@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FirebaseAuthentication Java Class Documentation</title>
+</head>
+<body>
+    <h1>FirebaseAuthentication Java Class Documentation</h1>
+
+    <h2>Introduction</h2>
+    <p>
+        The FirebaseAuthentication class is a Java implementation for interacting with Firebase Authentication services.
+        It provides methods to perform user registration, login, email verification, password reset, user deletion, and email change.
+    </p>
+
+    <h2>Dependencies</h2>
+    <p>
+        To use the FirebaseAuthentication Java class, you need the following dependencies:
+        <ul>
+            <li>Java Development Kit (JDK)</li>
+            <li>The org.json library for handling JSON data.</li>
+        </ul>
+    </p>
+
+    <h2>Usage</h2>
+    <p>
+        To use the FirebaseAuthentication class, follow these steps:
+
+        <h3>1. Create an instance of FirebaseAuthentication</h3>
+        <pre>
+FirebaseAuthentication firebaseAuth = new FirebaseAuthentication("YOUR_API_KEY");
+        </pre>
+
+        <h3>2. User Registration</h3>
+        <pre>
+JSONObject registrationResult = firebaseAuth.createUser("user@example.com", "password");
+        </pre>
+        <p>
+            Example:
+            <pre>
+if (registrationResult.getBoolean("success")) {
+    String idToken = registrationResult.getString("idToken");
+    String email = registrationResult.getString("email");
+    String refreshToken = registrationResult.getString("refreshToken");
+    int expiresIn = registrationResult.getInt("expiresIn");
+    String localId = registrationResult.getString("localId");
+    System.out.println("Registration Successful!");
+    System.out.println("ID Token: " + idToken);
+    System.out.println("Email: " + email);
+    System.out.println("Refresh Token: " + refreshToken);
+    System.out.println("Expires In: " + expiresIn);
+    System.out.println("Local ID: " + localId);
+} else {
+    String errorCode = registrationResult.getString("error_code");
+    String errorMessage = registrationResult.getString("error_message");
+    System.out.println("Registration Error: " + errorCode + " - " + errorMessage);
+}
+            </pre>
+        </p>
+
+        <h3>3. User Login</h3>
+        <pre>
+JSONObject loginResult = firebaseAuth.loginUser("user@example.com", "password");
+        </pre>
+        <p>
+            Example:
+            <pre>
+if (loginResult.getBoolean("success")) {
+    String idToken = loginResult.getString("idToken");
+    String email = loginResult.getString("email");
+    String refreshToken = loginResult.getString("refreshToken");
+    int expiresIn = loginResult.getInt("expiresIn");
+    String localId = loginResult.getString("localId");
+    System.out.println("Login Successful!");
+    System.out.println("ID Token: " + idToken);
+    System.out.println("Email: " + email);
+    System.out.println("Refresh Token: " + refreshToken);
+    System.out.println("Expires In: " + expiresIn);
+    System.out.println("Local ID: " + localId);
+} else {
+    String errorCode = loginResult.getString("error_code");
+    String errorMessage = loginResult.getString("error_message");
+    System.out.println("Login Error: " + errorCode + " - " + errorMessage);
+}
+            </pre>
+        </p>
+
+        <h3>4. Email Verification</h3>
+        <pre>
+JSONObject verificationResult = firebaseAuth.sendEmailVerification("ID_TOKEN");
+        </pre>
+        <p>
+            Example:
+            <pre>
+if (verificationResult.getBoolean("success")) {
+    System.out.println("Email Verification Sent Successfully!");
+} else {
+    String errorCode = verificationResult.getString("error_code");
+    String errorMessage = verificationResult.getString("error_message");
+    System.out.println("Verification Error: " + errorCode + " - " + errorMessage);
+}
+            </pre>
+        </p>
+
+        <h3>5. Password Reset</h3>
+        <pre>
+JSONObject resetResult = firebaseAuth.sendPasswordResetEmail("user@example.com");
+        </pre>
+        <p>
+            Example:
+            <pre>
+if (resetResult.getBoolean("success")) {
+    System.out.println("Password Reset Email Sent Successfully!");
+} else {
+    String errorCode = resetResult.getString("error_code");
+    String errorMessage = resetResult.getString("error_message");
+    System.out.println("Password Reset Error: " + errorCode + " - " + errorMessage);
+}
+            </pre>
+        </p>
+
+        <h3>6. User Deletion</h3>
+        <pre>
+JSONObject deleteResult = firebaseAuth.deleteUser("ID_TOKEN");
+        </pre>
+        <p>
+            Example:
+            <pre>
+if (deleteResult.getBoolean("success")) {
+    System.out.println("User Deletion Successful!");
+} else {
+    String errorCode = deleteResult.getString("error_code");
+    String errorMessage = deleteResult.getString("error_message");
+    System.out.println("Deletion Error: " + errorCode + " - " + errorMessage);
+}
+            </pre>
+        </p>
+
+        <h3>7. Email Change</h3>
+        <pre>
+JSONObject changeEmailResult = firebaseAuth.changeEmail("ID_TOKEN", "new@example.com");
+        </pre>
+        <p>
+            Example:
+            <pre>
+if (changeEmailResult.getBoolean("success")) {
+    System.out.println("Email Change Successful!");
+} else {
+    String errorCode = changeEmailResult.getString("error_code");
+    String errorMessage = changeEmailResult.getString("error_message");
+    System.out.println("Email Change Error: " + errorCode + " - " + errorMessage);
+}
+            </pre>
+        </p>
+    </p>
+
+    <h2>Important Notes</h2>
+    <p>
+        - Replace "YOUR_API_KEY" with your Firebase project's API key.
+        - Ensure your Java project includes the org.json library.
+    </p>
+
+    <h2>Conclusion</h2>
+    <p>
+        This Java class allows you to integrate Firebase Authentication into your Java applications. Refer to the method
+        descriptions and error handling guidelines for effective usage.
+    </p>
+</body>
+</html>
