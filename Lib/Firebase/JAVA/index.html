@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documentation File Manager</title>
+</head>
+<body>
+    <h1>Documentation File Manager</h1>
+    <button id="backButton">Back</button>
+    <ul id="fileList">
+        <!-- List of files and directories -->
+        <li><a href="FirebaseAuthentication.html">FirebaseAuthentication Documentation</a></li>
+        <li><a href="FirebaseAuthentication.java">FirebaseAuthentication Java Class</a></li>
+        <li><a href="FirebaseAuthentication.json">FirebaseAuthentication JSON Documentation</a></li>
+        <li><a href="FirebaseRealtimeDatabase.html">FirebaseRealtimeDatabase Documentation</a></li>
+        <li><a href="FirebaseRealtimeDatabase.java">FirebaseRealtimeDatabase Java Class</a></li>
+        <li><a href="FirebaseRealtimeDatabase.json">FirebaseRealtimeDatabase JSON Documentation</a></li>
+    </ul>
+
+    <script>
+        const backButton = document.getElementById('backButton');
+        const fileList = document.getElementById('fileList');
+
+        backButton.addEventListener('click', function() {
+            // Simulate going back in the browser history
+            window.history.back();
+        });
+
+        // Prevent the default behavior for anchor links and load the file
+        fileList.addEventListener('click', function(event) {
+            event.preventDefault();
+            const file = event.target.getAttribute('href');
+            // Load the selected file or navigate to the URL
+            window.location.href = file;
+        });
+    </script>
+</body>
+</html>
