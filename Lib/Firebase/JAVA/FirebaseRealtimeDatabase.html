@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FirebaseRealtimeDatabase Java Class Documentation</title>
+</head>
+<body>
+    <h1>FirebaseRealtimeDatabase Java Class Documentation</h1>
+
+    <h2>Introduction</h2>
+    <p>
+        The FirebaseRealtimeDatabase class is a Java implementation for interacting with a Firebase Realtime Database.
+        It provides methods to read, write, update, and delete data in the database.
+    </p>
+
+    <h2>Initialization</h2>
+    <p>
+        To use the FirebaseRealtimeDatabase class, create an instance of the class. The class is initialized with the
+        Firebase Realtime Database URL.
+    </p>
+    <pre>
+FirebaseRealtimeDatabase firebaseDatabase = new FirebaseRealtimeDatabase();
+    </pre>
+
+    <h2>Methods</h2>
+    <h3>1. Read Data</h3>
+    <p>
+        Use the `readData` method to retrieve data from the database at a specified path.
+    </p>
+    <pre>
+String data = firebaseDatabase.readData("path/to/data");
+    </pre>
+
+    <h3>2. Write Data</h3>
+    <p>
+        Use the `writeData` method to write data to the database at a specified path.
+    </p>
+    <pre>
+String data = "{'key': 'value'}";
+boolean success = firebaseDatabase.writeData("path/to/data", data);
+    </pre>
+
+    <h3>3. Update Data</h3>
+    <p>
+        Use the `updateData` method to update data in the database at a specified path.
+    </p>
+    <pre>
+String data = "{'updated_key': 'new_value'}";
+boolean success = firebaseDatabase.updateData("path/to/data", data);
+    </pre>
+
+    <h3>4. Delete Data</h3>
+    <p>
+        Use the `deleteData` method to delete data from the database at a specified path.
+    </p>
+    <pre>
+boolean success = firebaseDatabase.deleteData("path/to/data");
+    </pre>
+
+    <h2>Error Handling</h2>
+    <p>
+        Each method returns either data or a success status (true or false). Ensure you handle errors appropriately
+        based on the return values.
+    </p>
+
+    <h2>Conclusion</h2>
+    <p>
+        The FirebaseRealtimeDatabase Java class allows you to interact with a Firebase Realtime Database in your Java
+        applications. Use the provided methods to read, write, update, and delete data as needed.
+    </p>
+</body>
+</html>
