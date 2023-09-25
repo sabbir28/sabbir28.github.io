@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image to Base64 Example</title>
+</head>
+<body>
+  <input type="file" id="fileInput">
+  <div id="base64Output"></div>
+
+  <script src="path/to/your/ImageToBase64.js"></script>
+
+  <script>
+    // Example usage of the library
+    var fileInput = document.getElementById('fileInput');
+
+    fileInput.addEventListener('change', function (event) {
+      var file = event.target.files[0];
+      if (file) {
+        ImageToBase64.fromFile(file, function (base64Data) {
+          document.getElementById('base64Output').innerHTML = 'Base64 Image Data from File: ' + base64Data;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
