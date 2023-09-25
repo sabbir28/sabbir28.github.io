@@ -4,7 +4,7 @@ function base64ToHex(base64Data) {
     if (parts.length !== 2) {
       throw new Error('Invalid base64 data URI format');
     }
-  
+
     // Decode the base64 data and convert it to a hexadecimal representation
     const binaryData = atob(parts[1]);
     const byteArray = new Uint8Array(binaryData.length);
@@ -26,3 +26,18 @@ function hexToBase64(hexData, mimeType) {
     const base64Data = `data:${mimeType};base64,` + btoa(binaryData);
     return base64Data;
 }
+
+
+/*
+
+const base64Data = 'data:image/jpeg;base64,/9j/4AAQSkZRyb...'; // Your base64 data here
+const hexData = base64ToHex(base64Data);
+console.log(hexData);
+
+const hexData = '...'; // Your hexadecimal data here
+const mimeType = 'image/jpeg'; // Set the appropriate MIME type
+const base64Data = hexToBase64(hexData, mimeType);
+console.log(base64Data);
+
+
+*/

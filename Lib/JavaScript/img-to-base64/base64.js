@@ -29,3 +29,13 @@ var ImageToBase64 = {
       reader.readAsDataURL(file);
     }
 };
+
+
+
+
+/*
+
+
+
+
+*/
