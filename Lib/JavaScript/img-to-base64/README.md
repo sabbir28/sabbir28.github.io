@@ -57,7 +57,7 @@ This library is provided under the [MIT License](https://opensource.org/licenses
 
 ## Authors
 
-- [Your Name]
+- [MD. SABBIR HOSHEN HOWLADER]
 
 ## Feedback and Contributions
 
