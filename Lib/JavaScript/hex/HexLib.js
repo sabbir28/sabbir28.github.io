@@ -11,7 +11,7 @@ function base64ToHex(base64Data) {
     for (let i = 0; i < binaryData.length; i++) {
       byteArray[i] = binaryData.charCodeAt(i);
     }
-  
+
     const hexArray = Array.from(byteArray).map((byte) => byte.toString(16).padStart(2, '0'));
     return hexArray.join('');
 }
@@ -20,7 +20,7 @@ function hexToBase64(hexData, mimeType) {
     // Convert the hexadecimal representation to binary data
     const hexArray = hexData.match(/.{1,2}/g);
     const byteArray = new Uint8Array(hexArray.map((byte) => parseInt(byte, 16)));
-  
+
     // Convert the binary data to a base64 encoded string
     const binaryData = String.fromCharCode.apply(null, byteArray);
     const base64Data = `data:${mimeType};base64,` + btoa(binaryData);
