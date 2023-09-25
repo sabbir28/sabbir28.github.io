@@ -11,6 +11,12 @@ Certainly! Here's a documentation template for the `ImageToBase64` library:
 
 ## Usage
 
+## import this code 
+
+```html
+<script src="https://sabbir28.github.io/Lib/JavaScript/img-to-base64/base64.js"></script>
+```
+
 ### 1. Converting an Image from URL
 
 ```javascript
@@ -57,12 +63,12 @@ This library is provided under the [MIT License](https://opensource.org/licenses
 
 ## Authors
 
-- [MD. SABBIR HOSHEN HOWLADER]
+- MD. SABBIR HOSHEN HOWLADER
 
 ## Feedback and Contributions
 
-We welcome your feedback and contributions to this library. If you encounter any issues or have ideas for improvements, please submit them on our [GitHub repository](https://github.com/your-repository-link).
+We welcome your feedback and contributions to this library. If you encounter any issues or have ideas for improvements, please submit them on our [GitHub repository](https://github.com/sabbir28/sabbir28.github.io).
 
 ---
 
-Feel free to replace `[Your Name]`, `[MIT License]`, and `[your-repository-link]` with the appropriate information for your specific library. This documentation template provides a clear and structured guide for users to understand and utilize the library's features.
+Feel free to replace `[SABBIR]`, `[MIT License]`, and `[https://github.com/sabbir28/sabbir28.github.io]` with the appropriate information for your specific library. This documentation template provides a clear and structured guide for users to understand and utilize the library's features.
