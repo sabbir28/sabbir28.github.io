@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Binary Converter</title>
+</head>
+<body>
+  <h1>Binary Converter</h1>
+
+  <form id="conversionForm">
+    <label for="decimalInput">Decimal Number:</label>
+    <input type="number" id="decimalInput" name="decimalInput" required>
+    <button type="button" onclick="convertDecimalToBinary()">Convert to Binary</button>
+
+    <label for="binaryInput">Binary Number:</label>
+    <input type="text" id="binaryInput" name="binaryInput" required>
+    <button type="button" onclick="convertBinaryToDecimal()">Convert to Decimal</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    var BinaryConverter = {
+      DecimalToBinary: function(decimal) {
+        if (decimal === 0) return '0';
+        if (decimal === 1) return '1';
+    
+        let binary = '';
+        while (decimal > 0) {
+          binary = (decimal % 2) + binary;
+          decimal = Math.floor(decimal / 2);
+        }
+        return binary;
+      },
+    
+      BinaryToDecimal: function(binary) {
+        let decimal = 0;
+        const binaryDigits = binary.split('').reverse();
+    
+        for (let i = 0; i < binaryDigits.length; i++) {
+          if (binaryDigits[i] === '1') {
+            decimal += 2 ** i;
+          }
+        }
+    
+        return decimal;
+      }
+    };
+    
+    function convertDecimalToBinary() {
+      const decimalInput = document.getElementById('decimalInput').value;
+      const binaryResult = BinaryConverter.DecimalToBinary(parseInt(decimalInput));
+      document.getElementById('result').textContent = `Binary: ${binaryResult}`;
+    }
+    
+    function convertBinaryToDecimal() {
+      const binaryInput = document.getElementById('binaryInput').value;
+      const decimalResult = BinaryConverter.BinaryToDecimal(binaryInput);
+      document.getElementById('result').textContent = `Decimal: ${decimalResult}`;
+    }
+  </script>
+</body>
+</html>
