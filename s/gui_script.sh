@@ -1,22 +1,16 @@
 #!/bin/bash
 
-# Use Zenity to create a file selection dialog
-script_file=$(zenity --file-selection --file-filter="Shell Scripts | *.sh")
+# Use Zenity to prompt the user to select a directory to start the scan
+selected_directory=$(zenity --file-selection --directory --title="Select a Directory to Scan")
 
-# Check if the user canceled the file selection
+# Check if the user canceled the directory selection
 if [ $? -ne 0 ]; then
-    zenity --info --text="Script execution canceled."
+    zenity --info --text="Scan canceled."
     exit 1
 fi
 
-# Use Zenity to ask for confirmation before running the selected script
-zenity --question --text="Do you want to run the selected script?" --ok-label="Run" --cancel-label="Cancel"
+# Use find to scan all files and directories starting from the selected directory
+scan_result=$(find "$selected_directory")
 
-# Check the user's choice
-if [ $? -eq 0 ]; then
-    # Execute the selected script
-    bash "$script_file"
-    zenity --info --text="Script execution completed."
-else
-    zenity --info --text="Script execution canceled."
-fi
+# Use Zenity to display the scan result in a text box
+zenity --text-info --title="File Scanner" --width=800 --height=600 --text="$scan_result"
