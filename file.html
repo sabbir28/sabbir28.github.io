@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase File Upload</title>
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+
+    <script>
+        // Your Firebase configuration
+        var firebaseConfig = {
+
+  apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
+
+  authDomain: "alor28.firebaseapp.com",
+
+  databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId: "alor28",
+
+  storageBucket: "alor28.appspot.com",
+
+  messagingSenderId: "781215046566",
+
+  appId: "1:781215046566:web:9698150149c6bd370e0d67",
+
+  measurementId: "G-TYZ7NRCJ68"
+
+};
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Get a reference to the Firebase Storage service
+        var storage = firebase.storage();
+
+        function handleFileUpload() {
+            var fileInput = document.getElementById("fileInput");
+            var file = fileInput.files[0];
+
+            // Create a storage reference
+            var storageRef = storage.ref("uploads/" + file.name);
+
+            // Upload file
+            var uploadTask = storageRef.put(file);
+
+            // Monitor the upload state
+            uploadTask.on('state_changed',
+                function(snapshot) {
+                    // Upload progress
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                },
+                function(error) {
+                    // Handle errors
+                    console.error('Upload error:', error);
+                },
+                function() {
+                    // Upload successful
+                    console.log('Upload complete');
+                }
+            );
+        }
+    </script>
+</head>
+<body>
+    <h1>Firebase File Upload</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <button onclick="handleFileUpload()">Upload File</button>
+</body>
+</html>
