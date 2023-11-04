@@ -8,15 +8,28 @@
         // Get the current URL
         var url = window.location.href;
 
-        // Parse the URL to get the query parameters
-        var urlParams = new URLSearchParams(url);
+        // Find the position of '?'
+        var questionMarkIndex = url.indexOf('?');
 
-        // Check if the '1' parameter exists and print it to the console
-        if (urlParams.has('1')) {
-            var paramValue = urlParams.get('1');
-            console.log(paramValue);
+        // Check if '?' exists in the URL
+        if (questionMarkIndex !== -1) {
+            // Extract everything after '?'
+            var queryString = url.slice(questionMarkIndex + 1);
+            
+            // Split the query string into key-value pairs
+            var keyValuePairs = queryString.split('&');
+            
+            // Loop through the key-value pairs and find the '1' parameter
+            for (var i = 0; i < keyValuePairs.length; i++) {
+                var keyValue = keyValuePairs[i].split('=');
+                if (keyValue[0] === '1') {
+                    var paramValue = keyValue[1];
+                    console.log(paramValue);
+                    break; // Exit the loop once found
+                }
+            }
         } else {
-            console.log("Parameter '1' not found in the URL.");
+            console.log("No query parameters found in the URL.");
         }
     </script>
 </body>
