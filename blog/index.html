@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Parameter Example</title>
+</head>
+<body>
+    <script>
+        // Get the current URL
+        var url = window.location.href;
+
+        // Parse the URL to get the query parameters
+        var urlParams = new URLSearchParams(url);
+
+        // Check if the '1' parameter exists and print it to the console
+        if (urlParams.has('1')) {
+            var paramValue = urlParams.get('1');
+            console.log(paramValue);
+        } else {
+            console.log("Parameter '1' not found in the URL.");
+        }
+    </script>
+</body>
+</html>
