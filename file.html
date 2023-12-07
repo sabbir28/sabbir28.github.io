@@ -6,27 +6,36 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
 
+    <style>
+        #uploadedImage {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Firebase File Upload</h1>
+    <input type="file" id="fileInput" accept="image/*">
+    <button onclick="handleFileUpload()">Upload File</button>
+
+    <div id="progress"></div>
+    <img id="uploadedImage" style="display: none;">
+
+    <p id="downloadLink" style="display: none;">Download link: <a id="link" target="_blank"></a></p>
+
     <script>
         // Your Firebase configuration
         var firebaseConfig = {
-
-  apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
-
-  authDomain: "alor28.firebaseapp.com",
-
-  databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-  projectId: "alor28",
-
-  storageBucket: "alor28.appspot.com",
-
-  messagingSenderId: "781215046566",
-
-  appId: "1:781215046566:web:9698150149c6bd370e0d67",
-
-  measurementId: "G-TYZ7NRCJ68"
-
-};
+            apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
+            authDomain: "alor28.firebaseapp.com",
+            databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "alor28",
+            storageBucket: "alor28.appspot.com",
+            messagingSenderId: "781215046566",
+            appId: "1:781215046566:web:9698150149c6bd370e0d67",
+            measurementId: "G-TYZ7NRCJ68"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -50,6 +59,7 @@
                     // Upload progress
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     console.log('Upload is ' + progress + '% done');
+                    document.getElementById("progress").innerHTML = 'Upload is ' + Math.round(progress) + '% done';
                 },
                 function(error) {
                     // Handle errors
@@ -58,14 +68,20 @@
                 function() {
                     // Upload successful
                     console.log('Upload complete');
+
+                    // Display the uploaded image
+                    storageRef.getDownloadURL().then(function(downloadURL) {
+                        document.getElementById("uploadedImage").src = downloadURL;
+                        document.getElementById("uploadedImage").style.display = 'block';
+
+                        // Display the download link
+                        document.getElementById("downloadLink").style.display = 'block';
+                        document.getElementById("link").href = downloadURL;
+                        document.getElementById("link").textContent = downloadURL;
+                    });
                 }
             );
         }
     </script>
-</head>
-<body>
-    <h1>Firebase File Upload</h1>
-    <input type="file" id="fileInput" accept="image/*">
-    <button onclick="handleFileUpload()">Upload File</button>
 </body>
 </html>
