@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>SABBIR28 Portfolio - Submission Form</title>
+  <meta content="Submit your information or inquiries through the SABBIR28 Portfolio submission form. Connect with me and explore opportunities." name="description">
+  <meta content="portfolio, submission form, contact, inquiries" name="keywords">
+  
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://sabbir28.github.io/Lib/Firebase/JavaScript/FirebaseRealtimeDatabase.js"></script>
+
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      padding-top: 70px; /* Add padding to ensure content is not obscured by the fixed header */
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #888;
+    }
+
+    header {
+      background-color: #111;
+    }
+
+    header h1 a {
+      color: #fff;
+    }
+
+    header .navbar a {
+      color: #fff;
+    }
+
+    header .navbar a:hover {
+      color: #888;
+    }
+
+    #progress {
+      margin-top: 20px;
+    }
+
+    #uploadedImage {
+      max-width: 100%;
+      max-height: 300px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #downloadLink {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo">
+        <a href="index.html">SABBIR28</a>
+      </h1>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto" href="/fraud/">Home</a></li>
+          <li><a class="nav-link scrollto active" href="#">Submit</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header>
+
+  <!-- ======= Submit Form ======= -->
+  <form id="submitForm">
+    <h1>Your Information</h1>
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <h1>Fraud Information</h1>
+
+    <label for="additional_links">Additional Links or References (if any, comma-separated):</label>
+    <input type="text" id="additional_links" name="additional_links">
+
+    <label for="fraudName">Name:</label>
+    <input type="text" id="fraudName" name="fraudName" required>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">I don't know</option>
+    </select>
+
+    <label for="linksFreelancer">Links (Freelancer.com):</label>
+    <input type="text" id="linksFreelancer" name="linksFreelancer">
+
+    <label for="linksFiverr">Links (Fiverr.com):</label>
+    <input type="text" id="linksFiverr" name="linksFiverr">
+
+    <label for="linksUpwork">Links (Upwork.com):</label>
+    <input type="text" id="linksUpwork" name="linksUpwork">
+
+    <label for="files">Files:</label>
+    <input type="file" id="files" name="files" multiple>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4"></textarea>
+
+    <label for="condition">I agree to all the terms and conditions.</label>
+    <input type="checkbox" id="condition" name="condition">
+
+    <button type="button" onclick="handleFormSubmission()">Agree And Submit</button>
+
+    <!-- Progress Display -->
+    <div id="progress"></div>
+
+    <!-- Uploaded Image Display -->
+    <img id="uploadedImage">
+
+    <!-- Download Link Display -->
+    <p id="downloadLink"></p>
+  </form>
+
+  <script>
+    async function uploadFile(file) {
+      const storageBucket = 'alor28.appspot.com'; // Replace with your actual storage bucket name
+      const url = `https://firebasestorage.googleapis.com/v0/b/${storageBucket}/o`;
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch(`${url}?uploadType=media&name=${file.name}`, {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (response.ok) {
+        return response.url;
+      }
+  
+      throw new Error('File upload failed');
+    }
+  
+    async function handleFormSubmission() {
+        const form = document.getElementById('submitForm');
+        const formData = new FormData(form);
+        let downloadUrls; // Declare the variable here
+      
+        try {
+          const filesInput = document.getElementById('files');
+          const files = filesInput.files;
+      
+          const fileUploadPromises = Array.from(files).map(async (file) => {
+            const downloadUrl = await uploadFile(file);
+            return downloadUrl;
+          });
+      
+          downloadUrls = await Promise.all(fileUploadPromises);
+      
+          console.log('Download URLs:', downloadUrls);
+      
+          form.reset();
+        } catch (error) {
+          console.error('Form submission error:', error.message);
+          showAlert('Error', 'Failed to submit data. Please try again.');
+          return; // Exit the function to prevent further execution
+        }
+      
+        var formDataO = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          additional_links: document.getElementById('additional_links').value,
+          fraudName: document.getElementById('fraudName').value,
+          gender: document.getElementById('gender').value,
+          linksFreelancer: document.getElementById('linksFreelancer').value,
+          linksFiverr: document.getElementById('linksFiverr').value,
+          linksUpwork: document.getElementById('linksUpwork').value,
+          files: document.getElementById('files').files,
+          description: document.getElementById('description').value,
+          condition: document.getElementById('condition').checked,
+          file: downloadUrls // Use the variable here
+        };
+      
+        const firebaseDatabase = new FirebaseRealtimeDatabase();
+      
+        const currentDate = new Date();
+        const seconds = currentDate.getSeconds();
+        const milliseconds = currentDate.getMilliseconds();
+        const combinedValue = `${currentDate} - Seconds: ${seconds} - Milliseconds: ${milliseconds}`;
+      
+        console.log(combinedValue);
+      
+        const success = await firebaseDatabase.writeData(`fraud/${combinedValue}`, formDataO);
+      
+        if (success) {
+          console.log('Data added successfully!');
+          document.getElementById('submitForm').reset();
+        } else {
+          console.error('Failed to add data.');
+          showAlert('Error', 'Failed to add data to Firebase Realtime Database.');
+        }
+    }
+
+    function showAlert(type, message) {
+        alert(`${type}: ${message}`);
+    }
+      
+  </script>
+  
+  
+</body>
+
+</html>
