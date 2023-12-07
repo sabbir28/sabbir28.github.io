@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Fraud Searcher - Report and Investigate Fraudulent Activities</title>
+  <meta content="Explore and report individuals involved in fraudulent activities. Help create a safer online environment by sharing information about scams and fraudsters." name="description">
+  <meta content="fraud, scam, report, online safety, security,freelancher,fiverr,upwork" name="keywords">  
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .search-bar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .search-bar {
+      width: 200px; /* Adjust the width as needed */
+      background-color: #111;
+      color: #fff;
+      border: 1px solid #333;
+      padding: 8px; /* Adjust the padding as needed */
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    .search-icon {
+      color: #fff;
+    }
+
+    header {
+      background-color: #111;
+    }
+
+    header h1 a {
+      color: #fff;
+    }
+
+    header .navbar a {
+      color: #fff;
+    }
+
+    header .navbar a:hover {
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo">
+        <a href="index.html">SABBIR28</a>
+      </h1>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="/fraud/">Home</a></li>
+          <li><a class="nav-link scrollto" href="https://sabbir28.github.io/#about">About</a></li>
+          <li><a class="nav-link scrollto" href="submit.html">Submit</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header>
+
+  <!-- ======= Search Bar ======= -->
+  <div class="search-bar-container">
+    <input id="searchInput" type="text" class="form-control search-bar" placeholder="Search...">
+    <button type="button" class="btn btn-outline-light search-icon" onclick="search()">Search</button>
+  </div>
+
+  <script>
+    function search() {
+      var input = document.getElementById('searchInput');
+      var query = encodeURIComponent(input.value.trim()); // Encode the query for URL
+      window.location.href = '/search.html?qu=' + query;
+    }
+  </script>
+
+</body>
+
+</html>
