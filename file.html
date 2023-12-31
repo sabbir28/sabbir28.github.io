@@ -72,6 +72,12 @@
         // Get a reference to the Firebase Realtime Database
         var database = firebase.database();
 
+        // Function to sanitize the file name
+        function sanitizeFileName(filename) {
+            // Replace invalid characters with underscores
+            return filename.replace(/[.#$[\]/]/g, '_');
+        }
+
         function handleFileUpload() {
             var fileInput = document.getElementById("fileInput");
             var file = fileInput.files[0];
@@ -90,7 +96,7 @@
             var startTime = Date.now();
 
             // Modify file name to remove invalid characters
-            var modifiedFileName = file.name.replace(/[.#$[\]/]/g, '_');
+            var modifiedFileName = sanitizeFileName(file.name);
 
             // Create a storage reference
             var storageRef = storage.ref("uploads/" + modifiedFileName);
