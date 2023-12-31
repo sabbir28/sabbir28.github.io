@@ -84,13 +84,16 @@
 
             // Display file information
             document.getElementById("fileInfo").style.display = 'block';
-            document.getElementById("fileInfo").innerHTML = 'File Name: ' + file.name + '<br>File Size: ' + formatBytes(file.size);
+            document.getElementById("fileInfo").innerHTML = 'File Name: ' + file.name + '<br>File Size: ' + formatBytes(file.size) + '<br>File Extension: ' + getFileExtension(file.name);
 
             // Capture start timestamp
             var startTime = Date.now();
 
+            // Modify file name to remove invalid characters
+            var modifiedFileName = file.name.replace(/[.#$[\]/]/g, '_');
+
             // Create a storage reference
-            var storageRef = storage.ref("uploads/" + file.name);
+            var storageRef = storage.ref("uploads/" + modifiedFileName);
 
             // Upload file
             var uploadTask = storageRef.put(file);
@@ -113,9 +116,12 @@
                     document.getElementById("progressBarFill").style.width = progress + '%';
 
                     // Update speed in the Realtime Database
-                    database.ref('uploads/' + file.name).set({
+                    database.ref('uploads/' + modifiedFileName).set({
                         speed: speed.toFixed(2),
-                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                        timestamp: firebase.database.ServerValue.TIMESTAMP,
+                        file_size: file.size,
+                        file_extension: getFileExtension(file.name),
+                        download_link: '' // Update with the actual download link if needed
                     });
                 },
                 function(error) {
@@ -146,6 +152,11 @@
                         document.getElementById("downloadLink").style.display = 'block';
                         document.getElementById("link").href = downloadURL;
                         document.getElementById("link").textContent = downloadURL;
+
+                        // Update the download link in the Realtime Database
+                        database.ref('uploads/' + modifiedFileName).update({
+                            download_link: downloadURL
+                        });
                     });
                 }
             );
@@ -162,6 +173,11 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
 
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        // Function to get file extension
+        function getFileExtension(filename) {
+            return filename.split('.').pop();
         }
     </script>
 </body>
