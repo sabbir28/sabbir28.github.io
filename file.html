@@ -5,6 +5,7 @@
     <!-- Include Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 
     <style>
         #uploadedImage {
@@ -12,14 +13,39 @@
             max-height: 300px;
             margin-top: 20px;
         }
+
+        #fileInfo {
+            margin-top: 10px;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin-top: 10px;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        #progressBarFill {
+            height: 100%;
+            width: 0;
+            background-color: #4caf50;
+        }
     </style>
 </head>
 <body>
     <h1>Firebase File Upload</h1>
-    <input type="file" id="fileInput" accept="image/*">
+    <input type="file" id="fileInput">
     <button onclick="handleFileUpload()">Upload File</button>
 
     <div id="progress"></div>
+    <div id="speed"></div>
+    <div id="fileInfo" style="display: none;"></div>
+    <div id="progressBar" style="display: none;">
+        <div id="progressBarFill"></div>
+    </div>
+    <div id="uploadDuration" style="display: none;"></div>
     <img id="uploadedImage" style="display: none;">
 
     <p id="downloadLink" style="display: none;">Download link: <a id="link" target="_blank"></a></p>
@@ -43,9 +69,25 @@
         // Get a reference to the Firebase Storage service
         var storage = firebase.storage();
 
+        // Get a reference to the Firebase Realtime Database
+        var database = firebase.database();
+
         function handleFileUpload() {
             var fileInput = document.getElementById("fileInput");
             var file = fileInput.files[0];
+
+            // Check if a file is selected
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+
+            // Display file information
+            document.getElementById("fileInfo").style.display = 'block';
+            document.getElementById("fileInfo").innerHTML = 'File Name: ' + file.name + '<br>File Size: ' + formatBytes(file.size);
+
+            // Capture start timestamp
+            var startTime = Date.now();
 
             // Create a storage reference
             var storageRef = storage.ref("uploads/" + file.name);
@@ -58,14 +100,40 @@
                 function(snapshot) {
                     // Upload progress
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    var speed = snapshot.bytesTransferred / (snapshot.totalBytes / 1024); // speed in KB/s
                     console.log('Upload is ' + progress + '% done');
+                    console.log('Upload speed: ' + speed.toFixed(2) + ' KB/s');
+
+                    // Update progress and speed on the page
                     document.getElementById("progress").innerHTML = 'Upload is ' + Math.round(progress) + '% done';
+                    document.getElementById("speed").innerHTML = 'Upload speed: ' + speed.toFixed(2) + ' KB/s';
+
+                    // Update progress bar
+                    document.getElementById("progressBar").style.display = 'block';
+                    document.getElementById("progressBarFill").style.width = progress + '%';
+
+                    // Update speed in the Realtime Database
+                    database.ref('uploads/' + file.name).set({
+                        speed: speed.toFixed(2),
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
                 },
                 function(error) {
                     // Handle errors
                     console.error('Upload error:', error);
+                    alert('Upload error: ' + error.message);
                 },
                 function() {
+                    // Capture end timestamp
+                    var endTime = Date.now();
+
+                    // Calculate upload duration
+                    var duration = (endTime - startTime) / 1000; // in seconds
+
+                    // Display upload duration
+                    document.getElementById("uploadDuration").style.display = 'block';
+                    document.getElementById("uploadDuration").innerHTML = 'Upload Duration: ' + duration.toFixed(2) + ' seconds';
+
                     // Upload successful
                     console.log('Upload complete');
 
@@ -81,6 +149,19 @@
                     });
                 }
             );
+        }
+
+        // Function to format file size in human-readable format
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
     </script>
 </body>
