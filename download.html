@@ -39,17 +39,14 @@
                 return;
             }
 
-            // Check for invalid characters in the file name
-            if (/[.#$[\]/]/.test(fileName)) {
-                document.getElementById('downloadLink').innerHTML = 'Invalid characters in file name.';
-                return;
-            }
-
             // Get a reference to the Firebase Realtime Database
             var database = firebase.database();
 
+            // Transform file name to match the path in Firebase Realtime Database
+            var transformedFileName = fileName.replace(/\s/g, '_').toLowerCase();
+
             // Reference to the file in the database
-            var fileRef = database.ref('uploads/' + fileName + '/download_link');
+            var fileRef = database.ref('uploads/' + transformedFileName + '/download_link');
 
             // Retrieve the download URL for the file
             fileRef.once('value', function(snapshot) {
