@@ -9,7 +9,23 @@
     <h1>Download File</h1>
     <div id="downloadLink"></div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
     <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
+            authDomain: "alor28.firebaseapp.com",
+            databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "alor28",
+            storageBucket: "alor28.appspot.com",
+            messagingSenderId: "781215046566",
+            appId: "1:781215046566:web:9698150149c6bd370e0d67",
+            measurementId: "G-TYZ7NRCJ68"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
         // Function to extract file name from URL parameter
         function getFileNameFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -23,17 +39,25 @@
                 return;
             }
 
-            // Assuming the files are stored in a specific directory
-            const fileDirectory = 'uploads/';
+            // Get a reference to the Firebase Realtime Database
+            var database = firebase.database();
 
-            // Create the download link
-            const downloadLink = document.createElement('a');
-            downloadLink.href = fileDirectory + fileName;
-            downloadLink.download = fileName;
-            downloadLink.textContent = 'Download ' + fileName;
+            // Reference to the file in the database
+            var fileRef = database.ref('uploads/' + fileName);
 
-            // Append the download link to the page
-            document.getElementById('downloadLink').appendChild(downloadLink);
+            // Retrieve the download URL for the file
+            fileRef.once('value', function(snapshot) {
+                var downloadURL = snapshot.val();
+
+                // Create the download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadURL;
+                downloadLink.download = fileName;
+                downloadLink.textContent = 'Download ' + fileName;
+
+                // Append the download link to the page
+                document.getElementById('downloadLink').appendChild(downloadLink);
+            });
         }
 
         // Call the functions when the page loads
