@@ -39,6 +39,12 @@
                 return;
             }
 
+            // Check for invalid characters in the file name
+            if (/[.#$[\]/]/.test(fileName)) {
+                document.getElementById('downloadLink').innerHTML = 'Invalid characters in file name.';
+                return;
+            }
+
             // Get a reference to the Firebase Realtime Database
             var database = firebase.database();
 
