@@ -6,6 +6,7 @@
     <title>Firebase File Upload</title>
     <style>
         body {
+            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -15,11 +16,52 @@
         }
 
         #uploadContainer {
+            background-color: #fff;
             text-align: center;
             max-width: 400px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #uploadContainer h1 {
+            color: #333;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #uploadBtn {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #uploadBtn:hover {
+            background-color: #45a049;
+        }
+
+        #uploadBtnLabel {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+
+        #uploadBtnLabel:hover {
+            background-color: #45a049;
         }
 
         #uploadedImage {
@@ -52,15 +94,17 @@
 
         #downloadLink {
             display: none;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div id="uploadContainer">
         <h1>Firebase File Upload</h1>
+        <label for="fileInput" id="uploadBtnLabel">Choose File</label>
         <input type="file" id="fileInput">
         <br><br>
-        <button onclick="handleFileUpload()">Upload File</button>
+        <button id="uploadBtn" onclick="handleFileUpload()">Upload File</button>
 
         <div id="progress"></div>
         <div id="speed"></div>
