@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download File</title>
+</head>
+<body>
+    <h1>Download File</h1>
+    <div id="downloadLink"></div>
+
+    <script>
+        // Function to extract file name from URL parameter
+        function getFileNameFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('file');
+        }
+
+        // Function to generate download link for the specified file
+        function generateDownloadLink(fileName) {
+            if (!fileName) {
+                document.getElementById('downloadLink').innerHTML = 'File parameter is missing in the URL.';
+                return;
+            }
+
+            // Assuming the files are stored in a specific directory
+            const fileDirectory = 'uploads/';
+
+            // Create the download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = fileDirectory + fileName;
+            downloadLink.download = fileName;
+            downloadLink.textContent = 'Download ' + fileName;
+
+            // Append the download link to the page
+            document.getElementById('downloadLink').appendChild(downloadLink);
+        }
+
+        // Call the functions when the page loads
+        window.onload = function() {
+            const fileName = getFileNameFromURL();
+            generateDownloadLink(fileName);
+        };
+    </script>
+</body>
+</html>
