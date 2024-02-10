@@ -29,7 +29,7 @@
         // Function to extract file name from URL parameter
         function getFileNameFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('file');
+            return decodeURIComponent(urlParams.get('file'));
         }
 
         // Function to generate download link for the specified file
@@ -43,11 +43,16 @@
             var database = firebase.database();
 
             // Reference to the file in the database
-            var fileRef = database.ref('uploads/' + fileName);
+            var fileRef = database.ref('uploads/' + fileName + '/download_link');
 
             // Retrieve the download URL for the file
             fileRef.once('value', function(snapshot) {
                 var downloadURL = snapshot.val();
+
+                if (!downloadURL) {
+                    document.getElementById('downloadLink').innerHTML = 'Download link not found in the database.';
+                    return;
+                }
 
                 // Create the download link
                 const downloadLink = document.createElement('a');
