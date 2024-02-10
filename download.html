@@ -46,16 +46,19 @@
             var transformedFileName = fileName.replace(/\s/g, '_').toLowerCase();
 
             // Reference to the file in the database
-            var fileRef = database.ref('uploads/' + transformedFileName + '/download_link');
+            var fileRef = database.ref('uploads/' + transformedFileName);
 
             // Retrieve the download URL for the file
             fileRef.once('value', function(snapshot) {
-                var downloadURL = snapshot.val();
+                var fileData = snapshot.val();
 
-                if (!downloadURL) {
+                if (!fileData || !fileData.download_link) {
                     document.getElementById('downloadLink').innerHTML = 'Download link not found in the database.';
                     return;
                 }
+
+                // Get the download URL from the file data
+                var downloadURL = fileData.download_link;
 
                 // Create the download link
                 const downloadLink = document.createElement('a');
