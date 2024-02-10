@@ -199,8 +199,8 @@
                         document.getElementById("uploadedImage").style.display = 'block';
 
                         document.getElementById("downloadLink").style.display = 'block';
-                        document.getElementById("link").href = downloadURL;
-                        document.getElementById("link").textContent = downloadURL;
+                        document.getElementById("link").href = 'https://sabbir28.github.io/download.html?file=' + encodeURIComponent(file.name);
+                        document.getElementById("link").textContent = 'https://sabbir28.github.io/download.html?file=' + encodeURIComponent(file.name);
 
                         database.ref('uploads/' + modifiedFileName).update({
                             download_link: downloadURL
