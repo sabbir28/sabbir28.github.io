@@ -1,0 +1,10 @@
+{
+  "project_name": "Face Recognition Project",
+  "description": "This project focuses on developing a simple face recognition system using OpenCV for face detection and TensorFlow (Keras) for building and training a neural network.",
+  "author": "sabbir28",
+  "website": "https://sabbir28.github.io/s/video",
+  "github_repo": "https://github.com/sabbir28/face-recognition-project",
+  "keywords": ["face recognition", "OpenCV", "TensorFlow", "neural network"],
+  "license": "MIT",
+  "contact_email": "sabbirb228+vip@gmail.com"
+}
