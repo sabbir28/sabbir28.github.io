@@ -1,2 +1,7 @@
+# Incorrect configuration
+User-agent: Googlebot
+Disallow: /
+
+# Correct configuration to allow all bots
 User-agent: *
 Disallow:
