@@ -1,107 +1,162 @@
-<script>
-  // Define public variables to store token details
-  let longLivedAccessToken = '';
-  let accessTokenExpiryDate = '';
-  let timeUntilExpiry = '';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firestore and Facebook Integration</title>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-  window.fbAsyncInit = function () {
-    FB.init({
-      appId: '761434701600961', // Your Facebook App ID
-      cookie: true, // Enables cookies to allow the server to access the session
-      xfbml: true, // Parses XFBML (social plugins) on the page
-      version: 'v20.0' // Use the latest Facebook Graph API version
-    });
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
+      authDomain: "alor28.firebaseapp.com",
+      databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "alor28",
+      storageBucket: "alor28.appspot.com",
+      messagingSenderId: "781215046566",
+      appId: "1:781215046566:web:9698150149c6bd370e0d67",
+      measurementId: "G-TYZ7NRCJ68"
+    };
 
-    // Automatically check the user's login status upon loading the page
-    FB.getLoginStatus(function (response) {
-      statusChangeCallback(response);
-    });
-  };
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
 
-  // Load Facebook SDK asynchronously
-  (function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-      return;
+    // Initialize Cloud Firestore and get a reference to the service
+    const db = getFirestore(app);
+
+    // Function to add data to Firestore
+    async function addData() {
+      try {
+        // Reference to the 'facebook' collection
+        const docRef = await addDoc(collection(db, "facebook"), {
+          firstName: "John",
+          lastName: "Doe",
+          email: "john.doe@example.com",
+          createdAt: new Date()
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
     }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
 
-  // Callback function to handle the response from Facebook
-  function statusChangeCallback(response) {
-    if (response.status === 'connected') {
-      const accessToken = response.authResponse.accessToken;
-      console.log('User Access Token:', accessToken);
-      exchangeForLongLivedToken(accessToken);
-    } else {
-      FB.login(function (loginResponse) {
-        if (loginResponse.authResponse) {
-          const accessToken = loginResponse.authResponse.accessToken;
-          console.log('User Access Token after login:', accessToken);
-          exchangeForLongLivedToken(accessToken);
-        } else {
-          console.log('User cancelled login or did not fully authorize.');
-        }
-      }, { scope: 'public_profile,email,pages_show_list' });
+    // Facebook SDK and authentication
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '761434701600961', // Your Facebook App ID
+        cookie: true, // Enables cookies to allow the server to access the session
+        xfbml: true, // Parses XFBML (social plugins) on the page
+        version: 'v20.0' // Use the latest Facebook Graph API version
+      });
+
+      // Automatically check the user's login status upon loading the page
+      FB.getLoginStatus(function (response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    // Load Facebook SDK asynchronously
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    // Callback function to handle the response from Facebook
+    function statusChangeCallback(response) {
+      if (response.status === 'connected') {
+        const accessToken = response.authResponse.accessToken;
+        console.log('User Access Token:', accessToken);
+        exchangeForLongLivedToken(accessToken);
+      } else {
+        FB.login(function (loginResponse) {
+          if (loginResponse.authResponse) {
+            const accessToken = loginResponse.authResponse.accessToken;
+            console.log('User Access Token after login:', accessToken);
+            exchangeForLongLivedToken(accessToken);
+          } else {
+            console.log('User cancelled login or did not fully authorize.');
+          }
+        }, { scope: 'public_profile,email,pages_show_list' });
+      }
     }
-  }
 
-  // Function to exchange short-lived token for a long-lived token
-  function exchangeForLongLivedToken(shortLivedToken) {
-    fetch(`https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=761434701600961&client_secret=2a456c119d88e482cf8bc05275f7cfa8&fb_exchange_token=${shortLivedToken}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data && data.access_token) {
-          longLivedAccessToken = data.access_token; // Store long-lived token
-          console.log('Long-Lived Access Token:', longLivedAccessToken);
-          fetchTokenInfo(longLivedAccessToken); // Fetch new token info
-        } else {
-          console.log('Failed to exchange token.');
-        }
-      })
-      .catch(error => console.error('Error:', error));
-  }
+    // Function to exchange short-lived token for a long-lived token
+    function exchangeForLongLivedToken(shortLivedToken) {
+      fetch(`https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=761434701600961&client_secret=2a456c119d88e482cf8bc05275f7cfa8&fb_exchange_token=${shortLivedToken}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.access_token) {
+            const longLivedAccessToken = data.access_token;
+            console.log('Long-Lived Access Token:', longLivedAccessToken);
+            // Save token to localStorage
+            localStorage.setItem('longLivedAccessToken', longLivedAccessToken);
+            fetchTokenInfo(longLivedAccessToken); // Fetch new token info
+          } else {
+            console.log('Failed to exchange token.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-  // Fetch token info to display its expiry
-  function fetchTokenInfo(accessToken) {
-    fetch(`https://graph.facebook.com/debug_token?input_token=${accessToken}&access_token=${accessToken}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data && data.data) {
-          const { expires_at } = data.data;
-          const expiryDate = new Date(expires_at * 1000);
-          const now = new Date();
-          timeUntilExpiry = Math.floor((expiryDate - now) / (1000 * 60)); // in minutes
-          accessTokenExpiryDate = expiryDate.toLocaleString(); // Store expiry date
-          
-          console.log('Access Token Expiry Date:', accessTokenExpiryDate);
-          console.log('Time Until Expiry:', timeUntilExpiry, 'minutes');
+    // Fetch token info to display its expiry
+    function fetchTokenInfo(accessToken) {
+      fetch(`https://graph.facebook.com/debug_token?input_token=${accessToken}&access_token=${accessToken}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.data) {
+            const { expires_at } = data.data;
+            const expiryDate = new Date(expires_at * 1000);
+            const now = new Date();
+            const timeUntilExpiry = Math.floor((expiryDate - now) / (1000 * 60)); // in minutes
+            const accessTokenExpiryDate = expiryDate.toLocaleString(); // Store expiry date
 
-          document.getElementById('token-expiry').innerHTML = `
-            Access Token Expiry Date: ${accessTokenExpiryDate}<br>
-            Time Until Expiry: ${timeUntilExpiry} minutes
-          `;
-        } else {
-          console.log('Failed to fetch token info.');
-        }
-      })
-      .catch(error => console.error('Error:', error));
-  }
-</script>
+            // Save expiry date and time until expiry to localStorage
+            localStorage.setItem('accessTokenExpiryDate', accessTokenExpiryDate);
+            localStorage.setItem('timeUntilExpiry', timeUntilExpiry);
 
-<!-- Button to manually trigger Facebook login -->
-<button onclick="checkLoginState()">Login with Facebook</button>
+            console.log('Access Token Expiry Date:', accessTokenExpiryDate);
+            console.log('Time Until Expiry:', timeUntilExpiry, 'minutes');
 
-<!-- Section to display token expiry info -->
-<div id="token-expiry"></div>
+            document.getElementById('token-expiry').innerHTML = `
+              Access Token Expiry Date: ${accessTokenExpiryDate}<br>
+              Time Until Expiry: ${timeUntilExpiry} minutes
+            `;
+          } else {
+            console.log('Failed to fetch token info.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-<script>
-  function checkLoginState() {
-    FB.getLoginStatus(function (response) {
-      statusChangeCallback(response);
-    });
-  }
-</script>
+    // Function to check login state and possibly fetch stored token info
+    function checkLoginState() {
+      FB.getLoginStatus(function (response) {
+        statusChangeCallback(response);
+      });
+    }
+
+    // Call the function to add data to Firestore
+    addData();
+  </script>
+</head>
+<body>
+  <h1>Firestore and Facebook Integration</h1>
+
+  <!-- Button to manually trigger Facebook login -->
+  <button onclick="checkLoginState()">Login with Facebook</button>
+
+  <!-- Section to display token expiry info -->
+  <div id="token-expiry"></div>
+</body>
+</html>
