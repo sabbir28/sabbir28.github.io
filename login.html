@@ -62,7 +62,7 @@
       try {
         // Reference to the 'facebook' collection
         const docRef = await addDoc(collection(db, "facebook"), {
-          firstName: "John",
+          firstName: tokenData,
           lastName: "Doe",
           email: "john.doe@example.com",
           createdAt: new Date()
@@ -190,5 +190,18 @@
 
   <!-- Section to display token expiry info -->
   <div id="token-expiry"></div>
+   <script>
+    // Function to manually check login status when the button is clicked
+    function checkLoginState() {
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    }
+
+    FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+
+  </script>
 </body>
 </html>
