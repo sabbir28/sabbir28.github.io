@@ -35,18 +35,45 @@
     if (response.status === 'connected') {
       const accessToken = response.authResponse.accessToken;
       console.log('User Access Token:', accessToken);
+      fetchTokenInfo(accessToken); // Fetch token info
       fetchUserInfo();
     } else {
       FB.login(function (loginResponse) {
         if (loginResponse.authResponse) {
           const accessToken = loginResponse.authResponse.accessToken;
           console.log('User Access Token after login:', accessToken);
+          fetchTokenInfo(accessToken); // Fetch token info
           fetchUserInfo();
         } else {
           console.log('User cancelled login or did not fully authorize.');
         }
       }, { scope: 'public_profile,email,pages_show_list' });
     }
+  }
+
+  // Fetch the token's debug information
+  function fetchTokenInfo(accessToken) {
+    FB.api(
+      '/debug_token',
+      'GET',
+      { input_token: accessToken, access_token: accessToken },
+      function (response) {
+        if (response && response.data) {
+          const { expires_at } = response.data;
+          const expiresIn = expires_at ? Math.max(expires_at - (Date.now() / 1000), 0) : 0;
+          const expiryDate = new Date(expires_at * 1000).toLocaleString();
+
+          document.getElementById('token-info').innerHTML = `
+            <div>
+              <p><strong>Access Token Expiry Date:</strong> ${expiryDate}</p>
+              <p><strong>Time Until Expiry:</strong> ${Math.ceil(expiresIn / 60)} minutes</p>
+            </div>
+          `;
+        } else {
+          console.log('Failed to fetch token info.');
+        }
+      }
+    );
   }
 
   // Fetch user info, including name, email, and profile picture
@@ -135,6 +162,9 @@
 
 <!-- Section to display user info card -->
 <div id="user-card"></div>
+
+<!-- Section to display token info -->
+<div id="token-info"></div>
 
 <!-- Section to display user's pages and details -->
 <div id="user-pages"></div>
