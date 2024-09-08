@@ -54,7 +54,7 @@
     }
   }
 
-  // Fetch user info, including name, email, profile picture, and pages
+  // Fetch user info, including name, email, and profile picture
   function fetchUserInfo() {
     FB.api('/me', { fields: 'name,email,picture{url}' }, function (userInfo) {
       console.log('User Info:', userInfo);
