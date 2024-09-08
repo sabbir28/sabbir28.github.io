@@ -1,3 +1,4 @@
+<!-- Load Facebook SDK for JavaScript -->
 <script>
   // Define public variables to store token details
   let longLivedAccessToken = '';
@@ -84,11 +85,29 @@
             Access Token Expiry Date: ${accessTokenExpiryDate}<br>
             Time Until Expiry: ${timeUntilExpiry} minutes
           `;
+
+          // Save token details to Firebase
+          saveTokenToFirebase(accessToken, expiryDate);
         } else {
           console.log('Failed to fetch token info.');
         }
       })
       .catch(error => console.error('Error:', error));
+  }
+
+  // Function to save token details to Firebase
+  function saveTokenToFirebase(accessToken, expiryDate) {
+    const userId = FB.getUserID(); // Retrieve the Facebook user ID if needed
+
+    firebase.database().ref('tokens/' + userId).set({
+      longLivedAccessToken: accessToken,
+      accessTokenExpiryDate: expiryDate.toISOString(),
+      timeUntilExpiry: timeUntilExpiry
+    }).then(() => {
+      console.log('Token details saved to Firebase.');
+    }).catch(error => {
+      console.error('Error saving token details to Firebase:', error);
+    });
   }
 </script>
 
@@ -97,6 +116,30 @@
 
 <!-- Section to display token expiry info -->
 <div id="token-expiry"></div>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
+    authDomain: "alor28.firebaseapp.com",
+    databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "alor28",
+    storageBucket: "alor28.appspot.com",
+    messagingSenderId: "781215046566",
+    appId: "1:781215046566:web:9698150149c6bd370e0d67",
+    measurementId: "G-TYZ7NRCJ68"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const database = getDatabase(app);
+</script>
 
 <script>
   function checkLoginState() {
