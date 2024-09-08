@@ -1,17 +1,22 @@
-
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '761434701600961',
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v20.0'
+      appId      : '761434701600961',  // Your Facebook App ID
+      cookie     : true,               // Enables cookies to allow the server to access the session
+      xfbml      : true,               // Parses XFBML (social plugins) on the page
+      version    : 'v20.0'             // Use the latest Facebook Graph API version
     });
       
+    // Log page view event
     FB.AppEvents.logPageView();   
-      
+
+    // Automatically check the user's login status upon loading the page
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
   };
 
+  // Load Facebook SDK asynchronously
   (function(d, s, id){
      var js, fjs = d.getElementsByTagName(s)[0];
      if (d.getElementById(id)) {return;}
@@ -19,4 +24,42 @@
      js.src = "https://connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+
+  // Callback function to handle the response from Facebook
+  function statusChangeCallback(response) {
+    console.log('Facebook login status changed:', response);
+    
+    // The response object contains information about the user's login status
+    if (response.status === 'connected') {
+      // The user is logged into Facebook and authenticated with your app
+      console.log('User is logged in and authenticated.');
+      // Retrieve and log the user's access token
+      const accessToken = response.authResponse.accessToken;
+      console.log('User Access Token:', accessToken);
+    } else {
+      // The user is not logged in, prompt for login
+      console.log('User is not logged in. Prompting for login...');
+      FB.login(function(loginResponse) {
+        if (loginResponse.authResponse) {
+          // User successfully logged in, log the access token
+          const accessToken = loginResponse.authResponse.accessToken;
+          console.log('User Access Token after login:', accessToken);
+        } else {
+          console.log('User cancelled login or did not fully authorize.');
+        }
+      }, {scope: 'public_profile,email'});  // Request permissions for profile and email
+    }
+  }
+</script>
+
+<!-- Button to manually trigger Facebook login -->
+<button onclick="checkLoginState()">Login with Facebook</button>
+
+<script>
+  // Function to manually check login status when the button is clicked
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
 </script>
