@@ -1,53 +1,113 @@
 <script>
-  window.fbAsyncInit = function() {
+  window.fbAsyncInit = function () {
     FB.init({
-      appId      : '761434701600961',  // Your Facebook App ID
-      cookie     : true,               // Enables cookies to allow the server to access the session
-      xfbml      : true,               // Parses XFBML (social plugins) on the page
-      version    : 'v20.0'             // Use the latest Facebook Graph API version
+      appId: '761434701600961', // Your Facebook App ID
+      cookie: true, // Enables cookies to allow the server to access the session
+      xfbml: true, // Parses XFBML (social plugins) on the page
+      version: 'v20.0' // Use the latest Facebook Graph API version
     });
-      
+
     // Log page view event
-    FB.AppEvents.logPageView();   
+    FB.AppEvents.logPageView();
 
     // Automatically check the user's login status upon loading the page
-    FB.getLoginStatus(function(response) {
+    FB.getLoginStatus(function (response) {
       statusChangeCallback(response);
     });
   };
 
   // Load Facebook SDK asynchronously
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+  (function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {
+      return;
+    }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
 
   // Callback function to handle the response from Facebook
   function statusChangeCallback(response) {
     console.log('Facebook login status changed:', response);
-    
+
     // The response object contains information about the user's login status
     if (response.status === 'connected') {
-      // The user is logged into Facebook and authenticated with your app
       console.log('User is logged in and authenticated.');
       // Retrieve and log the user's access token
       const accessToken = response.authResponse.accessToken;
       console.log('User Access Token:', accessToken);
+      // Fetch user info
+      fetchUserInfo();
     } else {
-      // The user is not logged in, prompt for login
       console.log('User is not logged in. Prompting for login...');
-      FB.login(function(loginResponse) {
+      FB.login(function (loginResponse) {
         if (loginResponse.authResponse) {
-          // User successfully logged in, log the access token
           const accessToken = loginResponse.authResponse.accessToken;
           console.log('User Access Token after login:', accessToken);
+          fetchUserInfo();
         } else {
           console.log('User cancelled login or did not fully authorize.');
         }
-      }, {scope: 'public_profile,email'});  // Request permissions for profile and email
+      }, { scope: 'public_profile,email,pages_show_list' }); // Request permissions for profile, email, and pages
+    }
+  }
+
+  // Fetch user info, including name, email, profile picture, and pages
+  function fetchUserInfo() {
+    FB.api('/me', { fields: 'name,email,picture{url}' }, function (userInfo) {
+      console.log('User Info:', userInfo);
+      displayUserCard(userInfo);
+      fetchUserPages();
+    });
+  }
+
+  // Display the user's info as a card
+  function displayUserCard(userInfo) {
+    const userCard = `
+      <div style="border: 1px solid #ccc; padding: 16px; width: 300px; margin-bottom: 20px;">
+        <img src="${userInfo.picture.data.url}" alt="User Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
+        <h3>${userInfo.name}</h3>
+        <p>Email: ${userInfo.email}</p>
+      </div>
+    `;
+    document.getElementById('user-card').innerHTML = userCard;
+  }
+
+  // Fetch the list of pages the user is associated with
+  function fetchUserPages() {
+    FB.api('/me/accounts', function (pagesResponse) {
+      console.log('User Pages:', pagesResponse);
+      displayPagesTable(pagesResponse);
+    });
+  }
+
+  // Display the user's pages in a table
+  function displayPagesTable(pagesResponse) {
+    if (pagesResponse && pagesResponse.data && pagesResponse.data.length > 0) {
+      let tableHTML = `
+        <table border="1" cellpadding="10">
+          <thead>
+            <tr>
+              <th>Page Name</th>
+              <th>Page ID</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      pagesResponse.data.forEach(page => {
+        tableHTML += `
+          <tr>
+            <td>${page.name}</td>
+            <td>${page.id}</td>
+          </tr>
+        `;
+      });
+      tableHTML += `</tbody></table>`;
+      document.getElementById('user-pages').innerHTML = tableHTML;
+    } else {
+      document.getElementById('user-pages').innerHTML = 'No pages found.';
     }
   }
 </script>
@@ -55,10 +115,16 @@
 <!-- Button to manually trigger Facebook login -->
 <button onclick="checkLoginState()">Login with Facebook</button>
 
+<!-- Section to display user info card -->
+<div id="user-card"></div>
+
+<!-- Section to display user's pages -->
+<div id="user-pages"></div>
+
 <script>
   // Function to manually check login status when the button is clicked
   function checkLoginState() {
-    FB.getLoginStatus(function(response) {
+    FB.getLoginStatus(function (response) {
       statusChangeCallback(response);
     });
   }
