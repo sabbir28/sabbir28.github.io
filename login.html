@@ -7,9 +7,6 @@
       version: 'v20.0' // Use the latest Facebook Graph API version
     });
 
-    // Log page view event
-    FB.AppEvents.logPageView();
-
     // Automatically check the user's login status upon loading the page
     FB.getLoginStatus(function (response) {
       statusChangeCallback(response);
@@ -30,21 +27,15 @@
 
   // Callback function to handle the response from Facebook
   function statusChangeCallback(response) {
-    console.log('Facebook login status changed:', response);
-
     if (response.status === 'connected') {
       const accessToken = response.authResponse.accessToken;
       console.log('User Access Token:', accessToken);
-
-      // Exchange short-lived token for a long-lived token
       exchangeForLongLivedToken(accessToken);
     } else {
       FB.login(function (loginResponse) {
         if (loginResponse.authResponse) {
           const accessToken = loginResponse.authResponse.accessToken;
           console.log('User Access Token after login:', accessToken);
-
-          // Exchange short-lived token for a long-lived token
           exchangeForLongLivedToken(accessToken);
         } else {
           console.log('User cancelled login or did not fully authorize.');
@@ -60,93 +51,12 @@
       .then(data => {
         if (data && data.access_token) {
           console.log('Long-Lived Access Token:', data.access_token);
-          // Optionally, save this long-lived token securely
           fetchTokenInfo(data.access_token); // Fetch new token info
         } else {
           console.log('Failed to exchange token.');
         }
       })
       .catch(error => console.error('Error:', error));
-  }
-
-  // Fetch user info, including name, email, and profile picture
-  function fetchUserInfo() {
-    FB.api('/me', { fields: 'name,email,picture{url}' }, function (userInfo) {
-      displayUserCard(userInfo);
-      fetchUserPages();
-    });
-  }
-
-  // Display the user's info as a card
-  function displayUserCard(userInfo) {
-    const userCard = `
-      <div style="border: 1px solid #ccc; padding: 16px; width: 300px; margin-bottom: 20px;">
-        <img src="${userInfo.picture.data.url}" alt="User Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
-        <h3>${userInfo.name}</h3>
-        <p>Email: ${userInfo.email}</p>
-      </div>
-    `;
-    document.getElementById('user-card').innerHTML = userCard;
-  }
-
-  // Fetch the list of pages the user is associated with
-  function fetchUserPages() {
-    FB.api('/me/accounts', function (pagesResponse) {
-      if (pagesResponse && pagesResponse.data && pagesResponse.data.length > 0) {
-        displayPagesWithDetails(pagesResponse.data);
-      } else {
-        document.getElementById('user-pages').innerHTML = 'No pages found.';
-      }
-    });
-  }
-
-  // Display each page's details, including name, fan count, category, and latest posts
-  function displayPagesWithDetails(pages) {
-    let pagesHTML = '';
-    pages.forEach(page => {
-      // Fetch detailed information for each page
-      FB.api(`/${page.id}`, 'GET', { fields: 'name,fan_count,category' }, function (pageDetails) {
-        console.log('Page Details:', pageDetails);
-
-        // Create an HTML structure for each page's details
-        pagesHTML += `
-          <div style="border: 1px solid #ccc; padding: 16px; margin-bottom: 20px;">
-            <h4>${pageDetails.name} (${pageDetails.category})</h4>
-            <p>Fan Count: ${pageDetails.fan_count}</p>
-            <div id="posts-${pageDetails.id}">
-              <h5>Latest Posts:</h5>
-              <ul id="posts-list-${pageDetails.id}">Loading posts...</ul>
-            </div>
-          </div>
-        `;
-
-        // Fetch and display the latest posts
-        fetchPagePosts(pageDetails.id);
-        document.getElementById('user-pages').innerHTML = pagesHTML;
-      });
-    });
-  }
-
-  // Fetch the latest posts for a specific page and display them
-  function fetchPagePosts(pageId) {
-    FB.api(`/${pageId}/posts`, 'GET', { fields: 'message,created_time,likes.summary(true),comments.summary(true)' }, function (postsResponse) {
-      if (postsResponse && postsResponse.data && postsResponse.data.length > 0) {
-        let postsHTML = '';
-        postsResponse.data.forEach(post => {
-          postsHTML += `
-            <li>
-              <p><strong>Post:</strong> ${post.message || 'No message'}</p>
-              <p><strong>Created:</strong> ${new Date(post.created_time).toLocaleString()}</p>
-              <p><strong>Likes:</strong> ${post.likes.summary.total_count}</p>
-              <p><strong>Comments:</strong> ${post.comments.summary.total_count}</p>
-            </li>
-          `;
-        });
-        document.getElementById(`posts-list-${pageId}`).innerHTML = postsHTML;
-      } else {
-        document.getElementById(`posts-list-${pageId}`).innerHTML = '<li>No recent posts found.</li>';
-      }
-    });
   }
 
   // Fetch token info to display its expiry
@@ -177,12 +87,6 @@
 
 <!-- Button to manually trigger Facebook login -->
 <button onclick="checkLoginState()">Login with Facebook</button>
-
-<!-- Section to display user info card -->
-<div id="user-card"></div>
-
-<!-- Section to display user's pages and details -->
-<div id="user-pages"></div>
 
 <!-- Section to display token expiry info -->
 <div id="token-expiry"></div>
