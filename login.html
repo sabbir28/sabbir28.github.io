@@ -8,13 +8,12 @@
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyD-Flbdxd20544kFBHTiV0zkc3cNh75bcU",
       authDomain: "alor28.firebaseapp.com",
-      databaseURL: "https://alor28-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "alor28",
       storageBucket: "alor28.appspot.com",
       messagingSenderId: "781215046566",
@@ -28,6 +27,35 @@
 
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
+
+    // Function to generate a random token ID
+    function generateRandomId() {
+      return crypto.randomUUID(); // For modern browsers, use crypto.randomUUID() for a unique ID
+    }
+
+    // Function to save user token data
+    async function saveTokenData(userId, shortToken, longToken, expiryDate) {
+      try {
+        // Generate a random token ID
+        const tokenId = generateRandomId();
+
+        // Reference to the token document in the user's tokens collection
+        const tokenRef = doc(collection(db, `fb_tokens/${userId}/tokens`), tokenId);
+
+        // Data to be saved
+        const tokenData = {
+          short_token: shortToken,
+          long_token: longToken,
+          expiry_date: expiryDate
+        };
+
+        // Save data to Firestore
+        await setDoc(tokenRef, tokenData);
+        console.log(`Token data saved for user ${userId} with token ID ${tokenId}`);
+      } catch (e) {
+        console.error("Error saving token data: ", e);
+      }
+    }
 
     // Function to add data to Firestore
     async function addData() {
@@ -132,6 +160,10 @@
               Access Token Expiry Date: ${accessTokenExpiryDate}<br>
               Time Until Expiry: ${timeUntilExpiry} minutes
             `;
+
+            // Save token data to Firestore
+            const userId = 'someUserId'; // Replace with actual user ID
+            saveTokenData(userId, accessToken, longLivedAccessToken, accessTokenExpiryDate);
           } else {
             console.log('Failed to fetch token info.');
           }
