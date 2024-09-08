@@ -1,4 +1,9 @@
 <script>
+  // Define public variables to store token details
+  let longLivedAccessToken = '';
+  let accessTokenExpiryDate = '';
+  let timeUntilExpiry = '';
+
   window.fbAsyncInit = function () {
     FB.init({
       appId: '761434701600961', // Your Facebook App ID
@@ -50,8 +55,9 @@
       .then(response => response.json())
       .then(data => {
         if (data && data.access_token) {
-          console.log('Long-Lived Access Token:', data.access_token);
-          fetchTokenInfo(data.access_token); // Fetch new token info
+          longLivedAccessToken = data.access_token; // Store long-lived token
+          console.log('Long-Lived Access Token:', longLivedAccessToken);
+          fetchTokenInfo(longLivedAccessToken); // Fetch new token info
         } else {
           console.log('Failed to exchange token.');
         }
@@ -68,13 +74,14 @@
           const { expires_at } = data.data;
           const expiryDate = new Date(expires_at * 1000);
           const now = new Date();
-          const timeUntilExpiry = Math.floor((expiryDate - now) / (1000 * 60)); // in minutes
+          timeUntilExpiry = Math.floor((expiryDate - now) / (1000 * 60)); // in minutes
+          accessTokenExpiryDate = expiryDate.toLocaleString(); // Store expiry date
           
-          console.log('Access Token Expiry Date:', expiryDate.toLocaleString());
+          console.log('Access Token Expiry Date:', accessTokenExpiryDate);
           console.log('Time Until Expiry:', timeUntilExpiry, 'minutes');
 
           document.getElementById('token-expiry').innerHTML = `
-            Access Token Expiry Date: ${expiryDate.toLocaleString()}<br>
+            Access Token Expiry Date: ${accessTokenExpiryDate}<br>
             Time Until Expiry: ${timeUntilExpiry} minutes
           `;
         } else {
