@@ -35,15 +35,17 @@
     if (response.status === 'connected') {
       const accessToken = response.authResponse.accessToken;
       console.log('User Access Token:', accessToken);
-      fetchTokenInfo(accessToken); // Fetch token info
-      fetchUserInfo();
+
+      // Exchange short-lived token for a long-lived token
+      exchangeForLongLivedToken(accessToken);
     } else {
       FB.login(function (loginResponse) {
         if (loginResponse.authResponse) {
           const accessToken = loginResponse.authResponse.accessToken;
           console.log('User Access Token after login:', accessToken);
-          fetchTokenInfo(accessToken); // Fetch token info
-          fetchUserInfo();
+
+          // Exchange short-lived token for a long-lived token
+          exchangeForLongLivedToken(accessToken);
         } else {
           console.log('User cancelled login or did not fully authorize.');
         }
@@ -51,29 +53,20 @@
     }
   }
 
-  // Fetch the token's debug information
-  function fetchTokenInfo(accessToken) {
-    FB.api(
-      '/debug_token',
-      'GET',
-      { input_token: accessToken, access_token: accessToken },
-      function (response) {
-        if (response && response.data) {
-          const { expires_at } = response.data;
-          const expiresIn = expires_at ? Math.max(expires_at - (Date.now() / 1000), 0) : 0;
-          const expiryDate = new Date(expires_at * 1000).toLocaleString();
-
-          document.getElementById('token-info').innerHTML = `
-            <div>
-              <p><strong>Access Token Expiry Date:</strong> ${expiryDate}</p>
-              <p><strong>Time Until Expiry:</strong> ${Math.ceil(expiresIn / 60)} minutes</p>
-            </div>
-          `;
+  // Function to exchange short-lived token for a long-lived token
+  function exchangeForLongLivedToken(shortLivedToken) {
+    fetch(`https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=761434701600961&client_secret=2a456c119d88e482cf8bc05275f7cfa8&fb_exchange_token=${shortLivedToken}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.access_token) {
+          console.log('Long-Lived Access Token:', data.access_token);
+          // Optionally, save this long-lived token securely
+          fetchTokenInfo(data.access_token); // Fetch new token info
         } else {
-          console.log('Failed to fetch token info.');
+          console.log('Failed to exchange token.');
         }
-      }
-    );
+      })
+      .catch(error => console.error('Error:', error));
   }
 
   // Fetch user info, including name, email, and profile picture
@@ -155,6 +148,31 @@
       }
     });
   }
+
+  // Fetch token info to display its expiry
+  function fetchTokenInfo(accessToken) {
+    fetch(`https://graph.facebook.com/debug_token?input_token=${accessToken}&access_token=${accessToken}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.data) {
+          const { expires_at } = data.data;
+          const expiryDate = new Date(expires_at * 1000);
+          const now = new Date();
+          const timeUntilExpiry = Math.floor((expiryDate - now) / (1000 * 60)); // in minutes
+          
+          console.log('Access Token Expiry Date:', expiryDate.toLocaleString());
+          console.log('Time Until Expiry:', timeUntilExpiry, 'minutes');
+
+          document.getElementById('token-expiry').innerHTML = `
+            Access Token Expiry Date: ${expiryDate.toLocaleString()}<br>
+            Time Until Expiry: ${timeUntilExpiry} minutes
+          `;
+        } else {
+          console.log('Failed to fetch token info.');
+        }
+      })
+      .catch(error => console.error('Error:', error));
+  }
 </script>
 
 <!-- Button to manually trigger Facebook login -->
@@ -163,11 +181,11 @@
 <!-- Section to display user info card -->
 <div id="user-card"></div>
 
-<!-- Section to display token info -->
-<div id="token-info"></div>
-
 <!-- Section to display user's pages and details -->
 <div id="user-pages"></div>
+
+<!-- Section to display token expiry info -->
+<div id="token-expiry"></div>
 
 <script>
   function checkLoginState() {
