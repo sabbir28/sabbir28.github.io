@@ -32,16 +32,11 @@
   function statusChangeCallback(response) {
     console.log('Facebook login status changed:', response);
 
-    // The response object contains information about the user's login status
     if (response.status === 'connected') {
-      console.log('User is logged in and authenticated.');
-      // Retrieve and log the user's access token
       const accessToken = response.authResponse.accessToken;
       console.log('User Access Token:', accessToken);
-      // Fetch user info
       fetchUserInfo();
     } else {
-      console.log('User is not logged in. Prompting for login...');
       FB.login(function (loginResponse) {
         if (loginResponse.authResponse) {
           const accessToken = loginResponse.authResponse.accessToken;
@@ -50,14 +45,13 @@
         } else {
           console.log('User cancelled login or did not fully authorize.');
         }
-      }, { scope: 'public_profile,email,pages_show_list' }); // Request permissions for profile, email, and pages
+      }, { scope: 'public_profile,email,pages_show_list' });
     }
   }
 
   // Fetch user info, including name, email, and profile picture
   function fetchUserInfo() {
     FB.api('/me', { fields: 'name,email,picture{url}' }, function (userInfo) {
-      console.log('User Info:', userInfo);
       displayUserCard(userInfo);
       fetchUserPages();
     });
@@ -78,37 +72,61 @@
   // Fetch the list of pages the user is associated with
   function fetchUserPages() {
     FB.api('/me/accounts', function (pagesResponse) {
-      console.log('User Pages:', pagesResponse);
-      displayPagesTable(pagesResponse);
+      if (pagesResponse && pagesResponse.data && pagesResponse.data.length > 0) {
+        displayPagesWithDetails(pagesResponse.data);
+      } else {
+        document.getElementById('user-pages').innerHTML = 'No pages found.';
+      }
     });
   }
 
-  // Display the user's pages in a table
-  function displayPagesTable(pagesResponse) {
-    if (pagesResponse && pagesResponse.data && pagesResponse.data.length > 0) {
-      let tableHTML = `
-        <table border="1" cellpadding="10">
-          <thead>
-            <tr>
-              <th>Page Name</th>
-              <th>Page ID</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-      pagesResponse.data.forEach(page => {
-        tableHTML += `
-          <tr>
-            <td>${page.name}</td>
-            <td>${page.id}</td>
-          </tr>
+  // Display each page's details, including name, fan count, category, and latest posts
+  function displayPagesWithDetails(pages) {
+    let pagesHTML = '';
+    pages.forEach(page => {
+      // Fetch detailed information for each page
+      FB.api(`/${page.id}`, 'GET', { fields: 'name,fan_count,category' }, function (pageDetails) {
+        console.log('Page Details:', pageDetails);
+
+        // Create an HTML structure for each page's details
+        pagesHTML += `
+          <div style="border: 1px solid #ccc; padding: 16px; margin-bottom: 20px;">
+            <h4>${pageDetails.name} (${pageDetails.category})</h4>
+            <p>Fan Count: ${pageDetails.fan_count}</p>
+            <div id="posts-${pageDetails.id}">
+              <h5>Latest Posts:</h5>
+              <ul id="posts-list-${pageDetails.id}">Loading posts...</ul>
+            </div>
+          </div>
         `;
+
+        // Fetch and display the latest posts
+        fetchPagePosts(pageDetails.id);
+        document.getElementById('user-pages').innerHTML = pagesHTML;
       });
-      tableHTML += `</tbody></table>`;
-      document.getElementById('user-pages').innerHTML = tableHTML;
-    } else {
-      document.getElementById('user-pages').innerHTML = 'No pages found.';
-    }
+    });
+  }
+
+  // Fetch the latest posts for a specific page and display them
+  function fetchPagePosts(pageId) {
+    FB.api(`/${pageId}/posts`, 'GET', { fields: 'message,created_time,likes.summary(true),comments.summary(true)' }, function (postsResponse) {
+      if (postsResponse && postsResponse.data && postsResponse.data.length > 0) {
+        let postsHTML = '';
+        postsResponse.data.forEach(post => {
+          postsHTML += `
+            <li>
+              <p><strong>Post:</strong> ${post.message || 'No message'}</p>
+              <p><strong>Created:</strong> ${new Date(post.created_time).toLocaleString()}</p>
+              <p><strong>Likes:</strong> ${post.likes.summary.total_count}</p>
+              <p><strong>Comments:</strong> ${post.comments.summary.total_count}</p>
+            </li>
+          `;
+        });
+        document.getElementById(`posts-list-${pageId}`).innerHTML = postsHTML;
+      } else {
+        document.getElementById(`posts-list-${pageId}`).innerHTML = '<li>No recent posts found.</li>';
+      }
+    });
   }
 </script>
 
@@ -118,11 +136,10 @@
 <!-- Section to display user info card -->
 <div id="user-card"></div>
 
-<!-- Section to display user's pages -->
+<!-- Section to display user's pages and details -->
 <div id="user-pages"></div>
 
 <script>
-  // Function to manually check login status when the button is clicked
   function checkLoginState() {
     FB.getLoginStatus(function (response) {
       statusChangeCallback(response);
