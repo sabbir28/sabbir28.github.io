@@ -4,16 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Login Redirect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        #fb-login-container {
+            margin: 20px 0;
+        }
+
+        #openTabButton {
+            display: none;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #4267B2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #openTabButton:hover {
+            background-color: #365899;
+        }
+    </style>
 </head>
 <body>
     <h2>Facebook Login Demo</h2>
-    <fb:login-button 
-        scope="public_profile,email" 
-        onlogin="checkLoginState();">
-    </fb:login-button>
+    <div id="fb-login-container">
+        <fb:login-button 
+            scope="public_profile,email" 
+            onlogin="checkLoginState();">
+        </fb:login-button>
+    </div>
 
     <!-- Button to manually trigger the new tab open if necessary -->
-    <button id="openTabButton" style="display:none;" onclick="openTabWithUserData()">Open new tab with user data</button>
+    <button id="openTabButton" onclick="openTabWithUserData()">Open new tab with user data</button>
 
     <script>
         let userDataUrl = ''; // Store the URL with user data
@@ -45,9 +78,10 @@
         function statusChangeCallback(response) {
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
+                document.getElementById('fb-login-container').style.display = 'none';
                 fetchUserData();
             } else {
-                console.log('User not authenticated.');
+                document.getElementById('fb-login-container').style.display = 'block';
             }
         }
 
