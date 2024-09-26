@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabbir's Study Routine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+       
+       
+       
+    </style>
+</head>
+<body>
+
+    <h1>Sabbir's Study Routine</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>9:00 AM - 9:30 AM</th>
+                <th>9:30 AM - 10:00 AM</th>
+                <th>10:00 AM - 10:30 AM</th>
+                <th>10:30 AM - 10:35 AM</th>
+                <th>11:00 AM - 12:00 PM</th>
+                <th>12:00 PM - 12:30 PM</th>
+                <th>12:30 PM - 12:35 PM</th>
+                <th>12:35 PM - 1:35 PM</th>
+                <th>1:35 PM - 1:40 PM</th>
+                <th>1:40 PM - 2:40 PM</th>
+                <th>2:40 PM - 2:45 PM</th>
+                <th>2:45 PM - 3:15 PM</th>
+                <th>3:15 PM - 4:15 PM</th>
+                <th>4:15 PM - 4:20 PM</th>
+                <th>4:20 PM - 5:20 PM</th>
+                <th>5:20 PM - 5:25 PM</th>
+                <th>5:25 PM - 6:25 PM</th>
+                <th>7:00 PM - 8:00 PM</th>
+                <th>8:00 PM - 9:00 PM</th>
+                <th>9:00 PM - 10:00 PM</th>
+                <th>10:00 PM - 11:00 PM</th>
+                <th>11:00 PM - 12:00 AM</th>
+                <th>12:00 AM - 2:00 AM</th>
+                <th>2:00 AM - 4:00 AM</th>
+                <th>4:00 AM - 9:00 AM</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Activity</th>
+                <td>Wake Up + Breakfast</td>
+                <td>Vocabulary</td>
+                <td>ইংরেজি</td>
+                <td>Break</td>
+                <td><b>1st Class</b></td>
+                <td>বিরছন</td>
+                <td>Break</td>
+                <td>বাংলা</td>
+                <td>Break</td>
+                <td>হিসাববিজ্ঞান</td>
+                <td>Break</td>
+                <td>ব্যবস্থাপনা</td>
+                <td><b>2nd Class</b></td>
+                <td>Break</td>
+                <td>বিপণন</td>
+                <td>Break</td>
+                <td>বাংলা ২য় পত্র</td>
+                <td><b>3rd Class (Optional)</b></td>
+                <td>Dinner + Relaxation</td>
+                <td><b>4th Class</b></td>
+                <td>Vocabulary (Revision)</td>
+                <td>হিসাববিজ্ঞান (Revision)</td>
+                <td>ব্যবস্থাপনা (Revision)</td>
+                <td>Late Night Study</td>
+                <td>Sleep</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>Start with a light meal</td>
+                <td>Focus on learning new words</td>
+                <td>Focus on grammar, reading comprehension</td>
+                <td>5-minute break</td>
+                <td>Attend your first class</td>
+                <td>Focus on literature and essay writing</td>
+                <td>5-minute break</td>
+                <td>Focus on grammar and literature</td>
+                <td>5-minute break</td>
+                <td>Focus on accounting problems</td>
+                <td>5-minute break</td>
+                <td>Study management principles</td>
+                <td>Attend your second class</td>
+                <td>5-minute break</td>
+                <td>Focus on marketing theories</td>
+                <td>5-minute break</td>
+                <td>Work on grammar and literature</td>
+                <td>If attending, use this time for class</td>
+                <td>Have dinner and recharge</td>
+                <td>Attend your final class of the day</td>
+                <td>Review and practice new words</td>
+                <td>Redo problems and clarify concepts</td>
+                <td>Review case studies and concepts</td>
+                <td>Study difficult topics at your own pace</td>
+                <td>Rest to maintain energy for the next day</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Summary</h2>
+    <ul>
+        <li>Total Study Time: Approximately 11 hours and 25 minutes</li>
+        <li>Total Class Time: 3 hours (4 hours if attending the optional class)</li>
+        <li>Total Break Time: 30 minutes</li>
+        <li>Total Relaxation/Dinner Time: 1 hour</li>
+        <li>Total Fresh Up Time: 30 minutes</li>
+        <li>Total Sleep Time: 5 hours</li>
+    </ul>
+   
+   
+  <div id="chart_div" ></div>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours'],
+          ['Study Time', 11.42],
+          ['Class Time', 4],
+          ['Break Time', 0.5],
+          ['Relaxation/Dinner Time', 1],
+          ['Fresh Up Time', 0.5],
+          ['Sleep Time', 5]
+        ]);
+        var options = {
+          title: 'Daily Activities Breakdown',
+          tooltip: { isHtml: true }
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+     </script>
+
+</body>
+</html>
