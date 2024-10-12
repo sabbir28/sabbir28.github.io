@@ -282,75 +282,104 @@
         <p>All rights reserved © MD. Sabbir Hoshen</p>
     </footer>
 
-    <script>
-        async function fetchCourseData() {
-            const jsonUrl = document.getElementById('json-url').value;
-            const errorMessage = document.getElementById('error-message');
-            const loadingBar = document.getElementById('loading-bar');
-            const inputSection = document.querySelector('.input-section');
-            const courseHeader = document.querySelector('.course-header');
-            const courseDetails = document.querySelector('.course-details');
-            const courseSections = document.querySelector('.course-sections');
+ <script>
+    // Function to extract the URL parameter if present
+    function getUrlParameter(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
 
-            // Hide any previous course data and error messages
-            errorMessage.style.display = 'none';
-            courseHeader.style.display = 'none';
-            courseDetails.style.display = 'none';
-            courseSections.style.display = 'none';
-            loadingBar.style.display = 'block'; // Show loading bar
+    // Function to fetch and render the course data
+    async function fetchCourseData() {
+        const jsonUrl = document.getElementById('json-url').value;
+        const errorMessage = document.getElementById('error-message');
+        const loadingBar = document.getElementById('loading-bar');
+        const inputSection = document.querySelector('.input-section');
+        const courseHeader = document.querySelector('.course-header');
+        const courseDetails = document.querySelector('.course-details');
+        const courseSections = document.querySelector('.course-sections');
 
-            inputSection.style.display = 'none'; // Hide input and button while fetching
+        // Hide any previous course data and error messages
+        errorMessage.style.display = 'none';
+        courseHeader.style.display = 'none';
+        courseDetails.style.display = 'none';
+        courseSections.style.display = 'none';
+        loadingBar.style.display = 'block'; // Show loading bar
 
-            if (!jsonUrl) {
-                errorMessage.textContent = 'Please enter a valid URL.';
-                errorMessage.style.display = 'block';
-                inputSection.style.display = 'flex'; // Show input section again
-                loadingBar.style.display = 'none'; // Hide loading bar
-                return;
-            }
+        inputSection.style.display = 'none'; // Hide input and button while fetching
 
-            try {
-                const response = await fetch(jsonUrl);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch the data.');
-                }
-                const data = await response.json();
-
-                // Fill course data
-                document.getElementById('course-photo').src = data.photo;
-                document.getElementById('course-title').textContent = data.title;
-                document.getElementById('course-language').textContent = data.language;
-                document.getElementById('course-difficulty').textContent = data.difficulty;
-                document.getElementById('course-price').textContent = data.price;
-                document.getElementById('course-available-at').textContent = data.availableAt;
-
-                // Populate sections
-                const sectionsContainer = document.getElementById('sections-container');
-                sectionsContainer.innerHTML = ''; // Clear previous sections
-                data.sections.forEach(section => {
-                    const sectionDiv = document.createElement('div');
-                    sectionDiv.classList.add('section');
-                    sectionDiv.innerHTML = `
-                        <h3>${section.title}</h3>
-                        <p>${section.description}</p>
-                    `;
-                    sectionsContainer.appendChild(sectionDiv);
-                });
-
-                // Display course data
-                courseHeader.style.display = 'block';
-                courseDetails.style.display = 'grid';
-                courseSections.style.display = 'block';
-
-            } catch (error) {
-                errorMessage.textContent = error.message;
-                errorMessage.style.display = 'block';
-            } finally {
-                inputSection.style.display = 'flex'; // Show input and button again
-                loadingBar.style.display = 'none'; // Hide loading bar
-            }
+        if (!jsonUrl) {
+            errorMessage.textContent = 'Please enter a valid URL.';
+            errorMessage.style.display = 'block';
+            inputSection.style.display = 'flex'; // Show input section again
+            loadingBar.style.display = 'none'; // Hide loading bar
+            return; // Exit the function
         }
-    </script>
+
+        try {
+            const response = await fetch(jsonUrl);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.json();
+
+            // Log the received data to the console
+            console.log('Fetched data:', data);
+
+            // Make sure the properties exist
+            if (!data.courseSections || !Array.isArray(data.courseSections)) {
+                throw new Error('Course sections data is not available or not an array.');
+            }
+
+            // Update the UI with the fetched data
+            document.getElementById('course-title').innerText = data.courseTitle || 'No Title Available';
+            document.getElementById('course-language').innerText = data.language || 'N/A';
+            document.getElementById('course-difficulty').innerText = data.difficulty || 'N/A';
+            document.getElementById('course-price').innerText = data.price || 'N/A';
+            document.getElementById('course-available-at').innerText = data.availableAt || 'N/A';
+            document.getElementById('course-photo').src = data.courseImage || '';
+
+            // Show course header and details
+            courseHeader.style.display = 'block';
+            courseDetails.style.display = 'block';
+
+            // Display course sections
+            const sectionsContainer = document.getElementById('sections-container');
+            sectionsContainer.innerHTML = ''; // Clear previous sections
+            data.courseSections.forEach(section => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+                sectionDiv.innerHTML = `
+                    <h3>${section.title}</h3>
+                    <p>${section.description || 'No description available.'}</p>
+                    <a href="${section.link}" target="_blank">Go to section</a>
+                `;
+                sectionsContainer.appendChild(sectionDiv);
+            });
+
+            // Show sections container
+            courseSections.style.display = 'block';
+
+        } catch (error) {
+            console.error('Fetch error:', error);
+            errorMessage.textContent = 'Error fetching course data: ' + error.message;
+            errorMessage.style.display = 'block';
+        } finally {
+            loadingBar.style.display = 'none'; // Hide loading bar
+            inputSection.style.display = 'flex'; // Show input section again
+        }
+    }
+
+    // Function to check for URL parameter and fetch data automatically
+    window.onload = function() {
+        const urlParam = getUrlParameter('url');
+        if (urlParam) {
+            document.getElementById('json-url').value = urlParam; // Set the URL in the input field
+            fetchCourseData(); // Fetch the course data automatically
+        }
+    }
+</script>
+
 
 </body>
 
