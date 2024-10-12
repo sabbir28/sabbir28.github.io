@@ -57,6 +57,12 @@
 </div>
 
 <script>
+// Function to extract the URL parameter if present
+function getUrlParameter(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
 // Function to fetch and render the course data
 async function fetchCourseData() {
     const jsonUrl = document.getElementById('json-url').value; // Get the user-input URL
@@ -125,6 +131,15 @@ function renderCourseData(courseData) {
         
         sectionsContainer.appendChild(sectionElement);
     });
+}
+
+// Function to check for URL parameter and fetch data automatically
+window.onload = function() {
+    const urlParam = getUrlParameter('url');
+    if (urlParam) {
+        document.getElementById('json-url').value = urlParam; // Set the URL in the input field
+        fetchCourseData(); // Fetch the course data automatically
+    }
 }
 </script>
 
