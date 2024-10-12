@@ -5,38 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Details</title>
     <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
         }
+
+        /* Main container */
         .course-container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* Input section */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-section input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .input-section button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .input-section button:hover {
+            background-color: #0056b3;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Course details */
+        .course-header {
+            text-align: center;
+        }
+
         .course-header img {
             width: 100%;
             height: auto;
-        }
-        .course-header, .course-details, .course-sections {
+            border-radius: 10px;
             margin-bottom: 20px;
         }
-        .section {
-            border-bottom: 1px solid #ccc;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+
+        .course-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
         }
+
+        .course-details p {
+            font-size: 1.1em;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sections */
+        .course-sections {
+            margin-top: 20px;
+        }
+
+        .course-sections h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
         .section h3 {
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+
+        .section p {
             margin-bottom: 5px;
+        }
+
+        .section a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .course-details {
+                grid-template-columns: 1fr;
+            }
+
+            .input-section {
+                width: 100%;
+            }
+
+            .input-section input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .course-container {
+                padding: 15px;
+            }
+
+            .section h3, .course-sections h2 {
+                font-size: 1.2em;
+            }
+
+            .course-details p {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="course-container">
-    <h2>Enter the URL to Fetch Course Data:</h2>
-    <input type="text" id="json-url" placeholder="Enter the JSON URL" style="width: 100%;">
-    <button onclick="fetchCourseData()">Fetch Course Data</button>
-
-    <div id="error-message" style="color: red; display: none;"></div>
+    <div class="input-section">
+        <h2>Enter the URL to Fetch Course Data:</h2>
+        <input type="text" id="json-url" placeholder="Enter the JSON URL">
+        <button onclick="fetchCourseData()">Fetch Course Data</button>
+        <div id="error-message" style="display: none;"></div>
+    </div>
 
     <div class="course-header" style="display: none;">
         <img id="course-photo" src="" alt="Course Image">
