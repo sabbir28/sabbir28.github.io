@@ -1,349 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Course Details</title>
-    <style>
-        /* Importing a fancy Google Font */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@400;700&display=swap');
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Video Player</title>
+        <link rel="stylesheet" href="f.css">
+	</head>
+	<body>
+		<div class="loading-bar" style="display: none;"></div>
+		<!-- Header Section -->
+		<header>
+			<h1>MD. SABBIR HOSHEN HOWLADER</h1>
+			<nav>
+				<a href="https://y2mate.com">YT downloder</a>
+				<a href="/">Home</a>
+			</nav>
+		</header>
 
-        /* Basic reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+		<div class="course-container">
+			<div class="input-section">
+				<h2>Enter the URL to Fetch Course Data:</h2>
+				<input type="text" id="json-url" placeholder="Enter the JSON URL">
+				<button onclick="fetchCourseData()">Fetch Course Data</button>
+				<div id="error-message" style="display: none;"></div>
+			</div>
 
-        body {
-            font-family: 'Raleway', sans-serif;
-            background-color: #121212;
-            color: #c7c7c7;
-            line-height: 1.6;
-        }
+			<div class="course-header" style="display: none;">
+				<img id="course-photo" src="" alt="Course Image">
+				<h1 id="course-title"></h1>
+			</div>
 
-        /* Header */
-        header {
-            background-color: #1e1e1e;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid #ff4500;
-        }
+			<div class="course-details" style="display: none;">
+				<p><strong>Language:</strong> <span id="course-language"></span></p>
+				<p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
+				<p><strong>Price:</strong> <span id="course-price"></span></p>
+				<p><strong>Available At:</strong> <span id="course-available-at"></span></p>
+			</div>
 
-        header h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: #ff4500;
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-        }
-
-        header nav a {
-            color: #ff4500;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.2rem;
-        }
-
-        header nav a:hover {
-            text-decoration: underline;
-        }
-
-        /* Main container */
-        .course-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2);
-        }
-
-        /* Input section */
-        .input-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .input-section input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ff4500;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #282828;
-            color: #ff4500;
-        }
-
-        .input-section button {
-            padding: 10px 20px;
-            background-color: #ff4500;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .input-section button:hover {
-            background-color: #ff7000;
-        }
-
-        #error-message {
-            color: red;
-            margin-top: 10px;
-        }
-
-        /* Course details */
-        .course-header {
-            text-align: center;
-        }
-
-        .course-header img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #ff4500;
-        }
-
-        .course-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .course-details p {
-            font-size: 1.1em;
-            background-color: #282828;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(255, 69, 0, 0.3);
-            color: #ff4500;
-        }
-
-        /* Sections */
-        .course-sections {
-            margin-top: 20px;
-        }
-
-        .course-sections h2 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            color: #ff4500;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #282828;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(255, 69, 0, 0.3);
-        }
-
-        .section h3 {
-            margin-bottom: 10px;
-            color: #ff4500;
-        }
-
-        .section p {
-            margin-bottom: 5px;
-        }
-
-        .section a {
-            color: #ff4500;
-            text-decoration: none;
-        }
-
-        .section a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #1e1e1e;
-            color: #ff4500;
-            font-family: 'Orbitron', sans-serif;
-            border-top: 2px solid #ff4500;
-        }
-
-        footer p {
-            margin: 5px 0;
-        }
-
-        footer a {
-            color: #ff4500;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .course-details {
-                grid-template-columns: 1fr;
-            }
-
-            .input-section {
-                width: 100%;
-            }
-
-            .input-section input {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .course-container {
-                padding: 15px;
-            }
-
-            .section h3, .course-sections h2 {
-                font-size: 1.2em;
-            }
-
-            .course-details p {
-                font-size: 1em;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Header Section -->
-<header>
-    <h1>MD. SABBIR HOSHEN HOWLADER</h1>
-    <nav>
-        <a href="y2mate.com">YT downloder</a>
-        <a href="/">Home</a>
-    </nav>
-</header>
-    
-<div class="course-container">
-    <div class="input-section">
-        <h2>Enter the URL to Fetch Course Data:</h2>
-        <input type="text" id="json-url" placeholder="Enter the JSON URL">
-        <button onclick="fetchCourseData()">Fetch Course Data</button>
-        <div id="error-message" style="display: none;"></div>
-    </div>
-
-    <div class="course-header" style="display: none;">
-        <img id="course-photo" src="" alt="Course Image">
-        <h1 id="course-title"></h1>
-    </div>
-
-    <div class="course-details" style="display: none;">
-        <p><strong>Language:</strong> <span id="course-language"></span></p>
-        <p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
-        <p><strong>Price:</strong> <span id="course-price"></span></p>
-        <p><strong>Available At:</strong> <span id="course-available-at"></span></p>
-    </div>
-
-    <div class="course-sections" style="display: none;">
-        <h2>Sections</h2>
-        <div id="sections-container"></div>
-    </div>
-</div>
-    
-<!-- Footer Section -->
-<footer>
-    <p>All rights reserved © MD. Sabbir Hoshen</p>
-</footer>
-<script>
-    
-// Function to extract the URL parameter if present
-function getUrlParameter(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Function to fetch and render the course data
-async function fetchCourseData() {
-    const jsonUrl = document.getElementById('json-url').value; // Get the user-input URL
-    const errorMessage = document.getElementById('error-message');
-    const courseHeader = document.querySelector('.course-header');
-    const courseDetails = document.querySelector('.course-details');
-    const courseSections = document.querySelector('.course-sections');
-
-    // Hide any previous course data and error messages
-    errorMessage.style.display = 'none';
-    courseHeader.style.display = 'none';
-    courseDetails.style.display = 'none';
-    courseSections.style.display = 'none';
-
-    if (!jsonUrl) {
-        errorMessage.textContent = 'Please enter a valid URL.';
-        errorMessage.style.display = 'block';
-        return;
-    }
-
-    try {
-        const response = await fetch(jsonUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const courseData = await response.json();
-        renderCourseData(courseData.data);
-    } catch (error) {
-        errorMessage.textContent = 'Error fetching course data: ' + error.message;
-        errorMessage.style.display = 'block';
-    }
-}
-
-// Function to render the course data
-function renderCourseData(courseData) {
-    // Show course header and details sections
-    document.querySelector('.course-header').style.display = 'block';
-    document.querySelector('.course-details').style.display = 'block';
-    document.querySelector('.course-sections').style.display = 'block';
-
-    // Setting course information
-    document.getElementById('course-title').textContent = courseData.title;
-    document.getElementById('course-photo').src = courseData.photo;
-    document.getElementById('course-language').textContent = courseData.language;
-    document.getElementById('course-difficulty').textContent = courseData.difficulty;
-    document.getElementById('course-price').textContent = courseData.price === "0.00" ? "Free" : "$" + courseData.price;
-    document.getElementById('course-available-at').textContent = new Date(courseData.available_at).toLocaleString();
-
-    // Rendering sections
-    const sectionsContainer = document.getElementById('sections-container');
-    sectionsContainer.innerHTML = ''; // Clear previous content
-
-    courseData.sections.forEach(section => {
-        const sectionElement = document.createElement('div');
-        sectionElement.classList.add('section');
-        sectionElement.innerHTML = `<h3>${section.title}</h3>`;
-        
-        section.contents.forEach(content => {
-            if (content.link) {
-                sectionElement.innerHTML += `<p><a href="${content.link.src}" target="_blank">${content.title}</a></p>`;
-            }
-            if (content.video) {
-                sectionElement.innerHTML += `<p><a href="${content.video.link}" target="_blank">${content.title}</a></p>`;
-            }
-        });
-        
-        sectionsContainer.appendChild(sectionElement);
-    });
-}
-
-// Function to check for URL parameter and fetch data automatically
-window.onload = function() {
-    const urlParam = getUrlParameter('url');
-    if (urlParam) {
-        document.getElementById('json-url').value = urlParam; // Set the URL in the input field
-        fetchCourseData(); // Fetch the course data automatically
-    }
-}
-</script>
-
-</body>
+			<div class="course-sections" style="display: none;">
+				<h2>Sections</h2>
+				<div id="sections-container"></div>
+			</div>
+		</div>
+		<!-- Footer Section -->
+		<footer>
+			<p>All rights reserved © MD. Sabbir Hoshen</p>
+		</footer>
+		<script>
+			// Function to extract the URL parameter if present
+			function getUrlParameter(param) {
+			    const urlParams = new URLSearchParams(window.location.search);
+			    return urlParams.get(param);
+			}
+			
+			// Function to fetch and render the course data
+			async function fetchCourseData() {
+			    const jsonUrl = document.getElementById('json-url').value; // Get the user-input URL
+			    const errorMessage = document.getElementById('error-message');
+			    const courseHeader = document.querySelector('.course-header');
+			    const courseDetails = document.querySelector('.course-details');
+			    const courseSections = document.querySelector('.course-sections');
+			    const loadingBar = document.querySelector('.loading-bar');
+			    const inputSection = document.querySelector('.input-section');
+			
+			    // Hide any previous course data and error messages
+			    errorMessage.style.display = 'none';
+			    courseHeader.style.display = 'none';
+			    courseDetails.style.display = 'none';
+			    courseSections.style.display = 'none';
+			
+			    if (!jsonUrl) {
+			        errorMessage.textContent = 'Please enter a valid URL.';
+			        errorMessage.style.display = 'block';
+			        return;
+			    }
+			
+			    // Show loading bar and hide input section
+			    loadingBar.style.display = 'block';
+			    inputSection.style.display = 'none';
+			
+			    try {
+			        const response = await fetch(jsonUrl);
+			        if (!response.ok) {
+			            throw new Error(`HTTP error! Status: ${response.status}`);
+			        }
+			        const courseData = await response.json();
+			        renderCourseData(courseData.data);
+			    } catch (error) {
+			        errorMessage.textContent = 'Error fetching course data: ' + error.message;
+			        errorMessage.style.display = 'block';
+			    } finally {
+			        // Hide loading bar after data fetch
+			        loadingBar.style.display = 'none';
+			    }
+			}
+			
+			
+			// Function to render the course data
+			function renderCourseData(courseData) {
+			    // Show course header and details sections
+			    document.querySelector('.course-header').style.display = 'block';
+			    document.querySelector('.course-details').style.display = 'block';
+			    document.querySelector('.course-sections').style.display = 'block';
+			
+			    // Setting course information
+			    document.getElementById('course-title').textContent = courseData.title;
+			    document.getElementById('course-photo').src = courseData.photo;
+			    document.getElementById('course-language').textContent = courseData.language;
+			    document.getElementById('course-difficulty').textContent = courseData.difficulty;
+			    document.getElementById('course-price').textContent = courseData.price === "0.00" ? "Free" : "৳" + courseData.price;
+			    document.getElementById('course-available-at').textContent = new Date(courseData.available_at).toLocaleString();
+			
+			    // Rendering sections
+			    const sectionsContainer = document.getElementById('sections-container');
+			    sectionsContainer.innerHTML = ''; // Clear previous content
+			
+			    courseData.sections.forEach(section => {
+			        const sectionElement = document.createElement('div');
+			        sectionElement.classList.add('section');
+			        sectionElement.innerHTML = `<h3>${section.title}</h3>`;
+			        
+			        section.contents.forEach(content => {
+			            if (content.link) {
+			                sectionElement.innerHTML += `<p><a href="${content.link.src}" target="_blank">${content.title}</a></p>`;
+			            }
+			            if (content.video) {
+			                sectionElement.innerHTML += `<p><a href="${content.video.link}" target="_blank">${content.title}</a></p>`;
+			            }
+			        });
+			        
+			        sectionsContainer.appendChild(sectionElement);
+			    });
+			}
+			
+			// Function to check for URL parameter and fetch data automatically
+			window.onload = function() {
+			    const urlParam = getUrlParameter('url');
+			    if (urlParam) {
+			        document.getElementById('json-url').value = urlParam; // Set the URL in the input field
+			        fetchCourseData(); // Fetch the course data automatically
+			    }
+			}
+		</script>
+	</body>
 </html>
