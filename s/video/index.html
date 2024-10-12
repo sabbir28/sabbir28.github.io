@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .course-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .course-header img {
+            width: 100%;
+            height: auto;
+        }
+        .course-header, .course-details, .course-sections {
+            margin-bottom: 20px;
+        }
+        .section {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        .section h3 {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="course-container">
+    <h2>Enter the URL to Fetch Course Data:</h2>
+    <input type="text" id="json-url" placeholder="Enter the JSON URL" style="width: 100%;">
+    <button onclick="fetchCourseData()">Fetch Course Data</button>
+
+    <div id="error-message" style="color: red; display: none;"></div>
+
+    <div class="course-header" style="display: none;">
+        <img id="course-photo" src="" alt="Course Image">
+        <h1 id="course-title"></h1>
+    </div>
+
+    <div class="course-details" style="display: none;">
+        <p><strong>Language:</strong> <span id="course-language"></span></p>
+        <p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
+        <p><strong>Price:</strong> <span id="course-price"></span></p>
+        <p><strong>Available At:</strong> <span id="course-available-at"></span></p>
+    </div>
+
+    <div class="course-sections" style="display: none;">
+        <h2>Sections</h2>
+        <div id="sections-container"></div>
+    </div>
+</div>
+
+<script>
+// Function to fetch and render the course data
+async function fetchCourseData() {
+    const jsonUrl = document.getElementById('json-url').value; // Get the user-input URL
+    const errorMessage = document.getElementById('error-message');
+    const courseHeader = document.querySelector('.course-header');
+    const courseDetails = document.querySelector('.course-details');
+    const courseSections = document.querySelector('.course-sections');
+
+    // Hide any previous course data and error messages
+    errorMessage.style.display = 'none';
+    courseHeader.style.display = 'none';
+    courseDetails.style.display = 'none';
+    courseSections.style.display = 'none';
+
+    if (!jsonUrl) {
+        errorMessage.textContent = 'Please enter a valid URL.';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    try {
+        const response = await fetch(jsonUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const courseData = await response.json();
+        renderCourseData(courseData.data);
+    } catch (error) {
+        errorMessage.textContent = 'Error fetching course data: ' + error.message;
+        errorMessage.style.display = 'block';
+    }
+}
+
+// Function to render the course data
+function renderCourseData(courseData) {
+    // Show course header and details sections
+    document.querySelector('.course-header').style.display = 'block';
+    document.querySelector('.course-details').style.display = 'block';
+    document.querySelector('.course-sections').style.display = 'block';
+
+    // Setting course information
+    document.getElementById('course-title').textContent = courseData.title;
+    document.getElementById('course-photo').src = courseData.photo;
+    document.getElementById('course-language').textContent = courseData.language;
+    document.getElementById('course-difficulty').textContent = courseData.difficulty;
+    document.getElementById('course-price').textContent = courseData.price === "0.00" ? "Free" : "$" + courseData.price;
+    document.getElementById('course-available-at').textContent = new Date(courseData.available_at).toLocaleString();
+
+    // Rendering sections
+    const sectionsContainer = document.getElementById('sections-container');
+    sectionsContainer.innerHTML = ''; // Clear previous content
+
+    courseData.sections.forEach(section => {
+        const sectionElement = document.createElement('div');
+        sectionElement.classList.add('section');
+        sectionElement.innerHTML = `<h3>${section.title}</h3>`;
+        
+        section.contents.forEach(content => {
+            if (content.link) {
+                sectionElement.innerHTML += `<p><a href="${content.link.src}" target="_blank">${content.title}</a></p>`;
+            }
+            if (content.video) {
+                sectionElement.innerHTML += `<p><a href="${content.video.link}" target="_blank">${content.title}</a></p>`;
+            }
+        });
+        
+        sectionsContainer.appendChild(sectionElement);
+    });
+}
+</script>
+
+</body>
+</html>
