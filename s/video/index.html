@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Futuristic Course Details</title>
     <style>
-        /* Importing Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Hind+Siliguri:wght@400;700&family=Raleway:wght@400;700&display=swap');
+        /* Importing a fancy Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@400;700&display=swap');
 
         /* Basic reset */
         * {
@@ -19,7 +18,7 @@
         body {
             font-family: 'Raleway', sans-serif;
             background-color: #121212;
-            color: #e0e0e0;
+            color: #c7c7c7;
             line-height: 1.6;
         }
 
@@ -97,25 +96,6 @@
             margin-top: 10px;
         }
 
-        /* Loading Bar */
-        #loading-bar {
-            display: none;
-            margin-top: 10px;
-            height: 5px;
-            width: 100%;
-            background-color: #ff4500;
-            animation: load 2s infinite;
-        }
-
-        @keyframes load {
-            0% {
-                width: 0%;
-            }
-            100% {
-                width: 100%;
-            }
-        }
-
         /* Course details */
         .course-header {
             text-align: center;
@@ -163,7 +143,6 @@
             background-color: #282828;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(255, 69, 0, 0.3);
-            text-align: center; /* Center aligning the Bangla text */
         }
 
         .section h3 {
@@ -227,8 +206,7 @@
                 padding: 15px;
             }
 
-            .section h3,
-            .course-sections h2 {
+            .section h3, .course-sections h2 {
                 font-size: 1.2em;
             }
 
@@ -238,52 +216,50 @@
         }
     </style>
 </head>
-
 <body>
 
     <!-- Header Section -->
-    <header>
-        <h1>MD. SABBIR HOSHEN HOWLADER</h1>
-        <nav>
-            <a href="y2mate.com">YT Downloader</a>
-            <a href="/">Home</a>
-        </nav>
-    </header>
-
-    <div class="course-container">
-        <div class="input-section">
-            <h2>Enter the URL to Fetch Course Data:</h2>
-            <input type="text" id="json-url" placeholder="Enter the JSON URL">
-            <button onclick="fetchCourseData()">Fetch Course Data</button>
-            <div id="loading-bar"></div>
-            <div id="error-message" style="display: none;"></div>
-        </div>
-
-        <div class="course-header" style="display: none;">
-            <img id="course-photo" src="" alt="Course Image">
-            <h1 id="course-title"></h1>
-        </div>
-
-        <div class="course-details" style="display: none;">
-            <p><strong>Language:</strong> <span id="course-language"></span></p>
-            <p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
-            <p><strong>Price:</strong> <span id="course-price"></span></p>
-            <p><strong>Available At:</strong> <span id="course-available-at"></span></p>
-        </div>
-
-        <div class="course-sections" style="display: none;">
-            <h2>Sections</h2>
-            <div id="sections-container"></div>
-        </div>
+<header>
+    <h1>MD. SABBIR HOSHEN HOWLADER</h1>
+    <nav>
+        <a href="y2mate.com">YT downloder</a>
+        <a href="/">Home</a>
+    </nav>
+</header>
+    
+<div class="course-container">
+    <div class="input-section">
+        <h2>Enter the URL to Fetch Course Data:</h2>
+        <input type="text" id="json-url" placeholder="Enter the JSON URL">
+        <button onclick="fetchCourseData()">Fetch Course Data</button>
+        <div id="error-message" style="display: none;"></div>
     </div>
 
-    <!-- Footer Section -->
-    <footer>
-        <p>All rights reserved © MD. Sabbir Hoshen</p>
-    </footer>
+    <div class="course-header" style="display: none;">
+        <img id="course-photo" src="" alt="Course Image">
+        <h1 id="course-title"></h1>
+    </div>
 
- <script>
-   // Function to extract the URL parameter if present
+    <div class="course-details" style="display: none;">
+        <p><strong>Language:</strong> <span id="course-language"></span></p>
+        <p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
+        <p><strong>Price:</strong> <span id="course-price"></span></p>
+        <p><strong>Available At:</strong> <span id="course-available-at"></span></p>
+    </div>
+
+    <div class="course-sections" style="display: none;">
+        <h2>Sections</h2>
+        <div id="sections-container"></div>
+    </div>
+</div>
+    
+<!-- Footer Section -->
+<footer>
+    <p>All rights reserved © MD. Sabbir Hoshen</p>
+</footer>
+<script>
+    
+// Function to extract the URL parameter if present
 function getUrlParameter(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
@@ -291,43 +267,34 @@ function getUrlParameter(param) {
 
 // Function to fetch and render the course data
 async function fetchCourseData() {
-    const jsonUrl = document.getElementById('json-url').value;
+    const jsonUrl = document.getElementById('json-url').value; // Get the user-input URL
     const errorMessage = document.getElementById('error-message');
-    const loadingBar = document.getElementById('loading-bar');
-    const inputSection = document.querySelector('.input-section');
+    const courseHeader = document.querySelector('.course-header');
+    const courseDetails = document.querySelector('.course-details');
+    const courseSections = document.querySelector('.course-sections');
 
     // Hide any previous course data and error messages
     errorMessage.style.display = 'none';
-    loadingBar.style.display = 'block'; // Show loading bar
-    inputSection.style.display = 'none'; // Hide input and button while fetching
+    courseHeader.style.display = 'none';
+    courseDetails.style.display = 'none';
+    courseSections.style.display = 'none';
 
     if (!jsonUrl) {
         errorMessage.textContent = 'Please enter a valid URL.';
         errorMessage.style.display = 'block';
-        inputSection.style.display = 'flex'; // Show input section again
-        loadingBar.style.display = 'none'; // Hide loading bar
-        return; // Exit the function
+        return;
     }
 
     try {
         const response = await fetch(jsonUrl);
         if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const courseData = await response.json();
-
-        // Log the received data to the console
-        console.log('Fetched data:', courseData);
-
-        // Call the render function to update the UI
-        renderCourseData(courseData);
+        renderCourseData(courseData.data);
     } catch (error) {
-        console.error('Fetch error:', error);
         errorMessage.textContent = 'Error fetching course data: ' + error.message;
         errorMessage.style.display = 'block';
-    } finally {
-        loadingBar.style.display = 'none'; // Hide loading bar
-        inputSection.style.display = 'flex'; // Show input section again
     }
 }
 
@@ -339,10 +306,10 @@ function renderCourseData(courseData) {
     document.querySelector('.course-sections').style.display = 'block';
 
     // Setting course information
-    document.getElementById('course-title').textContent = courseData.title || 'No Title Available';
-    document.getElementById('course-photo').src = courseData.photo || '';
-    document.getElementById('course-language').textContent = courseData.language || 'N/A';
-    document.getElementById('course-difficulty').textContent = courseData.difficulty || 'N/A';
+    document.getElementById('course-title').textContent = courseData.title;
+    document.getElementById('course-photo').src = courseData.photo;
+    document.getElementById('course-language').textContent = courseData.language;
+    document.getElementById('course-difficulty').textContent = courseData.difficulty;
     document.getElementById('course-price').textContent = courseData.price === "0.00" ? "Free" : "$" + courseData.price;
     document.getElementById('course-available-at').textContent = new Date(courseData.available_at).toLocaleString();
 
@@ -354,7 +321,7 @@ function renderCourseData(courseData) {
         const sectionElement = document.createElement('div');
         sectionElement.classList.add('section');
         sectionElement.innerHTML = `<h3>${section.title}</h3>`;
-
+        
         section.contents.forEach(content => {
             if (content.link) {
                 sectionElement.innerHTML += `<p><a href="${content.link.src}" target="_blank">${content.title}</a></p>`;
@@ -363,7 +330,7 @@ function renderCourseData(courseData) {
                 sectionElement.innerHTML += `<p><a href="${content.video.link}" target="_blank">${content.title}</a></p>`;
             }
         });
-
+        
         sectionsContainer.appendChild(sectionElement);
     });
 }
@@ -375,11 +342,8 @@ window.onload = function() {
         document.getElementById('json-url').value = urlParam; // Set the URL in the input field
         fetchCourseData(); // Fetch the course data automatically
     }
-};
-
+}
 </script>
 
-
 </body>
-
 </html>
