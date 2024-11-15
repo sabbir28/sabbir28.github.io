@@ -11,7 +11,7 @@
 <meta name="google-site-verification" content="WPhxqM3zXSUz_3eGCIIsONDHN5X6sKrdlij-V-Kvc1o">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
+  <link rel="icon" href="/assets/profile.webp" type="image/webp">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Vendor CSS Files -->
@@ -19,6 +19,7 @@
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/update24/update24-d.css">
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -80,16 +81,17 @@
                   <div class="row">
                     <div class="col-sm-6 col-md-5">
                       <div class="about-img">
-                        <img src="https://cdn5.f-cdn.com/ppic/229572703/logo/71851112/8yYjk/CROPPED_profile_logo_LinkedIn_71851112.jpg?image-optimizer=force&format=webply&width=336%201x,%20https://cdn5.f-cdn.com/ppic/229572703/logo/71851112/8yYjk/CROPPED_profile_logo_LinkedIn_71851112.jpg?image-optimizer=force&format=webply&width=560%202x" class="img-fluid rounded b-shadow-a" alt="SABBIR">
+                        <img src="/assets/profile.webp" class="img-fluid rounded b-shadow-a" alt="SABBIR">
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-7">
-                      <div class="about-info">
-                        <p><span class="title-s">Name: </span> <span> MD. SABBIR HOSHEN</span></p>
-                        <p><span class="title-s">Profile: </span> <span>full stack developer</span></p>
-                        <p><span class="title-s">Email: </span> <span>sabbirb228@gmail.com</span></p>
-                        <p><span class="title-s">Phone: </span> <span>(+88) 01614933357</span></p>
-                      </div>
+                      <div class="about-info" itemscope itemtype="http://schema.org/Person">
+                        <h2 class="about-title">About Me</h2>
+                        <p><span class="title-s">Name: </span> <span itemprop="name">MD. SABBIR HOSHEN</span></p>
+                        <p><span class="title-s">Profile: </span> <span itemprop="jobTitle">Full Stack Developer</span></p>
+                        <p><span class="title-s">Email: </span> <a href="mailto:sabbirb228@gmail.com" itemprop="email">sabbirb228@gmail.com</a></p>
+                        <p><span class="title-s">Phone: </span> <a href="tel:+8801614933357" itemprop="telephone">(+88) 01614933357</a></p>
+                      </div>                      
                     </div>
                   </div>
                   <div class="skill-mf">
@@ -459,7 +461,7 @@
                 <div class="swiper-slide">
                   <div class="testimonial-box">
                     <div class="author-test">
-                      <img src="assets/img/testimonial-2.jpg" alt="" class="rounded-circle b-shadow-a">
+                      <img src="assets/img2/66.jpg" alt="" class="rounded-circle b-shadow-a">
                       <span class="author">Monchi (Freelancher.com)</span>
                     </div>
                     <div class="content-test">
@@ -470,19 +472,23 @@
                   </div>
                 </div><!-- End testimonial item -->
 
+                <!-- HTML structure for the testimonial item -->
                 <div class="swiper-slide">
                   <div class="testimonial-box">
                     <div class="author-test">
-                      <img src="assets/img/testimonial-4.jpg" alt="" class="rounded-circle b-shadow-a">
-                      <span class="author">josephjakpa (upwork)</span>
+                      <img src="assets/img2/22.jpg" alt="User Image" class="rounded-circle b-shadow-a" id="user-image">
+                      <span class="author" id="user-name">
+                        josephjakpa (upwork)
+                      </span>
                     </div>
                     <div class="content-test">
-                      <p class="description lead">
+                      <p class="description lead" id="user-testimonial">
                         Sabbir has a good command of python language. He understood the task and delivered in record time. He provided support even after delivery. I am very pleased with his work. would recommend and definitely work with him again.
                       </p>
                     </div>
                   </div>
-                </div><!-- End testimonial item -->
+                </div>
+
               </div>
               <div class="swiper-pagination"></div>
             </div>
@@ -518,6 +524,9 @@
 <script>
   // Set the current year dynamically
   document.getElementById('current-year').textContent = new Date().getFullYear();
+
+
+
 </script>
 
 

@@ -1,0 +1,50 @@
+/* CSS for a stylish drop cap paragraph with an old book look */
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap");
+
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box; /* corrected the typo here */
+	background: url("https://media.selfmade.com/images/embossed-velvet-black-w-wallpaper-look-250416-pack.jpg?width=1230&height=1230&i=139727&ud=afryixu33ag");
+	background-size: cover;
+}
+
+.card {
+	position: relative;
+	top: 1rem;
+	left: 50%;
+	transform: translateX(-50%) perspective(850px) rotateY(5deg);
+	text-align: justify;
+	width: 36rem;
+	height: auto;
+	background-color: #fdf5e6;
+	background: url("https://img.freepik.com/foto-premium/vecchia-carta-pergamena-texture-di-sfondo-carta-da-parati-vintage_118047-11775.jpg");
+	border: 1px solid #d3c4a3;
+	padding: 10px 20px;
+	margin: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+	font-size: 1.4rem;
+	font-family: "Dancing Script", serif;
+}
+
+.drop-cap {
+	margin-left: 1.8rem;
+	font-size: 1.4rem;
+	line-height: 1.6;
+	text-align: justify;
+	font-family: "Dancing Script", serif;
+}
+
+.card h2,
+.card h4 {
+	font-family: "Dancing Script", serif;
+}
+
+.drop-cap::first-letter {
+	font-size: 3em;
+	font-weight: bold;
+	float: left;
+	margin-right: 0.1em;
+	line-height: 1;
+	color: #8b4513;
+}
