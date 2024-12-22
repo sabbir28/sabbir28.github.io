@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modem PCB Design - MicroS Network Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .component {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .component img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .component-description {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .component-description h3 {
+            color: #444;
+            font-size: 18px;
+        }
+        .component-description p {
+            color: #666;
+        }
+        .component-title {
+            font-weight: bold;
+            color: #222;
+        }
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MicroS Network Card - Modem PCB Design</h1>
+
+        <!-- Power Management IC (PMIC) -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Power Management IC (PMIC)</h3>
+                <p>The Power Management IC (PMIC) is responsible for managing power distribution throughout the modem. It ensures that the circuit receives the correct voltages for smooth operation and protects sensitive components from power surges.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/51IhAdqKKDL._AC_SY450_.jpg" alt="Power Management IC">
+        </div>
+
+        <!-- Microcontroller (MCU) -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Microcontroller (MCU) - MicroS Core</h3>
+                <p>The Microcontroller (MCU) is the brain of the MicroS network card. It controls all the processing tasks and coordinates the actions of the various components. It interfaces with the RF transceivers, network interface, and other parts of the system.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/51qxqFiizEL._AC_SX450_.jpg" alt="Microcontroller">
+        </div>
+
+        <!-- RF Transceivers -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">RF Transceivers</h3>
+                <p>The RF Transceivers are responsible for transmitting and receiving wireless signals in the modem. These components handle the radio frequency communication for cellular networks (e.g., 4G LTE) and Wi-Fi, allowing the MicroS network card to connect to the internet and other devices.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/61eSh2ejG-L._AC_SY450_.jpg" alt="RF Transceivers">
+        </div>
+
+        <!-- 4G LTE Transceiver -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">4G LTE Transceiver</h3>
+                <p>This component handles 4G LTE communication, enabling high-speed mobile data transfer. The 4G LTE transceiver is crucial for providing fast and reliable internet connectivity for the MicroS network card in areas with cellular coverage.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/61HslqGG5-L.__AC_SX300_SY300_QL70_ML2_.jpg" alt="4G LTE Transceiver">
+        </div>
+
+        <!-- Realtek Wi-Fi Chip -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Realtek Wi-Fi Chip</h3>
+                <p>The Realtek Wi-Fi chip enables wireless communication through Wi-Fi networks. It is designed for high-speed wireless data transfer, which is ideal for modern internet use cases like streaming and web browsing.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/71BJ0a4xj6L.__AC_SX300_SY300_QL70_ML2_.jpg" alt="Realtek Wi-Fi Chip">
+        </div>
+
+        <!-- LAN/Wi-Fi Interface Chip -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">LAN/Wi-Fi Interface Chip</h3>
+                <p>This chip interfaces the modem with local area networks (LAN) or Wi-Fi networks, enabling fast and efficient data transfer for internet connectivity.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/41ePQwc1CLL._AC_SY450_.jpg" alt="LAN/Wi-Fi Interface Chip">
+        </div>
+
+        <!-- Voltage Regulators -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Voltage Regulators</h3>
+                <p>Voltage regulators maintain the correct voltage levels for different sections of the modem, ensuring stable operation and protecting components from overvoltage.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/71rdPX-gnCL._AC_SY450_.jpg" alt="Voltage Regulators">
+        </div>
+
+        <!-- SIM Card Slot -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">SIM Card Slot</h3>
+                <p>The SIM card slot allows the modem to connect to mobile networks, providing data connectivity through cellular networks such as 3G/4G.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/61hSJLPU+nL._AC_SY450_.jpg" alt="SIM Card Slot">
+        </div>
+
+        <!-- Capacitors and Inductors -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Capacitors and Inductors</h3>
+                <p>Capacitors and inductors are used to filter and stabilize power delivery, reducing noise and ensuring proper voltage levels throughout the circuit.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/71z4vGL8CwS._AC_SX425_.jpg" alt="Capacitors and Inductors">
+        </div>
+
+        <!-- Test Points and Jumpers -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Test Points and Jumpers</h3>
+                <p>Test points are used for debugging and testing the circuit, while jumpers are used for setting configurations or connecting different sections of the board.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/61dbq6Vx21L.__AC_SY300_SX300_QL70_ML2_.jpg" alt="Test Points and Jumpers">
+        </div>
+
+        <!-- Protection Diodes -->
+        <div class="component">
+            <div class="component-description">
+                <h3 class="component-title">Protection Diodes</h3>
+                <p>Protection diodes safeguard sensitive components from electrical surges or static discharge, ensuring the integrity of the circuit.</p>
+            </div>
+            <img src="https://m.media-amazon.com/images/I/41IF4Y8ipEL._AC_SY450_.jpg" alt="Protection Diodes">
+        </div>
+
+    </div>
+
+</body>
+</html>
