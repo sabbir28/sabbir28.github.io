@@ -1,0 +1,94 @@
+{
+  "profile": {
+    "name": "MD. SABBIR HOSHEN",
+    "title": "Full Stack Developer",
+    "email": "sabbirb228@gmail.com",
+    "phone": "(+88) 01614933357",
+    "skills": {
+      "python": "95%",
+      "androidAppDevelopment": "90%",
+      "htmlCssJs": "70%"
+    },
+    "about": "I'm a passionate developer with expertise in Python development and Android web development. My projects reflect my dedication to creating innovative solutions and user-friendly applications. In addition to my technical skills, I bring a strong problem-solving mindset and a commitment to delivering high-quality software. I thrive on tackling challenges and constantly expanding my knowledge in the ever-evolving world of technology."
+  },
+  "services": [
+    {
+      "name": "Python Development",
+      "description": "I specialize in Python development, creating robust and efficient applications. Whether it's web development, data analysis, or automation, I provide solutions that leverage Python's versatility to meet your needs.",
+      "icon": "Python Logo"
+    },
+    {
+      "name": "Android App Development",
+      "description": "I specialize in Android app development, creating engaging and user-friendly mobile applications. From concept to deployment, I ensure your app meets the highest standards of performance and usability.",
+      "icon": "Android App Development Image"
+    },
+    {
+      "name": "Java Development",
+      "description": "I specialize in Java development, creating robust and scalable software solutions. From enterprise applications to Android apps, I leverage the power of Java to meet your development needs.",
+      "icon": "Java Development Image"
+    },
+    {
+      "name": "Freelance Services",
+      "description": "I provide freelance services, offering a wide range of professional solutions to clients worldwide. From web development to software projects, I'm here to help you achieve your goals.",
+      "icon": "Freelance Services Image"
+    },
+    {
+      "name": "Flask Web Development",
+      "description": "I specialize in Flask web development, creating dynamic and responsive web applications with Python. From building RESTful APIs to crafting full-stack solutions, I bring your web ideas to life using Flask.",
+      "icon": "Flask Web Development Image"
+    },
+    {
+      "name": "OpenCV",
+      "description": "I specialize in OpenCV image processing, leveraging computer vision to analyze and manipulate images and videos. From object detection to facial recognition, I bring the power of OpenCV to solve visual problems.",
+      "icon": "OpenCV Image Processing Image"
+    }
+  ],
+  "portfolio": [
+    {
+      "projectName": "Python Command-Line Tool",
+      "description": "A Python command-line tool for sending HTTP requests with different data types to a server.",
+      "technology": "Python",
+      "date": "18 Sep. 2018"
+    },
+    {
+      "projectName": "Unity Game Code Repository",
+      "description": "Code repository for Unity game projects.",
+      "technology": "Unity",
+      "date": "18 Sep. 2018"
+    },
+    {
+      "projectName": "Android Project for Earning Money from Google Ads",
+      "description": "An Android project designed to generate revenue through Google Ads.",
+      "technology": "Android",
+      "date": "18 Oct. 2022"
+    },
+    {
+      "projectName": "GTA (Game) - Cheat Built by Python",
+      "description": "A cheat tool for GTA built using Python.",
+      "technology": "Python",
+      "date": "18 Sep. 2018"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Monchi",
+      "platform": "Freelancer.com",
+      "testimonial": "Md. Sabbir H. (@PyScripter) is an outstanding Android app developer. His depth of knowledge, attention to detail, and commitment to excellence made our app development journey seamless. Highly recommended for any Android-related projects!"
+    },
+    {
+      "name": "josephjakpa",
+      "platform": "Upwork",
+      "testimonial": "Sabbir has a good command of Python language. He understood the task and delivered in record time. He provided support even after delivery. I am very pleased with his work. Would recommend and definitely work with him again."
+    }
+  ],
+  "stats": {
+    "worksCompleted": 0,
+    "yearsOfExperience": -1,
+    "totalClients": 0,
+    "awardsWon": 0
+  },
+  "footer": {
+    "copyright": "© 2021 - 2025 Sabbir. All Rights Reserved.",
+    "designedBy": "Alor28"
+  }
+}
