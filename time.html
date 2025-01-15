@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Study Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        #video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+
+        #circle .progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                white var(--progress, 0%), 
+                lightgray var(--progress, 0%)
+            );
+        }
+
+        #circle .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            color: white;
+        }
+
+        #progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .stage {
+            width: 30px;
+            height: 30px;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: lightgray;
+            position: relative;
+        }
+
+        .stage.active {
+            background-color: white;
+        }
+
+        .stage::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 20px;
+            height: 5px;
+            background-color: lightgray;
+            transform: translateY(-50%);
+        }
+
+        .stage.active::after {
+            background-color: white;
+        }
+
+        .stage:last-child::after {
+            display: none;
+        }
+
+        #start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: white;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #start-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <div id="video-background">
+        <video autoplay muted loop>
+            <source src="https://sabbir28.github.io/assets/1.mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <h1>Study Timer</h1>
+    <div id="circle">
+        <div class="progress"></div>
+        <div class="timer-text" id="timer">60:00</div>
+    </div>
+    <div id="progress">
+        <div class="stage" id="stage1"></div>
+        <div class="stage" id="stage2"></div>
+        <div class="stage" id="stage3"></div>
+        <div class="stage" id="stage4"></div>
+        <div class="stage" id="stage5"></div>
+        <div class="stage" id="stage6"></div>
+    </div>
+    <button id="start-button" onclick="startTimer()">Start Timer</button>
+
+    <script>
+        const studyDuration = 60 * 60; // 60 minutes in seconds
+        const breakDuration = 10 * 60; // 10 minutes in seconds
+        const totalStages = 6;
+        let currentStage = 0;
+        let timeLeft = studyDuration;
+        let timerInterval;
+
+        function startTimer() {
+            document.getElementById("start-button").style.display = "none"; // Hide start button
+            if (currentStage >= totalStages) {
+                alert('All stages completed!');
+                return;
+            }
+            updateTimerDisplay();
+            updateProgressBar(0);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const progressPercentage = ((studyDuration - timeLeft) / studyDuration) * 100;
+                updateTimerDisplay();
+                updateProgressBar(progressPercentage);
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    currentStage++;
+                    updateProgress();
+                    if (currentStage < totalStages) {
+                        timeLeft = currentStage % 2 === 0 ? studyDuration : breakDuration;
+                        startTimer();
+                    } else {
+                        alert('All stages completed!');
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgressBar(percentage) {
+            const circle = document.querySelector('#circle .progress');
+            circle.style.setProperty('--progress', `${percentage}%`);
+        }
+
+        function updateProgress() {
+            for (let i = 1; i <= totalStages; i++) {
+                const stageElement = document.getElementById(`stage${i}`);
+                if (i <= currentStage) {
+                    stageElement.classList.add('active');
+                } else {
+                    stageElement.classList.remove('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
