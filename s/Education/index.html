@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parameter Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .message {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Enter EIIN</h2>
+    <input type="text" id="eiinInput" placeholder="Enter EIIN" />
+    <button onclick="fetchDetails()">Search</button>
+    <div class="message" id="output"></div>
+    <div class="result" id="result"></div>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function fetchDetails() {
+            const eiinValue = document.getElementById("eiinInput").value;
+            if (!eiinValue) {
+                alert("Please enter an EIIN");
+                return;
+            }
+            fetchData(eiinValue);
+        }
+
+        function fetchData(eiin) {
+            fetch("https://emis.gov.bd/emis/Portal/GetTeacherDetails", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ EIIN: eiin })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayData(data);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById("result").innerHTML = "Failed to fetch data.";
+            });
+        }
+
+        function displayData(data) {
+            if (data.length === 0) {
+                document.getElementById("result").innerHTML = "No data found.";
+                return;
+            }
+            
+            let content = "";
+            data.forEach(person => {
+                content += `
+                    <div>
+                        <h3>${person.FullName} (${person.FullNameBn})</h3>
+                        <p>Designation: ${person.DesignationNameBn}</p>
+                        <p>District: ${person.DistrictName}</p>
+                        <p>Subject: ${person.SubjectName}</p>
+                        <p>Mobile: ${person.MobileNo}</p>
+                        <p>Email: ${person.Email}</p>
+                        <p>Institute: ${person.InstituteInstituteNameInBangla}</p>
+                    </div>
+                    <hr>
+                `;
+            });
+            document.getElementById("result").innerHTML = content;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const eiinValue = getQueryParam("eein");
+            if (eiinValue) {
+                document.getElementById("eiinInput").value = eiinValue;
+                fetchData(eiinValue);
+            }
+        });
+    </script>
+</body>
+</html>
