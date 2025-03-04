@@ -3,38 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parameter Checker</title>
+    <title>EIIN Search</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             text-align: center;
-            margin-top: 50px;
+            margin: 0;
+            padding: 0;
         }
-        .message {
-            font-size: 20px;
-            font-weight: bold;
+        .container {
+            max-width: 500px;
+            background: white;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
             color: #333;
         }
         input {
-            padding: 8px;
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             font-size: 16px;
         }
         button {
-            padding: 8px 12px;
-            font-size: 16px;
+            background: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
         }
         .result {
             margin-top: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h2>Enter EIIN</h2>
-    <input type="text" id="eiinInput" placeholder="Enter EIIN" />
-    <button onclick="fetchDetails()">Search</button>
-    <div class="message" id="output"></div>
-    <div class="result" id="result"></div>
+    <div class="container">
+        <h2>Enter EIIN</h2>
+        <input type="text" id="eiinInput" placeholder="Enter EIIN" />
+        <button onclick="fetchDetails()">Search</button>
+        <div class="message" id="output"></div>
+        <div class="result" id="result"></div>
+    </div>
 
     <script>
         function getQueryParam(param) {
@@ -48,7 +78,7 @@
                 alert("Please enter an EIIN");
                 return;
             }
-            fetchData(eiinValue);
+            window.location.href = `?eein=${eiinValue}`;
         }
 
         function fetchData(eiin) {
@@ -65,27 +95,27 @@
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
-                document.getElementById("result").innerHTML = "Failed to fetch data.";
+                document.getElementById("result").innerHTML = "<p class='error'>Failed to fetch data.</p>";
             });
         }
 
         function displayData(data) {
             if (data.length === 0) {
-                document.getElementById("result").innerHTML = "No data found.";
+                document.getElementById("result").innerHTML = "<p class='error'>No data found.</p>";
                 return;
             }
             
             let content = "";
             data.forEach(person => {
                 content += `
-                    <div>
+                    <div class='result'>
                         <h3>${person.FullName} (${person.FullNameBn})</h3>
-                        <p>Designation: ${person.DesignationNameBn}</p>
-                        <p>District: ${person.DistrictName}</p>
-                        <p>Subject: ${person.SubjectName}</p>
-                        <p>Mobile: ${person.MobileNo}</p>
-                        <p>Email: ${person.Email}</p>
-                        <p>Institute: ${person.InstituteInstituteNameInBangla}</p>
+                        <p><strong>Designation:</strong> ${person.DesignationNameBn}</p>
+                        <p><strong>District:</strong> ${person.DistrictName}</p>
+                        <p><strong>Subject:</strong> ${person.SubjectName}</p>
+                        <p><strong>Mobile:</strong> ${person.MobileNo}</p>
+                        <p><strong>Email:</strong> ${person.Email}</p>
+                        <p><strong>Institute:</strong> ${person.InstituteInstituteNameInBangla}</p>
                     </div>
                     <hr>
                 `;
