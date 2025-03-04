@@ -52,7 +52,7 @@
         }
 
         function fetchData(eiin) {
-            fetch("https://emis.gov.bd/emis/Portal/GetInstituteVicePrincipal", {
+            fetch("https://cors-anywhere.herokuapp.com/https://emis.gov.bd/emis/Portal/GetTeacherDetails", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
