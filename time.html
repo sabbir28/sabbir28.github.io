@@ -14,6 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      font-family: Arial, sans-serif;
     }
     #root {
       width: 100%;
@@ -22,34 +23,79 @@
 </head>
 <body>
   <div id="root"></div>
-  <script type="module">
-    import React, { useState, useEffect } from "https://cdn.skypack.dev/react@18.2.0";
-    import ReactDOM from "https://cdn.skypack.dev/react-dom@18.2.0/client";
-    import { motion } from "https://cdn.skypack.dev/framer-motion@7.6.16";
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@7.6.16/dist/framer-motion.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.6/Babel.min.js"></script>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, StrictMode } = React;
+    const { motion } = window.FramerMotion;
 
     const STUDY_DURATION = 60 * 60;
     const BREAK_DURATION = 10 * 60;
     const TOTAL_STAGES = 6;
 
+    // Error Boundary Component
+    class ErrorBoundary extends React.Component {
+      state = { hasError: false };
+
+      static getDerivedStateFromError(error) {
+        return { hasError: true };
+      }
+
+      render() {
+        if (this.state.hasError) {
+          return <div className="text-white text-center p-4">Something went wrong. Please refresh the page.</div>;
+        }
+        return this.props.children;
+      }
+    }
+
     const StudyTimer = () => {
-      const [currentStage, setCurrentStage] = useState(() => parseInt(localStorage.getItem('currentStage')) || 0);
+      const [currentStage, setCurrentStage] = useState(() => {
+        try {
+          return parseInt(localStorage.getItem('currentStage')) || 0;
+        } catch {
+          return 0;
+        }
+      });
       const [timeLeft, setTimeLeft] = useState(STUDY_DURATION);
       const [isRunning, setIsRunning] = useState(false);
       const [isStudyPhase, setIsStudyPhase] = useState(true);
+      const timerRef = useRef(null);
 
       useEffect(() => {
-        localStorage.setItem('currentStage', currentStage);
-        if (currentStage >= TOTAL_STAGES) setIsRunning(false);
+        try {
+          localStorage.setItem('currentStage', currentStage.toString());
+        } catch (e) {
+          console.error('LocalStorage error:', e);
+        }
+        if (currentStage >= TOTAL_STAGES) {
+          setIsRunning(false);
+          clearInterval(timerRef.current);
+        }
       }, [currentStage]);
 
       useEffect(() => {
-        let timer;
         if (isRunning && timeLeft > 0) {
-          timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
-        } else if (timeLeft <= 0) {
+          timerRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+              if (prev <= 1) {
+                clearInterval(timerRef.current);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+        } else if (timeLeft <= 0 && isRunning) {
           handleStageTransition();
         }
-        return () => clearInterval(timer);
+
+        return () => {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+          }
+        };
       }, [isRunning, timeLeft]);
 
       const handleStageTransition = () => {
@@ -59,32 +105,54 @@
       };
 
       const startTimer = () => {
-        if (currentStage < TOTAL_STAGES) setIsRunning(true);
+        if (currentStage < TOTAL_STAGES && !isRunning) {
+          setIsRunning(true);
+        }
       };
 
       const resetTimer = () => {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
         setIsRunning(false);
         setCurrentStage(0);
         setTimeLeft(STUDY_DURATION);
         setIsStudyPhase(true);
-        localStorage.setItem('currentStage', '0');
+        try {
+          localStorage.setItem('currentStage', '0');
+        } catch (e) {
+          console.error('LocalStorage error:', e);
+        }
       };
 
       const formatTime = (seconds) => {
+        if (isNaN(seconds)) return "00:00";
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
       };
 
-      const progressPercentage = ((isStudyPhase ? STUDY_DURATION : BREAK_DURATION - timeLeft) / (isStudyPhase ? STUDY_DURATION : BREAK_DURATION)) * 100;
+      const progressPercentage = Math.min(100, Math.max(0, 
+        ((isStudyPhase ? STUDY_DURATION : BREAK_DURATION - timeLeft) / 
+        (isStudyPhase ? STUDY_DURATION : BREAK_DURATION)) * 100
+      ));
 
       return (
         <div className="flex flex-col items-center justify-center min-h-screen text-white p-4">
-          <motion.h1 className="text-4xl font-bold mb-8" initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <motion.h1 
+            className="text-4xl font-bold mb-8" 
+            initial={{ opacity: 0, y: -50 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5 }}
+          >
             {isStudyPhase ? 'Study Session' : 'Break Time'}
           </motion.h1>
 
-          <motion.div className="relative w-64 h-64 mb-8" animate={{ scale: isRunning ? 1.05 : 1 }} transition={{ duration: 0.3 }}>
+          <motion.div 
+            className="relative w-64 h-64 mb-8" 
+            animate={{ scale: isRunning ? 1.05 : 1 }} 
+            transition={{ duration: 0.3 }}
+          >
             <svg className="w-full h-full" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="45" fill="none" stroke="#4B5563" strokeWidth="10" />
               <motion.circle
@@ -97,9 +165,13 @@
                 strokeDasharray="283"
                 strokeDashoffset={283 - (283 * progressPercentage) / 100}
                 strokeLinecap="round"
+                animate={{ strokeDashoffset: 283 - (283 * progressPercentage) / 100 }}
+                transition={{ duration: 0.5 }}
               />
             </svg>
-            <motion.div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl">
+            <motion.div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl"
+            >
               {formatTime(timeLeft)}
             </motion.div>
           </motion.div>
@@ -107,17 +179,36 @@
           <div className="flex items-center mb-8">
             {[...Array(TOTAL_STAGES)].map((_, index) => (
               <div key={index} className="flex items-center">
-                <motion.div className={`w-8 h-8 rounded-full ${index < currentStage ? 'bg-green-400' : index === currentStage ? 'bg-white' : 'bg-gray-600'}`} />
-                {index < TOTAL_STAGES - 1 && <div className={`w-6 h-1 ${index < currentStage ? 'bg-green-400' : index === currentStage ? 'bg-white' : 'bg-gray-600'}`} />}
+                <motion.div 
+                  className={`w-8 h-8 rounded-full ${index < currentStage ? 'bg-green-400' : 
+                    index === currentStage ? 'bg-white' : 'bg-gray-600'}`} 
+                />
+                {index < TOTAL_STAGES - 1 && (
+                  <div 
+                    className={`w-6 h-1 ${index < currentStage ? 'bg-green-400' : 
+                      index === currentStage ? 'bg-white' : 'bg-gray-600'}`} 
+                  />
+                )}
               </div>
             ))}
           </div>
 
           <div className="flex space-x-4">
-            <motion.button onClick={startTimer} className="px-6 py-3 bg-white text-black rounded-lg font-semibold disabled:opacity-50" disabled={isRunning || currentStage >= TOTAL_STAGES}>
+            <motion.button 
+              onClick={startTimer} 
+              className="px-6 py-3 bg-white text-black rounded-lg font-semibold disabled:opacity-50" 
+              disabled={isRunning || currentStage >= TOTAL_STAGES}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               {isRunning ? 'Running...' : 'Start Timer'}
             </motion.button>
-            <motion.button onClick={resetTimer} className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold">
+            <motion.button 
+              onClick={resetTimer} 
+              className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               Reset
             </motion.button>
           </div>
@@ -125,8 +216,18 @@
       );
     };
 
+    const App = () => (
+      <ErrorBoundary>
+        <StudyTimer />
+      </ErrorBoundary>
+    );
+
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<StudyTimer />);
+    root.render(
+      <StrictMode>
+        <App />
+      </StrictMode>
+    );
   </script>
 </body>
 </html>
