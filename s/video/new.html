@@ -23,7 +23,7 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
     <div id="root"></div>
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center py-4 mt-auto">
+    <footer className="bg-gray-800 text-white text-center py-4 mt-auto">
         <p>All rights reserved © MD. Sabbir Hoshen</p>
     </footer>
     <!-- Tracking Library -->
@@ -42,6 +42,7 @@
             const [courseData, setCourseData] = useState(null);
             const [error, setError] = useState('');
             const [isLoading, setIsLoading] = useState(false);
+            const [searchQuery, setSearchQuery] = useState('');
 
             // Check for URL parameter on mount
             useEffect(() => {
@@ -80,6 +81,15 @@
                 fetchCourseData(url);
             };
 
+            // Filter sections based on search query
+            const filteredSections = courseData?.sections?.filter(section => {
+                const sectionMatch = section.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const contentMatch = section.contents.some(content =>
+                    content.title.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+                return sectionMatch || contentMatch;
+            }) || [];
+
             return (
                 <div className="container mx-auto p-4 max-w-4xl">
                     {/* Header */}
@@ -91,41 +101,54 @@
                         </nav>
                     </header>
 
-                    {/* Input Section */}
-                    <div className="bg-white p-6 rounded-lg shadow mb-6">
-                        <h2 className="text-xl font-semibold mb-4">Enter the URL to Fetch Course Data:</h2>
-                        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-                            <input
-                                type="text"
-                                value={url}
-                                onChange={(e) => setUrl(e.target.value)}
-                                placeholder="Enter the JSON URL"
-                                className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                            <button
-                                type="submit"
-                                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-                            >
-                                Fetch Course Data
-                            </button>
-                        </form>
-                        {error && (
-                            <div className="mt-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>
-                        )}
-                    </div>
+                    {/* Input Section (Hidden after data fetch) */}
+                    {!courseData && (
+                        <div className="bg-white p-6 rounded-lg shadow mb-6 animate-slideIn">
+                            <h2 className="text-xl font-semibold mb-4">Enter the URL to Fetch Course Data:</h2>
+                            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                                <input
+                                    type="text"
+                                    value={url}
+                                    onChange={(e) => setUrl(e.target.value)}
+                                    placeholder="Enter the JSON URL"
+                                    className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    type="submit"
+                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                                >
+                                    Fetch Course Data
+                                </button>
+                            </form>
+                            {error && (
+                                <div className="mt-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Loading Spinner */}
                     {isLoading && (
                         <div className="flex justify-center mb-6">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600"></div>
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50 animate-pulse"></div>
                         </div>
                     )}
 
                     {/* Course Data */}
                     {courseData && (
-                        <div className="space-y-6 animate-fadeIn">
+                        <div className="space-y-6">
+                            {/* Search Bar */}
+                            <div className="bg-white p-4 rounded-lg shadow">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search sections or content..."
+                                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+
                             {/* Course Header */}
-                            <div className="bg-white p-6 rounded-lg shadow flex flex-col sm:flex-row items-center gap-4">
+                            <div className="bg-white p-6 rounded-lg shadow flex flex-col sm:flex-row items-center gap-4 animate-slideIn">
                                 <img
                                     src={courseData.photo}
                                     alt="Course Image"
@@ -135,7 +158,7 @@
                             </div>
 
                             {/* Course Details */}
-                            <div className="bg-white p-6 rounded-lg shadow">
+                            <div className="bg-white p-6 rounded-lg shadow animate-slideIn">
                                 <h2 className="text-xl font-semibold mb-4">Course Details</h2>
                                 <p><strong>Language:</strong> {courseData.language}</p>
                                 <p><strong>Difficulty:</strong> {courseData.difficulty}</p>
@@ -144,29 +167,41 @@
                             </div>
 
                             {/* Course Sections */}
-                            <div className="bg-white p-6 rounded-lg shadow">
+                            <div className="bg-white p-6 rounded-lg shadow animate-slideIn">
                                 <h2 className="text-xl font-semibold mb-4">Sections</h2>
                                 <div className="space-y-4">
-                                    {courseData.sections.map((section, index) => (
-                                        <div key={index} className="border p-4 rounded">
-                                            <h3 className="text-lg font-medium">{section.title}</h3>
-                                            <div className="mt-2 space-y-2">
-                                                {section.contents.map((content, i) => (
-                                                    <p key={i}>
-                                                        {(content.link || content.video) && (
-                                                            <a
-                                                                href={content.link?.src || content.video?.link}
-                                                                target="_blank"
-                                                                className="text-blue-600 hover:underline"
-                                                            >
-                                                                {content.title}
-                                                            </a>
-                                                        )}
-                                                    </p>
-                                                ))}
+                                    {filteredSections.length > 0 ? (
+                                        filteredSections.map((section, index) => (
+                                            <div
+                                                key={index}
+                                                className="border p-4 rounded animate-section"
+                                                style={{ animationDelay: `${index * 0.1}s` }}
+                                            >
+                                                <h3 className="text-lg font-medium">{section.title}</h3>
+                                                <div className="mt-2 space-y-2">
+                                                    {section.contents
+                                                        .filter(content =>
+                                                            content.title.toLowerCase().includes(searchQuery.toLowerCase())
+                                                        )
+                                                        .map((content, i) => (
+                                                            <p key={i}>
+                                                                {(content.link || content.video) && (
+                                                                    <a
+                                                                        href={content.link?.src || content.video?.link}
+                                                                        target="_blank"
+                                                                        className="text-blue-600 hover:underline"
+                                                                    >
+                                                                        {content.title}
+                                                                    </a>
+                                                                )}
+                                                            </p>
+                                                        ))}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-500">No sections match your search.</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -180,12 +215,42 @@
     </script>
     <!-- Custom CSS for animations -->
     <style>
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-in;
+        .animate-slideIn {
+            animation: slideIn 0.5s ease-out;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .animate-section {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </body>
