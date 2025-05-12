@@ -23,33 +23,15 @@
 </head>
 <body>
   <div id="root"></div>
-  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/framer-motion@7.6.16/dist/framer-motion.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.6/babel.min.js"></script>
   <script type="text/babel">
-    const { useState, useEffect, useRef, StrictMode } = React;
-    const { motion } = window.FramerMotion;
+    const { useState, useEffect, useRef } = React;
 
     const STUDY_DURATION = 60 * 60;
     const BREAK_DURATION = 10 * 60;
     const TOTAL_STAGES = 6;
-
-    // Error Boundary Component
-    class ErrorBoundary extends React.Component {
-      state = { hasError: false };
-
-      static getDerivedStateFromError(error) {
-        return { hasError: true };
-      }
-
-      render() {
-        if (this.state.hasError) {
-          return <div className="text-white text-center p-4">Something went wrong. Please refresh the page.</div>;
-        }
-        return this.props.children;
-      }
-    }
 
     const StudyTimer = () => {
       const [currentStage, setCurrentStage] = useState(() => {
@@ -137,25 +119,19 @@
         (isStudyPhase ? STUDY_DURATION : BREAK_DURATION)) * 100
       ));
 
+      // Debug log to confirm component rendering
+      console.log('StudyTimer rendering, isRunning:', isRunning, 'currentStage:', currentStage);
+
       return (
         <div className="flex flex-col items-center justify-center min-h-screen text-white p-4">
-          <motion.h1 
-            className="text-4xl font-bold mb-8" 
-            initial={{ opacity: 0, y: -50 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.5 }}
-          >
+          <h1 className="text-4xl font-bold mb-8">
             {isStudyPhase ? 'Study Session' : 'Break Time'}
-          </motion.h1>
+          </h1>
 
-          <motion.div 
-            className="relative w-64 h-64 mb-8" 
-            animate={{ scale: isRunning ? 1.05 : 1 }} 
-            transition={{ duration: 0.3 }}
-          >
+          <div className="relative w-64 h-64 mb-8">
             <svg className="w-full h-full" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="45" fill="none" stroke="#4B5563" strokeWidth="10" />
-              <motion.circle
+              <circle
                 cx="50"
                 cy="50"
                 r="45"
@@ -165,21 +141,17 @@
                 strokeDasharray="283"
                 strokeDashoffset={283 - (283 * progressPercentage) / 100}
                 strokeLinecap="round"
-                animate={{ strokeDashoffset: 283 - (283 * progressPercentage) / 100 }}
-                transition={{ duration: 0.5 }}
               />
             </svg>
-            <motion.div 
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl"
-            >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl">
               {formatTime(timeLeft)}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           <div className="flex items-center mb-8">
             {[...Array(TOTAL_STAGES)].map((_, index) => (
               <div key={index} className="flex items-center">
-                <motion.div 
+                <div 
                   className={`w-8 h-8 rounded-full ${index < currentStage ? 'bg-green-400' : 
                     index === currentStage ? 'bg-white' : 'bg-gray-600'}`} 
                 />
@@ -194,40 +166,27 @@
           </div>
 
           <div className="flex space-x-4">
-            <motion.button 
+            <button 
               onClick={startTimer} 
-              className="px-6 py-3 bg-white text-black rounded-lg font-semibold disabled:opacity-50" 
+              className="px-6 py-3 bg-white text-black rounded-lg font-semibold disabled:opacity-50 hover:bg-gray-200 transition" 
               disabled={isRunning || currentStage >= TOTAL_STAGES}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              data-testid="start-button"
             >
               {isRunning ? 'Running...' : 'Start Timer'}
-            </motion.button>
-            <motion.button 
+            </button>
+            <button 
               onClick={resetTimer} 
-              className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition"
             >
               Reset
-            </motion.button>
+            </button>
           </div>
         </div>
       );
     };
 
-    const App = () => (
-      <ErrorBoundary>
-        <StudyTimer />
-      </ErrorBoundary>
-    );
-
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(
-      <StrictMode>
-        <App />
-      </StrictMode>
-    );
+    root.render(<StudyTimer />);
   </script>
 </body>
 </html>
