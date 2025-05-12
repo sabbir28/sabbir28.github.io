@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Course Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">MD. SABBIR HOSHEN HOWLADER</h1>
+      <nav class="space-x-4">
+        <a href="https://y2mate.com" class="hover:underline">YT Downloader</a>
+        <a href="/" class="hover:underline">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-grow container mx-auto p-4 space-y-8">
+    <div>
+      <h2 class="text-2xl font-semibold mb-2">Enter the URL to Fetch Course Data:</h2>
+      <div class="flex gap-2">
+        <input type="text" id="json-url" placeholder="Enter the JSON URL" class="flex-grow p-2 border rounded" />
+        <button onclick="fetchCourseData()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Fetch</button>
+      </div>
+      <p id="error-message" class="text-red-500 mt-2 hidden"></p>
+    </div>
+
+    <!-- Loading bar -->
+    <div id="loading-bar" class="w-full h-1 bg-blue-600 animate-pulse hidden"></div>
+
+    <!-- Course Header -->
+    <section class="hidden" id="course-header">
+      <img id="course-photo" class="w-full max-w-md rounded mb-4" />
+      <h1 id="course-title" class="text-3xl font-bold"></h1>
+    </section>
+
+    <!-- Course Details -->
+    <section class="hidden" id="course-details">
+      <p><strong>Language:</strong> <span id="course-language"></span></p>
+      <p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
+      <p><strong>Price:</strong> <span id="course-price"></span></p>
+      <p><strong>Available At:</strong> <span id="course-available-at"></span></p>
+    </section>
+
+    <!-- Course Sections -->
+    <section class="hidden" id="course-sections">
+      <h2 class="text-2xl font-semibold mb-2">Sections</h2>
+      <div id="sections-container" class="space-y-4"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-200 p-4 text-center">
+    <p>All rights reserved © MD. Sabbir Hoshen</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    function getUrlParameter(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    async function fetchCourseData() {
+      const url = document.getElementById("json-url").value;
+      const error = document.getElementById("error-message");
+      const loading = document.getElementById("loading-bar");
+      const header = document.getElementById("course-header");
+      const details = document.getElementById("course-details");
+      const sections = document.getElementById("course-sections");
+
+      error.classList.add("hidden");
+      header.classList.add("hidden");
+      details.classList.add("hidden");
+      sections.classList.add("hidden");
+
+      if (!url) {
+        error.textContent = "Please enter a valid URL.";
+        error.classList.remove("hidden");
+        return;
+      }
+
+      loading.classList.remove("hidden");
+
+      try {
+        const response = await axios.get(url);
+        renderCourseData(response.data.data);
+      } catch (err) {
+        error.textContent = "Error fetching course data: " + err.message;
+        error.classList.remove("hidden");
+      } finally {
+        loading.classList.add("hidden");
+      }
+    }
+
+    function renderCourseData(data) {
+      document.getElementById("course-header").classList.remove("hidden");
+      document.getElementById("course-details").classList.remove("hidden");
+      document.getElementById("course-sections").classList.remove("hidden");
+
+      document.getElementById("course-title").textContent = data.title;
+      document.getElementById("course-photo").src = data.photo;
+      document.getElementById("course-language").textContent = data.language;
+      document.getElementById("course-difficulty").textContent = data.difficulty;
+      document.getElementById("course-price").textContent = data.price === "0.00" ? "Free" : "৳" + data.price;
+      document.getElementById("course-available-at").textContent = new Date(data.available_at).toLocaleString();
+
+      const container = document.getElementById("sections-container");
+      container.innerHTML = "";
+
+      data.sections.forEach((section) => {
+        const sectionDiv = document.createElement("div");
+        sectionDiv.classList.add("p-4", "bg-white", "rounded", "shadow");
+
+        const title = document.createElement("h3");
+        title.classList.add("text-xl", "font-semibold", "mb-2");
+        title.textContent = section.title;
+        sectionDiv.appendChild(title);
+
+        section.contents.forEach((content) => {
+          const link = content.link?.src || content.video?.link;
+          if (link) {
+            const p = document.createElement("p");
+            p.innerHTML = `<a href="${link}" target="_blank" class="text-blue-600 hover:underline">${content.title}</a>`;
+            sectionDiv.appendChild(p);
+          }
+        });
+
+        container.appendChild(sectionDiv);
+      });
+    }
+
+    window.onload = () => {
+      const urlParam = getUrlParameter("url");
+      if (urlParam) {
+        document.getElementById("json-url").value = urlParam;
+        fetchCourseData();
+      }
+    };
+  </script>
+</body>
+</html>
