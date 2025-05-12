@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Modern Study Timer</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     body {
       margin: 0;
@@ -17,18 +14,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow-x: hidden;
     }
     #root {
       width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
-
   <script type="module">
     import React, { useState, useEffect } from "https://cdn.skypack.dev/react@18.2.0";
     import ReactDOM from "https://cdn.skypack.dev/react-dom@18.2.0/client";
@@ -39,32 +32,20 @@
     const TOTAL_STAGES = 6;
 
     const StudyTimer = () => {
-      const [currentStage, setCurrentStage] = useState(() =>
-        parseInt(localStorage.getItem('currentStage')) || 0
-      );
+      const [currentStage, setCurrentStage] = useState(() => parseInt(localStorage.getItem('currentStage')) || 0);
       const [timeLeft, setTimeLeft] = useState(STUDY_DURATION);
       const [isRunning, setIsRunning] = useState(false);
       const [isStudyPhase, setIsStudyPhase] = useState(true);
-      const [error, setError] = useState(null);
 
       useEffect(() => {
         localStorage.setItem('currentStage', currentStage);
-        if (currentStage >= TOTAL_STAGES) {
-          setIsRunning(false);
-          try {
-            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3').play().catch(console.error);
-          } catch (err) {
-            setError('Audio playback failed');
-          }
-        }
+        if (currentStage >= TOTAL_STAGES) setIsRunning(false);
       }, [currentStage]);
 
       useEffect(() => {
         let timer;
         if (isRunning && timeLeft > 0) {
-          timer = setInterval(() => {
-            setTimeLeft(prev => prev - 1);
-          }, 1000);
+          timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
         } else if (timeLeft <= 0) {
           handleStageTransition();
         }
@@ -72,11 +53,6 @@
       }, [isRunning, timeLeft]);
 
       const handleStageTransition = () => {
-        try {
-          new Audio('https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3').play().catch(console.error);
-        } catch (err) {
-          setError('Transition audio failed');
-        }
         setCurrentStage(prev => prev + 1);
         setIsStudyPhase(prev => !prev);
         setTimeLeft(isStudyPhase ? BREAK_DURATION : STUDY_DURATION);
@@ -100,21 +76,11 @@
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
       };
 
-      const progressPercentage = ((isStudyPhase ? STUDY_DURATION : BREAK_DURATION - timeLeft) /
-        (isStudyPhase ? STUDY_DURATION : BREAK_DURATION)) * 100;
-
-      if (error) {
-        return <div className="text-white text-center p-4">Error: {error}</div>;
-      }
+      const progressPercentage = ((isStudyPhase ? STUDY_DURATION : BREAK_DURATION - timeLeft) / (isStudyPhase ? STUDY_DURATION : BREAK_DURATION)) * 100;
 
       return (
         <div className="flex flex-col items-center justify-center min-h-screen text-white p-4">
-          <motion.h1
-            className="text-4xl font-bold mb-8"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.h1 className="text-4xl font-bold mb-8" initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             {isStudyPhase ? 'Study Session' : 'Break Time'}
           </motion.h1>
 
@@ -131,15 +97,9 @@
                 strokeDasharray="283"
                 strokeDashoffset={283 - (283 * progressPercentage) / 100}
                 strokeLinecap="round"
-                animate={{ strokeDashoffset: 283 - (283 * progressPercentage) / 100 }}
-                transition={{ duration: 0.5 }}
               />
             </svg>
-            <motion.div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl"
-              animate={{ scale: isRunning ? 1.1 : 1 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl">
               {formatTime(timeLeft)}
             </motion.div>
           </motion.div>
@@ -147,36 +107,17 @@
           <div className="flex items-center mb-8">
             {[...Array(TOTAL_STAGES)].map((_, index) => (
               <div key={index} className="flex items-center">
-                <motion.div
-                  className={`w-8 h-8 rounded-full ${index < currentStage ? 'bg-green-400' :
-                    index === currentStage ? 'bg-white' : 'bg-gray-600'}`}
-                  animate={{ scale: index === currentStage ? 1.2 : 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-                {index < TOTAL_STAGES - 1 && (
-                  <div className={`w-6 h-1 ${index < currentStage ? 'bg-green-400' :
-                    index === currentStage ? 'bg-white' : 'bg-gray-600'}`} />
-                )}
+                <motion.div className={`w-8 h-8 rounded-full ${index < currentStage ? 'bg-green-400' : index === currentStage ? 'bg-white' : 'bg-gray-600'}`} />
+                {index < TOTAL_STAGES - 1 && <div className={`w-6 h-1 ${index < currentStage ? 'bg-green-400' : index === currentStage ? 'bg-white' : 'bg-gray-600'}`} />}
               </div>
             ))}
           </div>
 
           <div className="flex space-x-4">
-            <motion.button
-              onClick={startTimer}
-              className="px-6 py-3 bg-white text-black rounded-lg font-semibold disabled:opacity-50"
-              disabled={isRunning || currentStage >= TOTAL_STAGES}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.button onClick={startTimer} className="px-6 py-3 bg-white text-black rounded-lg font-semibold disabled:opacity-50" disabled={isRunning || currentStage >= TOTAL_STAGES}>
               {isRunning ? 'Running...' : 'Start Timer'}
             </motion.button>
-            <motion.button
-              onClick={resetTimer}
-              className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.button onClick={resetTimer} className="px-6 py-3 bg-red-500 text-white rounded-lg font-semibold">
               Reset
             </motion.button>
           </div>
