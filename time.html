@@ -5,14 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Modern Study Timer</title>
 
-  <!-- React and Babel -->
-  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.5/babel.min.js"></script>
-
-  <!-- Framer Motion (UMD version compatible with browsers) -->
-  <script src="https://cdn.jsdelivr.net/npm/framer-motion@7.6.16/dist/framer-motion.umd.js"></script>
-
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -37,12 +29,13 @@
 <body>
   <div id="root"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
-    const { motion } = window.framerMotion;
+  <script type="module">
+    import React, { useState, useEffect } from "https://cdn.skypack.dev/react@18.2.0";
+    import ReactDOM from "https://cdn.skypack.dev/react-dom@18.2.0/client";
+    import { motion } from "https://cdn.skypack.dev/framer-motion@7.6.16";
 
-    const STUDY_DURATION = 60 * 60; // 60 minutes
-    const BREAK_DURATION = 10 * 60; // 10 minutes
+    const STUDY_DURATION = 60 * 60;
+    const BREAK_DURATION = 10 * 60;
     const TOTAL_STAGES = 6;
 
     const StudyTimer = () => {
@@ -59,9 +52,7 @@
         if (currentStage >= TOTAL_STAGES) {
           setIsRunning(false);
           try {
-            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3').play().catch(err => {
-              console.error('Audio play failed:', err);
-            });
+            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3').play().catch(console.error);
           } catch (err) {
             setError('Audio playback failed');
           }
@@ -82,9 +73,7 @@
 
       const handleStageTransition = () => {
         try {
-          new Audio('https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3').play().catch(err => {
-            console.error('Audio play failed:', err);
-          });
+          new Audio('https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3').play().catch(console.error);
         } catch (err) {
           setError('Transition audio failed');
         }
@@ -94,9 +83,7 @@
       };
 
       const startTimer = () => {
-        if (currentStage < TOTAL_STAGES) {
-          setIsRunning(true);
-        }
+        if (currentStage < TOTAL_STAGES) setIsRunning(true);
       };
 
       const resetTimer = () => {
@@ -131,11 +118,7 @@
             {isStudyPhase ? 'Study Session' : 'Break Time'}
           </motion.h1>
 
-          <motion.div
-            className="relative w-64 h-64 mb-8"
-            animate={{ scale: isRunning ? 1.05 : 1 }}
-            transition={{ duration: 0.3 }}
-          >
+          <motion.div className="relative w-64 h-64 mb-8" animate={{ scale: isRunning ? 1.05 : 1 }} transition={{ duration: 0.3 }}>
             <svg className="w-full h-full" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="45" fill="none" stroke="#4B5563" strokeWidth="10" />
               <motion.circle
@@ -148,7 +131,6 @@
                 strokeDasharray="283"
                 strokeDashoffset={283 - (283 * progressPercentage) / 100}
                 strokeLinecap="round"
-                initial={{ strokeDashoffset: 283 }}
                 animate={{ strokeDashoffset: 283 - (283 * progressPercentage) / 100 }}
                 transition={{ duration: 0.5 }}
               />
@@ -202,18 +184,8 @@
       );
     };
 
-    try {
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<StudyTimer />);
-    } catch (err) {
-      document.getElementById('root').innerHTML = `
-        <div style="color: white; text-align: center; padding: 20px;">
-          <h1>Error Loading Timer</h1>
-          <p>${err.message}</p>
-          <p>Please ensure you're using a modern browser and have an internet connection.</p>
-        </div>
-      `;
-    }
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<StudyTimer />);
   </script>
 </body>
 </html>
