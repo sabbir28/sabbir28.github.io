@@ -1,154 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modern Course Viewer</title>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/babel.min.js"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZB2K9PX37D"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-ZB2K9PX37D');
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
-  <!-- Header -->
-  <header class="bg-blue-600 text-white p-4 shadow-md">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">MD. SABBIR HOSHEN HOWLADER</h1>
-      <nav class="space-x-4">
-        <a href="https://y2mate.com" class="hover:underline">YT Downloader</a>
-        <a href="/" class="hover:underline">Home</a>
-      </nav>
-    </div>
-  </header>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <div id="root"></div>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-4 mt-auto">
+        <p>All rights reserved © MD. Sabbir Hoshen</p>
+    </footer>
+    <!-- Tracking Library -->
+    <script src="https://s28-core-api.vercel.app/lib/TrackLib.js"></script>
+    <script src="https://s28-core-api.vercel.app/lib/Track.js" defer></script>
+    <script>
+        // Initialize tracking
+        const tracker = new TrackLib('https://s28-core-api.vercel.app/api/track-event');
+    </script>
+    <!-- React App -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-  <!-- Main -->
-  <main class="flex-grow container mx-auto p-4 space-y-8">
-    <div>
-      <h2 class="text-2xl font-semibold mb-2">Enter the URL to Fetch Course Data:</h2>
-      <div class="flex gap-2">
-        <input type="text" id="json-url" placeholder="Enter the JSON URL" class="flex-grow p-2 border rounded" />
-        <button onclick="fetchCourseData()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Fetch</button>
-      </div>
-      <p id="error-message" class="text-red-500 mt-2 hidden"></p>
-    </div>
+        function App() {
+            const [url, setUrl] = useState('');
+            const [courseData, setCourseData] = useState(null);
+            const [error, setError] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
 
-    <!-- Loading bar -->
-    <div id="loading-bar" class="w-full h-1 bg-blue-600 animate-pulse hidden"></div>
+            // Check for URL parameter on mount
+            useEffect(() => {
+                const urlParam = new URLSearchParams(window.location.search).get('url');
+                if (urlParam) {
+                    setUrl(urlParam);
+                    fetchCourseData(urlParam);
+                }
+            }, []);
 
-    <!-- Course Header -->
-    <section class="hidden" id="course-header">
-      <img id="course-photo" class="w-full max-w-md rounded mb-4" />
-      <h1 id="course-title" class="text-3xl font-bold"></h1>
-    </section>
+            // Fetch course data
+            const fetchCourseData = async (fetchUrl) => {
+                if (!fetchUrl) {
+                    setError('Please enter a valid URL.');
+                    return;
+                }
+                setIsLoading(true);
+                setError('');
+                try {
+                    const response = await fetch(fetchUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    setCourseData(data.data);
+                } catch (err) {
+                    setError('Error fetching course data: ' + err.message);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
 
-    <!-- Course Details -->
-    <section class="hidden" id="course-details">
-      <p><strong>Language:</strong> <span id="course-language"></span></p>
-      <p><strong>Difficulty:</strong> <span id="course-difficulty"></span></p>
-      <p><strong>Price:</strong> <span id="course-price"></span></p>
-      <p><strong>Available At:</strong> <span id="course-available-at"></span></p>
-    </section>
+            // Handle form submission
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                fetchCourseData(url);
+            };
 
-    <!-- Course Sections -->
-    <section class="hidden" id="course-sections">
-      <h2 class="text-2xl font-semibold mb-2">Sections</h2>
-      <div id="sections-container" class="space-y-4"></div>
-    </section>
-  </main>
+            return (
+                <div className="container mx-auto p-4 max-w-4xl">
+                    {/* Header */}
+                    <header className="bg-blue-600 text-white p-4 rounded-lg shadow mb-6">
+                        <h1 className="text-2xl font-bold">MD. SABBIR HOSHEN HOWLADER</h1>
+                        <nav className="mt-2">
+                            <a href="https://y2mate.com" className="text-blue-200 hover:underline mr-4">YT Downloader</a>
+                            <a href="/" className="text-blue-200 hover:underline">Home</a>
+                        </nav>
+                    </header>
 
-  <!-- Footer -->
-  <footer class="bg-gray-200 p-4 text-center">
-    <p>All rights reserved © MD. Sabbir Hoshen</p>
-  </footer>
+                    {/* Input Section */}
+                    <div className="bg-white p-6 rounded-lg shadow mb-6">
+                        <h2 className="text-xl font-semibold mb-4">Enter the URL to Fetch Course Data:</h2>
+                        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                            <input
+                                type="text"
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
+                                placeholder="Enter the JSON URL"
+                                className="flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button
+                                type="submit"
+                                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                            >
+                                Fetch Course Data
+                            </button>
+                        </form>
+                        {error && (
+                            <div className="mt-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>
+                        )}
+                    </div>
 
-  <!-- Script -->
-  <script>
-    function getUrlParameter(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
+                    {/* Loading Spinner */}
+                    {isLoading && (
+                        <div className="flex justify-center mb-6">
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600"></div>
+                        </div>
+                    )}
 
-    async function fetchCourseData() {
-      const url = document.getElementById("json-url").value;
-      const error = document.getElementById("error-message");
-      const loading = document.getElementById("loading-bar");
-      const header = document.getElementById("course-header");
-      const details = document.getElementById("course-details");
-      const sections = document.getElementById("course-sections");
+                    {/* Course Data */}
+                    {courseData && (
+                        <div className="space-y-6 animate-fadeIn">
+                            {/* Course Header */}
+                            <div className="bg-white p-6 rounded-lg shadow flex flex-col sm:flex-row items-center gap-4">
+                                <img
+                                    src={courseData.photo}
+                                    alt="Course Image"
+                                    className="w-32 h-32 object-cover rounded"
+                                />
+                                <h1 className="text-2xl font-bold">{courseData.title}</h1>
+                            </div>
 
-      error.classList.add("hidden");
-      header.classList.add("hidden");
-      details.classList.add("hidden");
-      sections.classList.add("hidden");
+                            {/* Course Details */}
+                            <div className="bg-white p-6 rounded-lg shadow">
+                                <h2 className="text-xl font-semibold mb-4">Course Details</h2>
+                                <p><strong>Language:</strong> {courseData.language}</p>
+                                <p><strong>Difficulty:</strong> {courseData.difficulty}</p>
+                                <p><strong>Price:</strong> {courseData.price === "0.00" ? "Free" : "৳" + courseData.price}</p>
+                                <p><strong>Available At:</strong> {new Date(courseData.available_at).toLocaleString()}</p>
+                            </div>
 
-      if (!url) {
-        error.textContent = "Please enter a valid URL.";
-        error.classList.remove("hidden");
-        return;
-      }
+                            {/* Course Sections */}
+                            <div className="bg-white p-6 rounded-lg shadow">
+                                <h2 className="text-xl font-semibold mb-4">Sections</h2>
+                                <div className="space-y-4">
+                                    {courseData.sections.map((section, index) => (
+                                        <div key={index} className="border p-4 rounded">
+                                            <h3 className="text-lg font-medium">{section.title}</h3>
+                                            <div className="mt-2 space-y-2">
+                                                {section.contents.map((content, i) => (
+                                                    <p key={i}>
+                                                        {(content.link || content.video) && (
+                                                            <a
+                                                                href={content.link?.src || content.video?.link}
+                                                                target="_blank"
+                                                                className="text-blue-600 hover:underline"
+                                                            >
+                                                                {content.title}
+                                                            </a>
+                                                        )}
+                                                    </p>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
 
-      loading.classList.remove("hidden");
-
-      try {
-        const response = await axios.get(url);
-        renderCourseData(response.data.data);
-      } catch (err) {
-        error.textContent = "Error fetching course data: " + err.message;
-        error.classList.remove("hidden");
-      } finally {
-        loading.classList.add("hidden");
-      }
-    }
-
-    function renderCourseData(data) {
-      document.getElementById("course-header").classList.remove("hidden");
-      document.getElementById("course-details").classList.remove("hidden");
-      document.getElementById("course-sections").classList.remove("hidden");
-
-      document.getElementById("course-title").textContent = data.title;
-      document.getElementById("course-photo").src = data.photo;
-      document.getElementById("course-language").textContent = data.language;
-      document.getElementById("course-difficulty").textContent = data.difficulty;
-      document.getElementById("course-price").textContent = data.price === "0.00" ? "Free" : "৳" + data.price;
-      document.getElementById("course-available-at").textContent = new Date(data.available_at).toLocaleString();
-
-      const container = document.getElementById("sections-container");
-      container.innerHTML = "";
-
-      data.sections.forEach((section) => {
-        const sectionDiv = document.createElement("div");
-        sectionDiv.classList.add("p-4", "bg-white", "rounded", "shadow");
-
-        const title = document.createElement("h3");
-        title.classList.add("text-xl", "font-semibold", "mb-2");
-        title.textContent = section.title;
-        sectionDiv.appendChild(title);
-
-        section.contents.forEach((content) => {
-          const link = content.link?.src || content.video?.link;
-          if (link) {
-            const p = document.createElement("p");
-            p.innerHTML = `<a href="${link}" target="_blank" class="text-blue-600 hover:underline">${content.title}</a>`;
-            sectionDiv.appendChild(p);
-          }
-        });
-
-        container.appendChild(sectionDiv);
-      });
-    }
-
-    window.onload = () => {
-      const urlParam = getUrlParameter("url");
-      if (urlParam) {
-        document.getElementById("json-url").value = urlParam;
-        fetchCourseData();
-      }
-    };
-  </script>
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+    <!-- Custom CSS for animations -->
+    <style>
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </body>
 </html>
