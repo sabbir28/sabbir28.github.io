@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DU ICU Batch C Unit Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold mb-4 text-center">📚 DU ICU Batch C Unit Daily Routine</h1>
+
+    <!-- Progress Chart -->
+    <div class="bg-white p-4 rounded shadow mb-6">
+      <canvas id="progressChart" width="400" height="150"></canvas>
+    </div>
+
+    <!-- Topic List -->
+    <div id="topicList" class="space-y-4"></div>
+  </div>
+
+  <script>
+    const API_URL = "https://api.ieducationbd.com/api/course/du-icu-batch-c-unit";
+    const LOCAL_KEY = "du_icu_progress";
+
+    let progressData = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
+
+    async function loadTopics() {
+      try {
+        const response = await fetch(API_URL);
+        const result = await response.json();
+        const days = result.data || [];
+
+        const topicList = document.getElementById("topicList");
+        topicList.innerHTML = "";
+
+        days.forEach((dayItem, dayIndex) => {
+          const { title, details } = dayItem;
+
+          const checkedItems = progressData[title] || [];
+
+          const dayDiv = document.createElement("div");
+          dayDiv.className = "bg-white p-4 rounded shadow";
+
+          const dayTitle = document.createElement("h2");
+          dayTitle.className = "text-xl font-semibold mb-2";
+          dayTitle.textContent = `Day ${dayIndex + 1}: ${title}`;
+
+          const list = document.createElement("ul");
+          list.className = "space-y-2";
+
+          details.forEach((item, idx) => {
+            const itemId = `${title}_topic_${idx}`;
+            const li = document.createElement("li");
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = itemId;
+            checkbox.checked = checkedItems.includes(idx);
+            checkbox.className = "mr-2";
+
+            checkbox.addEventListener("change", () => {
+              if (!progressData[title]) progressData[title] = [];
+              if (checkbox.checked) {
+                progressData[title].push(idx);
+              } else {
+                progressData[title] = progressData[title].filter(i => i !== idx);
+              }
+              localStorage.setItem(LOCAL_KEY, JSON.stringify(progressData));
+              updateChart(days);
+            });
+
+            const label = document.createElement("label");
+            label.htmlFor = itemId;
+            label.textContent = item;
+
+            li.appendChild(checkbox);
+            li.appendChild(label);
+            list.appendChild(li);
+          });
+
+          dayDiv.appendChild(dayTitle);
+          dayDiv.appendChild(list);
+          topicList.appendChild(dayDiv);
+        });
+
+        updateChart(days);
+      } catch (error) {
+        console.error("Failed to load topics:", error);
+        document.getElementById("topicList").innerHTML =
+          "<div class='text-red-500'>Failed to load data. Please try again later.</div>";
+      }
+    }
+
+    function updateChart(days) {
+      const totalTopics = days.reduce((acc, day) => acc + day.details.length, 0);
+      const completedTopics = days.reduce((acc, day) => {
+        const checked = progressData[day.title] || [];
+        return acc + checked.length;
+      }, 0);
+
+      const ctx = document.getElementById("progressChart").getContext("2d");
+
+      if (window.myChart) {
+        window.myChart.data.datasets[0].data = [completedTopics, totalTopics - completedTopics];
+        window.myChart.update();
+      } else {
+        window.myChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: ["Completed", "Remaining"],
+            datasets: [{
+              data: [completedTopics, totalTopics - completedTopics],
+              backgroundColor: ["#10B981", "#F87171"],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom"
+              }
+            }
+          }
+        });
+      }
+    }
+
+    loadTopics();
+  </script>
+</body>
+</html>
