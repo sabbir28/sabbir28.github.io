@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Responsive Nav System</title>
+
+  <!-- Normalize CSS for consistent rendering -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=K2D:wght@700&family=Lato:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      margin: 0;
+      padding-bottom: 70px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .navbar-brand {
+      font-family: 'K2D', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: linear-gradient(90deg, #FA6E00 0%, #E60026 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-text-fill-color: transparent;
+      color: #FA6E00;
+    }
+
+    .btn-hire {
+      padding: 10px 16px;
+      background: linear-gradient(94.36deg, #FD6F00 3.1%, #E46400 94.54%);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-hire:hover {
+      transform: scale(1.05);
+      -webkit-transform: scale(1.05);
+    }
+
+    .navbar-desktop {
+      display: flex;
+    }
+
+    .navbar-nav .nav-link {
+      font-family: 'Lato', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .navbar-nav .nav-link.active,
+    .navbar-nav .nav-link.text-warning {
+      color: #FD6F00;
+      font-weight: 700;
+      background: linear-gradient(94.36deg, #FD6F00 3.1%, #E46400 94.54%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-text-fill-color: transparent;
+    }
+
+    .navbar-nav .nav-link.text-secondary {
+      color: #444;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #FD6F00;
+      background: linear-gradient(94.36deg, #FD6F00 3.1%, #E46400 94.54%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-text-fill-color: transparent;
+    }
+
+    .bottom-navbar-mobile {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #fff;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1050;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .bottom-navbar-mobile a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: #444;
+      font-family: 'Lato', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      padding: 8px 0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .bottom-navbar-mobile a:hover,
+    .bottom-navbar-mobile a.active {
+      color: #FD6F00;
+      background: linear-gradient(94.36deg, #FD6F00 3.1%, #E46400 94.54%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-text-fill-color: transparent;
+    }
+
+    .bottom-navbar-mobile a i {
+      font-size: 20px;
+      margin-bottom: 4px;
+      transition: transform 0.3s ease;
+    }
+
+    .bottom-navbar-mobile a:hover i,
+    .bottom-navbar-mobile a.active i {
+      transform: scale(1.1);
+      -webkit-transform: scale(1.1);
+    }
+
+    .mobile-topbar {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-desktop {
+        display: none !important;
+      }
+
+      .mobile-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+        padding: 0 15px;
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1050;
+      }
+
+      .mobile-logo {
+        font-family: 'K2D', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        background: linear-gradient(90deg, #FA6E00 0%, #E60026 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+        color: #FA6E00;
+        text-align: center;
+      }
+
+      .sidebar-mobile {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background-color: #fff;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+        z-index: 1060;
+        padding: 20px;
+        transition: left 0.3s ease;
+        -webkit-transition: left 0.3s ease;
+      }
+
+      .sidebar-mobile.show {
+        left: 0;
+      }
+
+      .sidebar-mobile a {
+        display: block;
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #333;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .sidebar-mobile a:hover {
+        color: #FD6F00;
+        background: linear-gradient(94.36deg, #FD6F00 3.1%, #E46400 94.54%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+      }
+
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgba(0,0,0,0.4);
+        z-index: 1055;
+      }
+
+      .sidebar-backdrop.show {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-topbar,
+      .bottom-navbar-mobile,
+      .sidebar-mobile,
+      .sidebar-backdrop {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Desktop Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white navbar-desktop px-4 py-3" role="navigation">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" aria-label="Website Logo">LOGO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav gap-4">
+          <li class="nav-item"><a class="nav-link active text-warning" href="#" aria-current="page">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="#">Services</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="#">About Me</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="#">Portfolio</a></li>
+          <li class="nav-item"><a class="nav-link text-secondary" href="#">Contact Me</a></li>
+        </ul>
+      </div>
+      <button class="btn btn-hire" aria-label="Hire Me">Hire Me</button>
+    </div>
+  </nav>
+
+  <!-- Mobile Top Bar -->
+  <div class="mobile-topbar d-md-none">
+    <button class="btn btn-hire btn-sm" aria-label="Hire Me">Hire Me</button>
+    <div class="mobile-logo">LOGO</div>
+    <button class="btn btn-outline-secondary btn-sm" id="toggleSidebarTop" aria-label="Toggle Menu">☰</button>
+  </div>
+
+  <!-- Mobile Bottom Bar -->
+  <div class="bottom-navbar-mobile d-md-none">
+    <a href="#" class="active" aria-label="Home"><i class="bi bi-house-fill"></i>Home</a>
+    <a href="#" aria-label="Services"><i class="bi bi-gear-fill"></i>Services</a>
+    <a href="#" aria-label="Contact Me"><i class="bi bi-envelope-fill"></i>Contact</a>
+  </div>
+
+  <!-- Sidebar for Mobile -->
+  <div class="sidebar-mobile" id="mobileSidebar" role="navigation">
+    <a href="#" aria-label="Home"><i class="bi bi-house-fill me-2"></i>Home</a>
+    <a href="#" aria-label="Services"><i class="bi bi-gear-fill me-2"></i>Services</a>
+    <a href="#" aria-label="About Me"><i class="bi bi-person-fill me-2"></i>About Me</a>
+    <a href="#" aria-label="Portfolio"><i class="bi bi-briefcase-fill me-2"></i>Portfolio</a>
+    <a href="#" aria-label="Contact Me"><i class="bi bi-envelope-fill me-2"></i>Contact Me</a>
+  </div>
+
+  <!-- Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" role="presentation"></div>
+
+  <!-- Bootstrap JS and Custom Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      'use strict';
+      const toggleBtnTop = document.getElementById('toggleSidebarTop');
+      const sidebar = document.getElementById('mobileSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+
+      function toggleSidebar() {
+        sidebar.classList.toggle('show');
+        backdrop.classList.toggle('show');
+      }
+
+      toggleBtnTop.addEventListener('click', toggleSidebar);
+      backdrop.addEventListener('click', toggleSidebar);
+
+      // Accessibility: Close sidebar on Escape key
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && sidebar.classList.contains('show')) {
+          toggleSidebar();
+        }
+      });
+
+      // Handle active state for bottom navbar
+      const navLinks = document.querySelectorAll('.bottom-navbar-mobile a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Handle active state for desktop navbar
+      const desktopNavLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      desktopNavLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          desktopNavLinks.forEach(l => {
+            l.classList.remove('active', 'text-warning');
+            l.classList.add('text-secondary');
+          });
+          this.classList.add('active', 'text-warning');
+          this.classList.remove('text-secondary');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
