@@ -3,35 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Information Viewer</title>
+    <title>SABBIR28 - Course Viewer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
         }
         
-        .glow {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .futuristic-border {
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            background: rgba(30, 41, 59, 0.7);
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
         
         .neon-text {
-            text-shadow: 0 0 5px rgba(59, 130, 246, 0.7);
+            color: #fff;
+            text-shadow: 
+                0 0 5px #00ffff,
+                0 0 10px #00ffff,
+                0 0 15px #00ffff,
+                0 0 20px #00ffff,
+                0 0 35px #00ffff,
+                0 0 40px #00ffff;
+            animation: neon-flicker 2s infinite alternate;
+        }
+        
+        @keyframes neon-flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 
+                    0 0 5px #00ffff,
+                    0 0 10px #00ffff,
+                    0 0 15px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 35px #00ffff,
+                    0 0 40px #00ffff;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .rotate {
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
         .content-area {
@@ -45,37 +117,34 @@
         }
         
         .content-area::-webkit-scrollbar-track {
-            background: #1e293b;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
         }
         
         .content-area::-webkit-scrollbar-thumb {
-            background: #3b82f6;
+            background: linear-gradient(180deg, #00ffff, #0080ff);
             border-radius: 10px;
         }
         
-        .content-area::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
-        
         .course-card {
-            background: rgba(30, 41, 59, 0.8);
-            border-left: 4px solid #3b82f6;
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid #00ffff;
             transition: all 0.3s ease;
         }
         
         .course-card:hover {
-            background: rgba(30, 41, 59, 1);
-            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
         }
         
         .lecture-item {
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: background 0.2s;
         }
         
         .lecture-item:hover {
-            background: rgba(51, 65, 85, 0.5);
+            background: rgba(255, 255, 255, 0.1);
         }
         
         .badge {
@@ -87,119 +156,231 @@
         }
         
         .badge-open {
-            background-color: #10b981;
+            background: linear-gradient(45deg, #10b981, #00ff95);
             color: white;
         }
         
         .badge-closed {
-            background-color: #ef4444;
+            background: linear-gradient(45deg, #ef4444, #ff6b6b);
             color: white;
         }
         
         .badge-pdf {
-            background-color: #f59e0b;
+            background: linear-gradient(45deg, #f59e0b, #ffd93d);
             color: white;
         }
         
         .badge-class {
-            background-color: #8b5cf6;
+            background: linear-gradient(45deg, #8b5cf6, #c084fc);
             color: white;
         }
         
-        .url-display {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid #3b82f6;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            word-break: break-all;
+        .hologram-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hologram-effect::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: hologram 3s infinite linear;
+        }
+        
+        @keyframes hologram {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float-particle 15s infinite linear;
+        }
+        
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) translateX(0); }
+            100% { transform: translateY(-100px) translateX(100px); }
         }
     </style>
 </head>
-<body class="text-gray-200">
-    <div class="container mx-auto px-4 py-8">
+<body class="text-white">
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Floating Elements -->
+    <div class="fixed top-10 left-10 w-20 h-20 rounded-full bg-cyan-500/20 blur-xl float"></div>
+    <div class="fixed top-1/4 right-20 w-16 h-16 rounded-full bg-purple-500/20 blur-xl float" style="animation-delay: 1s;"></div>
+    <div class="fixed bottom-20 left-1/4 w-24 h-24 rounded-full bg-blue-500/20 blur-xl float" style="animation-delay: 2s;"></div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10">
         <!-- Header -->
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 neon-text">
-                <i class="fas fa-graduation-cap mr-3 text-blue-500"></i>
-                Course Information Viewer
-            </h1>
-            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-                Course data loaded from URL parameter. Use website.html?url=YOUR_JSON_URL
-            </p>
-        </header>
-        
-        <!-- Current URL Display -->
-        <div class="max-w-4xl mx-auto mb-8">
-            <div class="futuristic-border rounded-xl p-6">
-                <h2 class="text-2xl font-semibold mb-4 flex items-center">
-                    <i class="fas fa-link mr-3 text-blue-500"></i>
-                    Current Data Source
-                </h2>
-                <div class="url-display">
-                    <span id="currentUrl">Loading...</span>
-                </div>
-                <div class="mt-4 text-sm text-gray-400">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    Change the URL parameter to load different course data
+        <header class="text-center mb-12 slide-in">
+            <div class="inline-block mb-4">
+                <div class="glass rounded-full p-6 pulse">
+                    <i class="fas fa-graduation-cap text-4xl text-cyan-400"></i>
                 </div>
             </div>
-        </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 neon-text font-orbitron">
+                SABBIR28
+            </h1>
+            <p class="text-xl text-cyan-200 max-w-2xl mx-auto fade-in">
+                Advanced Course Management System
+            </p>
+            <div class="mt-6 flex justify-center space-x-4">
+                <div class="glass rounded-lg px-4 py-2 text-sm">
+                    <i class="fas fa-bolt text-yellow-400 mr-2"></i>
+                    Premium Content
+                </div>
+                <div class="glass rounded-lg px-4 py-2 text-sm">
+                    <i class="fas fa-shield-alt text-green-400 mr-2"></i>
+                    Secure Access
+                </div>
+                <div class="glass rounded-lg px-4 py-2 text-sm">
+                    <i class="fas fa-rocket text-purple-400 mr-2"></i>
+                    High Performance
+                </div>
+            </div>
+        </header>
         
         <!-- Content Display Section -->
-        <div class="max-w-6xl mx-auto">
-            <div class="futuristic-border rounded-xl overflow-hidden">
-                <div class="bg-slate-800 px-6 py-4 flex justify-between items-center">
-                    <h2 class="text-xl font-semibold flex items-center">
-                        <i class="fas fa-book-open mr-3 text-blue-500"></i>
-                        Course Details
+        <div class="max-w-6xl mx-auto mb-12">
+            <div class="glass rounded-2xl overflow-hidden hologram-effect">
+                <div class="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-2xl font-semibold flex items-center">
+                        <i class="fas fa-book-open mr-3 text-cyan-400"></i>
+                        Course Dashboard
                     </h2>
                     <div class="flex items-center space-x-4">
-                        <span id="status" class="text-sm px-3 py-1 bg-slate-700 rounded-full">
+                        <span id="status" class="text-sm px-3 py-1 glass rounded-full">
+                            <i class="fas fa-sync-alt animate-spin mr-2"></i>
                             Loading...
                         </span>
-                        <button id="copyBtn" class="text-gray-400 hover:text-white transition" title="Copy Data">
+                        <button id="copyBtn" class="glass p-2 rounded-lg hover:glow transition-all" title="Copy Data">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="p-6">
-                    <div id="contentArea" class="content-area bg-slate-900 rounded-lg p-6 min-h-64">
+                    <div id="contentArea" class="content-area rounded-xl p-6 min-h-64">
                         <div class="text-center py-12">
-                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                            <p>Loading course data...</p>
+                            <div class="inline-block mb-4">
+                                <div class="rounded-full p-4 bg-cyan-500/20 rotate">
+                                    <i class="fas fa-cog text-2xl text-cyan-400"></i>
+                                </div>
+                            </div>
+                            <p class="text-cyan-200">Loading course data...</p>
+                            <div class="mt-4 h-1 w-48 bg-cyan-900/50 rounded-full mx-auto overflow-hidden">
+                                <div class="h-full bg-cyan-500 rounded-full animate-pulse" style="width: 60%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Instructions -->
-        <div class="max-w-4xl mx-auto mt-12">
-            <div class="futuristic-border rounded-xl p-6">
-                <h3 class="text-xl font-semibold mb-4 flex items-center">
-                    <i class="fas fa-question-circle mr-3 text-blue-500"></i>
-                    How to Use
-                </h3>
-                <div class="space-y-3 text-gray-300">
-                    <p>1. Add your JSON URL as a parameter: <code class="bg-slate-800 px-2 py-1 rounded">website.html?url=YOUR_JSON_URL</code></p>
-                    <p>2. The page will automatically fetch and display the course data</p>
-                    <p>3. Make sure your JSON follows the course data structure</p>
-                    <p class="text-sm text-gray-400 mt-4">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        Note: Due to CORS restrictions, you may need to use a CORS proxy for external URLs
-                    </p>
+        <!-- Features Section -->
+        <div class="max-w-6xl mx-auto mt-16">
+            <h2 class="text-3xl font-bold text-center mb-12 neon-text font-orbitron">WHY CHOOSE SABBIR28?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-6 text-center card-hover slide-in" style="animation-delay: 0.2s;">
+                    <div class="inline-block p-4 rounded-full bg-cyan-500/20 mb-4">
+                        <i class="fas fa-bolt text-3xl text-cyan-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Lightning Fast</h3>
+                    <p class="text-cyan-100">Optimized performance with instant data loading and real-time updates.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center card-hover slide-in" style="animation-delay: 0.4s;">
+                    <div class="inline-block p-4 rounded-full bg-purple-500/20 mb-4">
+                        <i class="fas fa-shield-alt text-3xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Secure & Private</h3>
+                    <p class="text-cyan-100">Enterprise-grade security with encrypted data transmission.</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center card-hover slide-in" style="animation-delay: 0.6s;">
+                    <div class="inline-block p-4 rounded-full bg-green-500/20 mb-4">
+                        <i class="fas fa-infinity text-3xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Always Available</h3>
+                    <p class="text-cyan-100">99.9% uptime guarantee with 24/7 access to your course materials.</p>
                 </div>
             </div>
         </div>
+        
+        <!-- Footer -->
+        <footer class="mt-16 text-center py-8 border-t border-cyan-900/30">
+            <div class="glass rounded-2xl p-6 max-w-2xl mx-auto">
+                <h3 class="text-xl font-bold mb-4 neon-text">SABBIR28 EDUCATION PLATFORM</h3>
+                <p class="text-cyan-200 mb-4">Transforming education through technology and innovation</p>
+                <div class="flex justify-center space-x-6 text-cyan-300">
+                    <a href="#" class="hover:text-cyan-100 transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="hover:text-cyan-100 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-cyan-100 transition"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="hover:text-cyan-100 transition"><i class="fab fa-github"></i></a>
+                </div>
+                <p class="mt-4 text-sm text-cyan-400">© 2024 SABBIR28. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
 
     <script>
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 5 + 2;
+                const posX = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             const contentArea = document.getElementById('contentArea');
             const status = document.getElementById('status');
             const copyBtn = document.getElementById('copyBtn');
-            const currentUrl = document.getElementById('currentUrl');
+            
+            // Create background particles
+            createParticles();
             
             // Get URL parameter
             function getUrlParameter(name) {
@@ -216,21 +397,17 @@
                 const url = getUrlParameter('url');
                 
                 if (!url) {
-                    showError('No URL parameter found. Please add ?url=YOUR_JSON_URL to the address bar.');
-                    currentUrl.textContent = 'No URL parameter provided';
+                    showError('No course data URL provided. Please add ?url=YOUR_JSON_URL to the address bar.');
                     return;
                 }
-                
-                currentUrl.textContent = url;
-                currentUrl.innerHTML = `<a href="${url}" target="_blank" class="text-blue-400 hover:text-blue-300">${url}</a>`;
                 
                 fetchData(url);
             }
             
             // Fetch and display data
             function fetchData(url) {
-                status.textContent = 'Loading...';
-                status.className = 'text-sm px-3 py-1 bg-yellow-600 rounded-full';
+                status.innerHTML = '<i class="fas fa-sync-alt animate-spin mr-2"></i> Loading...';
+                status.className = 'text-sm px-3 py-1 glass rounded-full';
                 
                 // Using a proxy to avoid CORS issues
                 const proxyUrl = 'https://api.allorigins.win/raw?url=';
@@ -244,36 +421,43 @@
                     })
                     .then(data => {
                         displayCourseData(data);
-                        status.textContent = 'Loaded';
-                        status.className = 'text-sm px-3 py-1 bg-green-600 rounded-full';
+                        status.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Loaded';
+                        status.className = 'text-sm px-3 py-1 bg-green-500/30 rounded-full';
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
                         showError(`Failed to load course data: ${error.message}`);
-                        status.textContent = 'Error';
-                        status.className = 'text-sm px-3 py-1 bg-red-600 rounded-full';
+                        status.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i> Error';
+                        status.className = 'text-sm px-3 py-1 bg-red-500/30 rounded-full';
                     });
             }
             
             // Display course data in a structured format
             function displayCourseData(courseData) {
                 let html = `
-                    <div class="mb-8">
-                        <h2 class="text-2xl font-bold mb-4 text-blue-400">Course ID: ${courseData.id}</h2>
+                    <div class="mb-8 fade-in">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-3xl font-bold text-cyan-400">Course ID: ${courseData.id}</h2>
+                            <div class="glass px-4 py-2 rounded-lg">
+                                <i class="fas fa-star text-yellow-400 mr-2"></i>
+                                Premium Course
+                            </div>
+                        </div>
                         
                         <!-- Course Descriptions -->
                         ${courseData.descriptions && courseData.descriptions.length > 0 ? `
-                            <div class="mb-6">
-                                <h3 class="text-xl font-semibold mb-3 flex items-center">
-                                    <i class="fas fa-info-circle mr-2 text-blue-500"></i>
-                                    Course Details
+                            <div class="mb-8 slide-in">
+                                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                                    <i class="fas fa-info-circle mr-3 text-cyan-400"></i>
+                                    Course Overview
                                 </h3>
                                 <div class="space-y-4">
                                     ${courseData.descriptions.map(desc => `
-                                        <div class="course-card p-4 rounded-lg">
-                                            <h4 class="font-semibold text-lg mb-2">${desc.question}</h4>
-                                            <div class="text-gray-300">${formatHtmlContent(desc.answer)}</div>
-                                            <div class="mt-2 text-xs text-gray-500">
+                                        <div class="course-card p-5 rounded-xl glass">
+                                            <h4 class="font-semibold text-xl mb-3 text-cyan-300">${desc.question}</h4>
+                                            <div class="text-gray-200">${formatHtmlContent(desc.answer)}</div>
+                                            <div class="mt-3 text-sm text-cyan-400">
+                                                <i class="far fa-clock mr-1"></i>
                                                 Created: ${formatDate(desc.created_at)} | Updated: ${formatDate(desc.updated_at)}
                                             </div>
                                         </div>
@@ -284,19 +468,19 @@
                         
                         <!-- Course Sections -->
                         ${courseData.sections && courseData.sections.length > 0 ? `
-                            <div class="mb-6">
-                                <h3 class="text-xl font-semibold mb-3 flex items-center">
-                                    <i class="fas fa-list-alt mr-2 text-blue-500"></i>
-                                    Course Sections
+                            <div class="mb-8 slide-in" style="animation-delay: 0.3s;">
+                                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                                    <i class="fas fa-list-alt mr-3 text-cyan-400"></i>
+                                    Course Curriculum
                                 </h3>
                                 <div class="space-y-6">
                                     ${courseData.sections.map(section => `
-                                        <div class="bg-slate-800 rounded-lg p-4">
-                                            <h4 class="font-semibold text-lg mb-3">Section ID: ${section.id}</h4>
+                                        <div class="glass rounded-xl p-5">
+                                            <h4 class="font-semibold text-xl mb-4 text-cyan-300">Section ID: ${section.id}</h4>
                                             <div class="space-y-4">
                                                 ${section.lectures && section.lectures.length > 0 ? section.lectures.map(lecture => `
-                                                    <div class="lecture-item p-3 rounded">
-                                                        <div class="flex justify-between items-start mb-2">
+                                                    <div class="lecture-item p-4 rounded-lg">
+                                                        <div class="flex justify-between items-start mb-3">
                                                             <h5 class="font-medium text-lg">${lecture.title}</h5>
                                                             <div class="flex space-x-2">
                                                                 <span class="badge ${lecture.is_open ? 'badge-open' : 'badge-closed'}">
@@ -310,18 +494,18 @@
                                                         
                                                         <!-- Lecture Items -->
                                                         ${lecture.items && lecture.items.length > 0 ? `
-                                                            <div class="ml-4 mt-2 space-y-2">
+                                                            <div class="ml-4 mt-3 space-y-3">
                                                                 ${lecture.items.map(item => `
-                                                                    <div class="flex justify-between items-center py-2 px-3 bg-slate-700 rounded">
+                                                                    <div class="flex justify-between items-center py-3 px-4 glass rounded-lg">
                                                                         <div class="flex items-center">
-                                                                            <span class="badge ${item.type === 'PDF' ? 'badge-pdf' : 'badge-class'} mr-2">
+                                                                            <span class="badge ${item.type === 'PDF' ? 'badge-pdf' : 'badge-class'} mr-3">
                                                                                 ${item.type}
                                                                             </span>
-                                                                            <span>${item.title}</span>
+                                                                            <span class="font-medium">${item.title}</span>
                                                                         </div>
-                                                                        <div class="flex space-x-2">
+                                                                        <div class="flex space-x-3">
                                                                             ${item.url ? `
-                                                                                <a href="${item.url}" target="_blank" class="text-blue-400 hover:text-blue-300" title="Open Link">
+                                                                                <a href="${item.url}" target="_blank" class="text-cyan-400 hover:text-cyan-300 transition" title="Open Link">
                                                                                     <i class="fas fa-external-link-alt"></i>
                                                                                 </a>
                                                                             ` : ''}
@@ -332,9 +516,9 @@
                                                                     </div>
                                                                 `).join('')}
                                                             </div>
-                                                        ` : '<p class="text-gray-500 text-sm ml-4">No items in this lecture</p>'}
+                                                        ` : '<p class="text-cyan-300 text-sm ml-4">No items in this lecture</p>'}
                                                     </div>
-                                                `).join('') : '<p class="text-gray-500">No lectures in this section</p>'}
+                                                `).join('') : '<p class="text-cyan-300">No lectures in this section</p>'}
                                             </div>
                                         </div>
                                     `).join('')}
@@ -343,32 +527,18 @@
                         ` : ''}
                         
                         <!-- Empty Arrays Information -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 slide-in" style="animation-delay: 0.5s;">
                             ${courseData.preps && courseData.preps.length === 0 ? `
-                                <div class="bg-slate-800 p-3 rounded text-center">
-                                    <i class="fas fa-users text-gray-500 mb-2"></i>
-                                    <p class="text-gray-400">No Preps</p>
+                                <div class="glass p-4 rounded-xl text-center">
+                                    <i class="fas fa-users text-cyan-400 text-2xl mb-2"></i>
+                                    <p class="text-cyan-300">No Preps</p>
                                 </div>
                             ` : ''}
                             
                             ${courseData.mentors && courseData.mentors.length === 0 ? `
-                                <div class="bg-slate-800 p-3 rounded text-center">
-                                    <i class="fas fa-chalkboard-teacher text-gray-500 mb-2"></i>
-                                    <p class="text-gray-400">No Mentors</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${courseData.course_images && courseData.course_images.length === 0 ? `
-                                <div class="bg-slate-800 p-3 rounded text-center">
-                                    <i class="fas fa-images text-gray-500 mb-2"></i>
-                                    <p class="text-gray-400">No Course Images</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${courseData.routines && courseData.routines.length === 0 ? `
-                                <div class="bg-slate-800 p-3 rounded text-center">
-                                    <i class="fas fa-calendar-alt text-gray-500 mb-2"></i>
-                                    <p class="text-gray-400">No Routines</p>
+                                <div class="glass p-4 rounded-xl text-center">
+                                    <i class="fas fa-chalkboard-teacher text-cyan-400 text-2xl mb-2"></i>
+                                    <p class="text-cyan-300">No Mentors</p>
                                 </div>
                             ` : ''}
                         </div>
@@ -399,31 +569,20 @@
             // Show error message
             function showError(message) {
                 contentArea.innerHTML = `
-                    <div class="text-center py-8 text-red-400">
-                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                        <p class="text-xl mb-2">Error Loading Data</p>
-                        <p class="text-sm mb-4">${message}</p>
-                        <div class="mt-4 p-4 bg-slate-800 rounded-lg">
-                            <p class="text-sm text-gray-300">Usage: website.html?url=https://example.com/course.json</p>
+                    <div class="text-center py-12 fade-in">
+                        <div class="inline-block mb-6">
+                            <div class="rounded-full p-6 bg-red-500/20">
+                                <i class="fas fa-exclamation-triangle text-4xl text-red-400"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-red-400">Data Load Error</h3>
+                        <p class="text-red-300 mb-6 max-w-md mx-auto">${message}</p>
+                        <div class="glass p-6 rounded-xl max-w-md mx-auto">
+                            <p class="text-cyan-300 mb-2">Usage Example:</p>
+                            <code class="bg-black/30 p-3 rounded-lg block text-sm">website.html?url=https://example.com/course.json</code>
                         </div>
                     </div>
                 `;
-            }
-            
-            // Show status message
-            function showMessage(message, type) {
-                const oldStatus = status.textContent;
-                const oldClass = status.className;
-                
-                status.textContent = message;
-                status.className = `text-sm px-3 py-1 rounded-full ${
-                    type === 'error' ? 'bg-red-600' : 'bg-green-600'
-                }`;
-                
-                setTimeout(() => {
-                    status.textContent = oldStatus;
-                    status.className = oldClass;
-                }, 3000);
             }
             
             // Copy content to clipboard
@@ -431,10 +590,18 @@
                 if (contentArea.textContent && !contentArea.textContent.includes('Loading course data')) {
                     navigator.clipboard.writeText(contentArea.textContent)
                         .then(() => {
-                            showMessage('Content copied to clipboard', 'success');
+                            // Show temporary success feedback
+                            const originalHTML = copyBtn.innerHTML;
+                            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                            copyBtn.classList.add('bg-green-500/30');
+                            
+                            setTimeout(() => {
+                                copyBtn.innerHTML = originalHTML;
+                                copyBtn.classList.remove('bg-green-500/30');
+                            }, 2000);
                         })
                         .catch(err => {
-                            showMessage('Failed to copy content', 'error');
+                            console.error('Copy failed:', err);
                         });
                 }
             });
