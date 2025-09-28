@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic URL Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        
+        .glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .futuristic-border {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: rgba(30, 41, 59, 0.7);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px rgba(59, 130, 246, 0.7);
+        }
+        
+        .content-area {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        /* Custom scrollbar */
+        .content-area::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .content-area::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        
+        .content-area::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        
+        .content-area::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 neon-text">
+                <i class="fas fa-globe mr-3 text-blue-500"></i>
+                Futuristic URL Viewer
+            </h1>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                Enter a URL to view its content in a clean, futuristic interface. Perfect for previewing web content.
+            </p>
+        </header>
+        
+        <!-- URL Input Section -->
+        <div class="max-w-4xl mx-auto mb-12">
+            <div class="futuristic-border rounded-xl p-6 glow">
+                <h2 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-link mr-3 text-blue-500"></i>
+                    Enter URL to View
+                </h2>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input 
+                        type="url" 
+                        id="urlInput" 
+                        placeholder="https://example.com" 
+                        class="flex-grow px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                    <button 
+                        id="viewBtn" 
+                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300 flex items-center justify-center"
+                    >
+                        <i class="fas fa-eye mr-2"></i>
+                        View Content
+                    </button>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
+                        https://jsonplaceholder.typicode.com/posts/1
+                    </button>
+                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
+                        https://jsonplaceholder.typicode.com/users
+                    </button>
+                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
+                        https://api.github.com/users/octocat
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Display Section -->
+        <div class="max-w-6xl mx-auto">
+            <div class="futuristic-border rounded-xl overflow-hidden">
+                <div class="bg-slate-800 px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-file-alt mr-3 text-blue-500"></i>
+                        Content Viewer
+                    </h2>
+                    <div class="flex items-center space-x-4">
+                        <span id="status" class="text-sm px-3 py-1 bg-slate-700 rounded-full">
+                            Ready
+                        </span>
+                        <button id="copyBtn" class="text-gray-400 hover:text-white transition">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div id="contentArea" class="content-area bg-slate-900 rounded-lg p-6 min-h-64">
+                        <div class="text-center py-12 text-gray-500">
+                            <i class="fas fa-arrow-up text-3xl mb-4 block"></i>
+                            <p>Enter a URL above and click "View Content" to see the data here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Section -->
+        <div class="max-w-6xl mx-auto mt-12">
+            <h2 class="text-2xl font-semibold mb-6 text-center">Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="futuristic-border rounded-xl p-6 card-hover">
+                    <div class="text-blue-500 text-center mb-4">
+                        <i class="fas fa-bolt text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Fast Loading</h3>
+                    <p class="text-gray-400 text-center">Quickly fetch and display content from any URL with minimal delay.</p>
+                </div>
+                
+                <div class="futuristic-border rounded-xl p-6 card-hover">
+                    <div class="text-blue-500 text-center mb-4">
+                        <i class="fas fa-eye text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Clean Interface</h3>
+                    <p class="text-gray-400 text-center">Futuristic dark theme with easy-to-read content presentation.</p>
+                </div>
+                
+                <div class="futuristic-border rounded-xl p-6 card-hover">
+                    <div class="text-blue-500 text-center mb-4">
+                        <i class="fas fa-code text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">JSON Formatted</h3>
+                    <p class="text-gray-400 text-center">Automatically formats JSON responses for better readability.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlInput = document.getElementById('urlInput');
+            const viewBtn = document.getElementById('viewBtn');
+            const contentArea = document.getElementById('contentArea');
+            const status = document.getElementById('status');
+            const copyBtn = document.getElementById('copyBtn');
+            const urlExamples = document.querySelectorAll('.url-example');
+            
+            // Set example URLs
+            urlExamples.forEach(example => {
+                example.addEventListener('click', function() {
+                    urlInput.value = this.textContent.trim();
+                });
+            });
+            
+            // View URL content
+            viewBtn.addEventListener('click', function() {
+                const url = urlInput.value.trim();
+                
+                if (!url) {
+                    showMessage('Please enter a URL', 'error');
+                    return;
+                }
+                
+                // Validate URL format
+                try {
+                    new URL(url);
+                } catch (e) {
+                    showMessage('Please enter a valid URL', 'error');
+                    return;
+                }
+                
+                fetchContent(url);
+            });
+            
+            // Copy content to clipboard
+            copyBtn.addEventListener('click', function() {
+                const content = contentArea.textContent;
+                if (content && !content.includes('Enter a URL above')) {
+                    navigator.clipboard.writeText(content)
+                        .then(() => {
+                            showMessage('Content copied to clipboard', 'success');
+                        })
+                        .catch(err => {
+                            showMessage('Failed to copy content', 'error');
+                        });
+                }
+            });
+            
+            // Fetch and display content
+            function fetchContent(url) {
+                status.textContent = 'Loading...';
+                status.className = 'text-sm px-3 py-1 bg-yellow-600 rounded-full';
+                
+                // Using a proxy to avoid CORS issues
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                
+                fetch(proxyUrl + encodeURIComponent(url))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        displayContent(data);
+                        status.textContent = 'Loaded';
+                        status.className = 'text-sm px-3 py-1 bg-green-600 rounded-full';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching content:', error);
+                        contentArea.innerHTML = `
+                            <div class="text-center py-8 text-red-400">
+                                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                                <p class="text-xl mb-2">Failed to load content</p>
+                                <p class="text-sm">${error.message}</p>
+                            </div>
+                        `;
+                        status.textContent = 'Error';
+                        status.className = 'text-sm px-3 py-1 bg-red-600 rounded-full';
+                    });
+            }
+            
+            // Display content with formatting
+            function displayContent(content) {
+                // Try to parse as JSON for pretty formatting
+                try {
+                    const jsonContent = JSON.parse(content);
+                    contentArea.innerHTML = `<pre class="text-sm overflow-auto">${JSON.stringify(jsonContent, null, 2)}</pre>`;
+                } catch (e) {
+                    // If not JSON, display as plain text
+                    contentArea.textContent = content;
+                }
+            }
+            
+            // Show status message
+            function showMessage(message, type) {
+                const oldStatus = status.textContent;
+                const oldClass = status.className;
+                
+                status.textContent = message;
+                status.className = `text-sm px-3 py-1 rounded-full ${
+                    type === 'error' ? 'bg-red-600' : 'bg-green-600'
+                }`;
+                
+                setTimeout(() => {
+                    status.textContent = oldStatus;
+                    status.className = oldClass;
+                }, 3000);
+            }
+            
+            // Allow pressing Enter to submit
+            urlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    viewBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
