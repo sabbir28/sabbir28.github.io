@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced JSON Data Viewer</title>
+    <title>Course Information Viewer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -58,45 +58,60 @@
             background: #2563eb;
         }
         
-        .json-key {
-            color: #60a5fa;
-            font-weight: 600;
-        }
-        
-        .json-string {
-            color: #86efac;
-        }
-        
-        .json-number {
-            color: #fbbf24;
-        }
-        
-        .json-boolean {
-            color: #c084fc;
-        }
-        
-        .json-null {
-            color: #f87171;
-        }
-        
-        .data-card {
+        .course-card {
             background: rgba(30, 41, 59, 0.8);
             border-left: 4px solid #3b82f6;
             transition: all 0.3s ease;
         }
         
-        .data-card:hover {
+        .course-card:hover {
             background: rgba(30, 41, 59, 1);
             transform: translateX(5px);
         }
         
-        .table-row {
+        .lecture-item {
             border-bottom: 1px solid #334155;
             transition: background 0.2s;
         }
         
-        .table-row:hover {
+        .lecture-item:hover {
             background: rgba(51, 65, 85, 0.5);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-open {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .badge-closed {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .badge-pdf {
+            background-color: #f59e0b;
+            color: white;
+        }
+        
+        .badge-class {
+            background-color: #8b5cf6;
+            color: white;
+        }
+        
+        .url-display {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -105,49 +120,27 @@
         <!-- Header -->
         <header class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-bold mb-4 neon-text">
-                <i class="fas fa-database mr-3 text-blue-500"></i>
-                Advanced JSON Data Viewer
+                <i class="fas fa-graduation-cap mr-3 text-blue-500"></i>
+                Course Information Viewer
             </h1>
             <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-                Enter a URL to fetch and visualize JSON data in a structured, user-friendly format.
+                Course data loaded from URL parameter. Use website.html?url=YOUR_JSON_URL
             </p>
         </header>
         
-        <!-- URL Input Section -->
-        <div class="max-w-4xl mx-auto mb-12">
-            <div class="futuristic-border rounded-xl p-6 glow">
+        <!-- Current URL Display -->
+        <div class="max-w-4xl mx-auto mb-8">
+            <div class="futuristic-border rounded-xl p-6">
                 <h2 class="text-2xl font-semibold mb-4 flex items-center">
                     <i class="fas fa-link mr-3 text-blue-500"></i>
-                    Enter API URL
+                    Current Data Source
                 </h2>
-                <div class="flex flex-col md:flex-row gap-4">
-                    <input 
-                        type="url" 
-                        id="urlInput" 
-                        placeholder="https://jsonplaceholder.typicode.com/posts/1" 
-                        class="flex-grow px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                    <button 
-                        id="viewBtn" 
-                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-300 flex items-center justify-center"
-                    >
-                        <i class="fas fa-eye mr-2"></i>
-                        Fetch Data
-                    </button>
+                <div class="url-display">
+                    <span id="currentUrl">Loading...</span>
                 </div>
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
-                        https://jsonplaceholder.typicode.com/posts/1
-                    </button>
-                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
-                        https://jsonplaceholder.typicode.com/users
-                    </button>
-                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
-                        https://jsonplaceholder.typicode.com/comments?postId=1
-                    </button>
-                    <button class="url-example px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-md text-sm transition">
-                        https://api.github.com/users/octocat
-                    </button>
+                <div class="mt-4 text-sm text-gray-400">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Change the URL parameter to load different course data
                 </div>
             </div>
         </div>
@@ -157,59 +150,45 @@
             <div class="futuristic-border rounded-xl overflow-hidden">
                 <div class="bg-slate-800 px-6 py-4 flex justify-between items-center">
                     <h2 class="text-xl font-semibold flex items-center">
-                        <i class="fas fa-table mr-3 text-blue-500"></i>
-                        Data Viewer
+                        <i class="fas fa-book-open mr-3 text-blue-500"></i>
+                        Course Details
                     </h2>
                     <div class="flex items-center space-x-4">
                         <span id="status" class="text-sm px-3 py-1 bg-slate-700 rounded-full">
-                            Ready
+                            Loading...
                         </span>
                         <button id="copyBtn" class="text-gray-400 hover:text-white transition" title="Copy Data">
                             <i class="fas fa-copy"></i>
-                        </button>
-                        <button id="toggleView" class="text-gray-400 hover:text-white transition" title="Toggle View">
-                            <i class="fas fa-exchange-alt"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="p-6">
                     <div id="contentArea" class="content-area bg-slate-900 rounded-lg p-6 min-h-64">
-                        <div class="text-center py-12 text-gray-500">
-                            <i class="fas fa-arrow-up text-3xl mb-4 block"></i>
-                            <p>Enter a URL above and click "Fetch Data" to see the processed data here</p>
+                        <div class="text-center py-12">
+                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                            <p>Loading course data...</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Features Section -->
-        <div class="max-w-6xl mx-auto mt-12">
-            <h2 class="text-2xl font-semibold mb-6 text-center">Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="futuristic-border rounded-xl p-6 card-hover">
-                    <div class="text-blue-500 text-center mb-4">
-                        <i class="fas fa-table text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-center">Structured View</h3>
-                    <p class="text-gray-400 text-center">Data is displayed in organized tables and cards for easy reading.</p>
-                </div>
-                
-                <div class="futuristic-border rounded-xl p-6 card-hover">
-                    <div class="text-blue-500 text-center mb-4">
-                        <i class="fas fa-toggle-on text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-center">View Toggle</h3>
-                    <p class="text-gray-400 text-center">Switch between structured view and raw JSON format.</p>
-                </div>
-                
-                <div class="futuristic-border rounded-xl p-6 card-hover">
-                    <div class="text-blue-500 text-center mb-4">
-                        <i class="fas fa-palette text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-center">Color Coded</h3>
-                    <p class="text-gray-400 text-center">Different data types are color-coded for quick identification.</p>
+        <!-- Instructions -->
+        <div class="max-w-4xl mx-auto mt-12">
+            <div class="futuristic-border rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-question-circle mr-3 text-blue-500"></i>
+                    How to Use
+                </h3>
+                <div class="space-y-3 text-gray-300">
+                    <p>1. Add your JSON URL as a parameter: <code class="bg-slate-800 px-2 py-1 rounded">website.html?url=YOUR_JSON_URL</code></p>
+                    <p>2. The page will automatically fetch and display the course data</p>
+                    <p>3. Make sure your JSON follows the course data structure</p>
+                    <p class="text-sm text-gray-400 mt-4">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Note: Due to CORS restrictions, you may need to use a CORS proxy for external URLs
+                    </p>
                 </div>
             </div>
         </div>
@@ -217,74 +196,36 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const urlInput = document.getElementById('urlInput');
-            const viewBtn = document.getElementById('viewBtn');
             const contentArea = document.getElementById('contentArea');
             const status = document.getElementById('status');
             const copyBtn = document.getElementById('copyBtn');
-            const toggleView = document.getElementById('toggleView');
-            const urlExamples = document.querySelectorAll('.url-example');
+            const currentUrl = document.getElementById('currentUrl');
             
-            let currentData = null;
-            let currentViewMode = 'structured'; // 'structured' or 'raw'
+            // Get URL parameter
+            function getUrlParameter(name) {
+                name = name.replace(/[\[\]]/g, '\\$&');
+                const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+                const results = regex.exec(window.location.href);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            }
             
-            // Set example URLs
-            urlExamples.forEach(example => {
-                example.addEventListener('click', function() {
-                    urlInput.value = this.textContent.trim();
-                });
-            });
-            
-            // View URL content
-            viewBtn.addEventListener('click', function() {
-                const url = urlInput.value.trim();
+            // Load data from URL parameter
+            function loadDataFromUrl() {
+                const url = getUrlParameter('url');
                 
                 if (!url) {
-                    showMessage('Please enter a URL', 'error');
+                    showError('No URL parameter found. Please add ?url=YOUR_JSON_URL to the address bar.');
+                    currentUrl.textContent = 'No URL parameter provided';
                     return;
                 }
                 
-                // Validate URL format
-                try {
-                    new URL(url);
-                } catch (e) {
-                    showMessage('Please enter a valid URL', 'error');
-                    return;
-                }
+                currentUrl.textContent = url;
+                currentUrl.innerHTML = `<a href="${url}" target="_blank" class="text-blue-400 hover:text-blue-300">${url}</a>`;
                 
                 fetchData(url);
-            });
-            
-            // Copy content to clipboard
-            copyBtn.addEventListener('click', function() {
-                if (currentData) {
-                    navigator.clipboard.writeText(JSON.stringify(currentData, null, 2))
-                        .then(() => {
-                            showMessage('Data copied to clipboard', 'success');
-                        })
-                        .catch(err => {
-                            showMessage('Failed to copy data', 'error');
-                        });
-                }
-            });
-            
-            // Toggle between structured and raw view
-            toggleView.addEventListener('click', function() {
-                if (!currentData) return;
-                
-                currentViewMode = currentViewMode === 'structured' ? 'raw' : 'structured';
-                displayData(currentData);
-                
-                // Update button tooltip
-                const icon = toggleView.querySelector('i');
-                if (currentViewMode === 'structured') {
-                    icon.className = 'fas fa-exchange-alt';
-                    toggleView.title = 'Switch to Raw View';
-                } else {
-                    icon.className = 'fas fa-table';
-                    toggleView.title = 'Switch to Structured View';
-                }
-            });
+            }
             
             // Fetch and display data
             function fetchData(url) {
@@ -297,255 +238,176 @@
                 fetch(proxyUrl + encodeURIComponent(url))
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         return response.json();
                     })
                     .then(data => {
-                        currentData = data;
-                        displayData(data);
+                        displayCourseData(data);
                         status.textContent = 'Loaded';
                         status.className = 'text-sm px-3 py-1 bg-green-600 rounded-full';
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
-                        contentArea.innerHTML = `
-                            <div class="text-center py-8 text-red-400">
-                                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                                <p class="text-xl mb-2">Failed to load data</p>
-                                <p class="text-sm">${error.message}</p>
-                            </div>
-                        `;
+                        showError(`Failed to load course data: ${error.message}`);
                         status.textContent = 'Error';
                         status.className = 'text-sm px-3 py-1 bg-red-600 rounded-full';
                     });
             }
             
-            // Display data based on current view mode
-            function displayData(data) {
-                if (currentViewMode === 'structured') {
-                    contentArea.innerHTML = renderStructuredView(data);
-                } else {
-                    contentArea.innerHTML = `<pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>`;
-                }
-            }
-            
-            // Render structured view of data
-            function renderStructuredView(data) {
-                if (Array.isArray(data)) {
-                    return renderArray(data);
-                } else if (typeof data === 'object' && data !== null) {
-                    return renderObject(data);
-                } else {
-                    return renderPrimitive(data);
-                }
-            }
-            
-            // Render an array as a table
-            function renderArray(arr) {
-                if (arr.length === 0) {
-                    return '<div class="text-center py-4 text-gray-500">Empty array</div>';
-                }
-                
-                // Check if all items are objects with similar structure
-                const allObjects = arr.every(item => typeof item === 'object' && item !== null);
-                
-                if (allObjects) {
-                    // Get all unique keys from all objects
-                    const allKeys = [...new Set(arr.flatMap(item => Object.keys(item)))];
-                    
-                    return `
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold mb-2 flex items-center">
-                                <i class="fas fa-list mr-2 text-blue-500"></i>
-                                Array (${arr.length} items)
-                            </h3>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full">
-                                    <thead>
-                                        <tr class="bg-slate-800">
-                                            <th class="px-4 py-2 text-left">#</th>
-                                            ${allKeys.map(key => `
-                                                <th class="px-4 py-2 text-left">${key}</th>
-                                            `).join('')}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${arr.map((item, index) => `
-                                            <tr class="table-row">
-                                                <td class="px-4 py-2 border-r border-slate-700 font-mono text-sm">${index}</td>
-                                                ${allKeys.map(key => `
-                                                    <td class="px-4 py-2 max-w-xs truncate">
-                                                        ${renderTableCell(item[key])}
-                                                    </td>
-                                                `).join('')}
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // Simple array with primitive values
-                    return `
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold mb-2 flex items-center">
-                                <i class="fas fa-list mr-2 text-blue-500"></i>
-                                Array (${arr.length} items)
-                            </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                ${arr.map((item, index) => `
-                                    <div class="data-card p-3 rounded">
-                                        <div class="flex justify-between items-start">
-                                            <span class="font-mono text-sm text-gray-400">[${index}]</span>
-                                            <span class="text-xs px-2 py-1 rounded ${getValueTypeClass(item)}">
-                                                ${getValueType(item)}
-                                            </span>
+            // Display course data in a structured format
+            function displayCourseData(courseData) {
+                let html = `
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold mb-4 text-blue-400">Course ID: ${courseData.id}</h2>
+                        
+                        <!-- Course Descriptions -->
+                        ${courseData.descriptions && courseData.descriptions.length > 0 ? `
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold mb-3 flex items-center">
+                                    <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                                    Course Details
+                                </h3>
+                                <div class="space-y-4">
+                                    ${courseData.descriptions.map(desc => `
+                                        <div class="course-card p-4 rounded-lg">
+                                            <h4 class="font-semibold text-lg mb-2">${desc.question}</h4>
+                                            <div class="text-gray-300">${formatHtmlContent(desc.answer)}</div>
+                                            <div class="mt-2 text-xs text-gray-500">
+                                                Created: ${formatDate(desc.created_at)} | Updated: ${formatDate(desc.updated_at)}
+                                            </div>
                                         </div>
-                                        <div class="mt-1 truncate">${renderPrimitive(item)}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            
-            // Render an object as key-value pairs
-            function renderObject(obj) {
-                const keys = Object.keys(obj);
-                
-                if (keys.length === 0) {
-                    return '<div class="text-center py-4 text-gray-500">Empty object</div>';
-                }
-                
-                return `
-                    <div class="mb-4">
-                        <h3 class="text-lg font-semibold mb-2 flex items-center">
-                            <i class="fas fa-cube mr-2 text-blue-500"></i>
-                            Object (${keys.length} properties)
-                        </h3>
-                        <div class="space-y-2">
-                            ${keys.map(key => `
-                                <div class="flex items-start py-2 border-b border-slate-700">
-                                    <div class="json-key w-1/3 md:w-1/4 pr-2 break-words">${key}</div>
-                                    <div class="flex-1 pl-2 border-l border-slate-700">
-                                        ${renderValue(obj[key])}
-                                    </div>
+                                    `).join('')}
                                 </div>
-                            `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Course Sections -->
+                        ${courseData.sections && courseData.sections.length > 0 ? `
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold mb-3 flex items-center">
+                                    <i class="fas fa-list-alt mr-2 text-blue-500"></i>
+                                    Course Sections
+                                </h3>
+                                <div class="space-y-6">
+                                    ${courseData.sections.map(section => `
+                                        <div class="bg-slate-800 rounded-lg p-4">
+                                            <h4 class="font-semibold text-lg mb-3">Section ID: ${section.id}</h4>
+                                            <div class="space-y-4">
+                                                ${section.lectures && section.lectures.length > 0 ? section.lectures.map(lecture => `
+                                                    <div class="lecture-item p-3 rounded">
+                                                        <div class="flex justify-between items-start mb-2">
+                                                            <h5 class="font-medium text-lg">${lecture.title}</h5>
+                                                            <div class="flex space-x-2">
+                                                                <span class="badge ${lecture.is_open ? 'badge-open' : 'badge-closed'}">
+                                                                    ${lecture.is_open ? 'Open' : 'Closed'}
+                                                                </span>
+                                                                ${lecture.is_enrolled ? `
+                                                                    <span class="badge badge-open">Enrolled</span>
+                                                                ` : ''}
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Lecture Items -->
+                                                        ${lecture.items && lecture.items.length > 0 ? `
+                                                            <div class="ml-4 mt-2 space-y-2">
+                                                                ${lecture.items.map(item => `
+                                                                    <div class="flex justify-between items-center py-2 px-3 bg-slate-700 rounded">
+                                                                        <div class="flex items-center">
+                                                                            <span class="badge ${item.type === 'PDF' ? 'badge-pdf' : 'badge-class'} mr-2">
+                                                                                ${item.type}
+                                                                            </span>
+                                                                            <span>${item.title}</span>
+                                                                        </div>
+                                                                        <div class="flex space-x-2">
+                                                                            ${item.url ? `
+                                                                                <a href="${item.url}" target="_blank" class="text-blue-400 hover:text-blue-300" title="Open Link">
+                                                                                    <i class="fas fa-external-link-alt"></i>
+                                                                                </a>
+                                                                            ` : ''}
+                                                                            <span class="badge ${item.is_open ? 'badge-open' : 'badge-closed'}">
+                                                                                ${item.is_open ? 'Open' : 'Closed'}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                `).join('')}
+                                                            </div>
+                                                        ` : '<p class="text-gray-500 text-sm ml-4">No items in this lecture</p>'}
+                                                    </div>
+                                                `).join('') : '<p class="text-gray-500">No lectures in this section</p>'}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Empty Arrays Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                            ${courseData.preps && courseData.preps.length === 0 ? `
+                                <div class="bg-slate-800 p-3 rounded text-center">
+                                    <i class="fas fa-users text-gray-500 mb-2"></i>
+                                    <p class="text-gray-400">No Preps</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${courseData.mentors && courseData.mentors.length === 0 ? `
+                                <div class="bg-slate-800 p-3 rounded text-center">
+                                    <i class="fas fa-chalkboard-teacher text-gray-500 mb-2"></i>
+                                    <p class="text-gray-400">No Mentors</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${courseData.course_images && courseData.course_images.length === 0 ? `
+                                <div class="bg-slate-800 p-3 rounded text-center">
+                                    <i class="fas fa-images text-gray-500 mb-2"></i>
+                                    <p class="text-gray-400">No Course Images</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${courseData.routines && courseData.routines.length === 0 ? `
+                                <div class="bg-slate-800 p-3 rounded text-center">
+                                    <i class="fas fa-calendar-alt text-gray-500 mb-2"></i>
+                                    <p class="text-gray-400">No Routines</p>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
-            }
-            
-            // Render a value based on its type
-            function renderValue(value) {
-                if (Array.isArray(value)) {
-                    if (value.length === 0) {
-                        return '<span class="text-gray-500">Empty array</span>';
-                    }
-                    return `
-                        <div class="mb-1">
-                            <span class="text-xs px-2 py-1 rounded bg-blue-900 text-blue-200 mr-2">
-                                Array (${value.length})
-                            </span>
-                            <button class="toggle-array text-xs text-blue-400 hover:text-blue-300" onclick="toggleArrayVisibility(this)">
-                                Show items
-                            </button>
-                        </div>
-                        <div class="array-content hidden mt-2 ml-4 pl-2 border-l border-slate-600">
-                            ${value.map((item, idx) => `
-                                <div class="mb-1">
-                                    <span class="text-gray-500 text-xs mr-2">[${idx}]</span>
-                                    ${renderValue(item)}
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                } else if (typeof value === 'object' && value !== null) {
-                    return `
-                        <div>
-                            <span class="text-xs px-2 py-1 rounded bg-purple-900 text-purple-200 mr-2">
-                                Object
-                            </span>
-                            <button class="toggle-object text-xs text-blue-400 hover:text-blue-300" onclick="toggleObjectVisibility(this)">
-                                Show properties
-                            </button>
-                            <div class="object-content hidden mt-2 ml-4 pl-2 border-l border-slate-600">
-                                ${renderObject(value)}
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    return renderPrimitive(value);
-                }
-            }
-            
-            // Render a primitive value with appropriate styling
-            function renderPrimitive(value) {
-                if (value === null) {
-                    return '<span class="json-null">null</span>';
-                }
                 
-                const type = typeof value;
-                
-                switch (type) {
-                    case 'string':
-                        // Check if it's a date string
-                        if (/^\d{4}-\d{2}-\d{2}/.test(value)) {
-                            const date = new Date(value);
-                            if (!isNaN(date.getTime())) {
-                                return `
-                                    <span class="json-string">"${value}"</span>
-                                    <span class="text-xs text-gray-500 ml-2">(${date.toLocaleString()})</span>
-                                `;
-                            }
-                        }
-                        // Check if it's a URL
-                        if (value.startsWith('http')) {
-                            return `<a href="${value}" target="_blank" class="json-string underline">"${value}"</a>`;
-                        }
-                        return `<span class="json-string">"${value}"</span>`;
-                    case 'number':
-                        return `<span class="json-number">${value}</span>`;
-                    case 'boolean':
-                        return `<span class="json-boolean">${value}</span>`;
-                    default:
-                        return `<span>${value}</span>`;
+                contentArea.innerHTML = html;
+            }
+            
+            // Format HTML content safely
+            function formatHtmlContent(html) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                return tempDiv.innerHTML;
+            }
+            
+            // Format date for better display
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                } catch (e) {
+                    return dateString;
                 }
             }
             
-            // Render table cell content
-            function renderTableCell(value) {
-                if (Array.isArray(value)) {
-                    return `<span class="text-xs px-2 py-1 rounded bg-blue-900 text-blue-200">Array (${value.length})</span>`;
-                } else if (typeof value === 'object' && value !== null) {
-                    return `<span class="text-xs px-2 py-1 rounded bg-purple-900 text-purple-200">Object</span>`;
-                } else {
-                    return renderPrimitive(value);
-                }
-            }
-            
-            // Get CSS class for value type
-            function getValueTypeClass(value) {
-                if (value === null) return 'bg-red-900 text-red-200';
-                
-                const type = typeof value;
-                switch (type) {
-                    case 'string': return 'bg-green-900 text-green-200';
-                    case 'number': return 'bg-yellow-900 text-yellow-200';
-                    case 'boolean': return 'bg-purple-900 text-purple-200';
-                    default: return 'bg-gray-700 text-gray-300';
-                }
-            }
-            
-            // Get display name for value type
-            function getValueType(value) {
-                if (value === null) return 'null';
-                if (Array.isArray(value)) return 'array';
-                return typeof value;
+            // Show error message
+            function showError(message) {
+                contentArea.innerHTML = `
+                    <div class="text-center py-8 text-red-400">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                        <p class="text-xl mb-2">Error Loading Data</p>
+                        <p class="text-sm mb-4">${message}</p>
+                        <div class="mt-4 p-4 bg-slate-800 rounded-lg">
+                            <p class="text-sm text-gray-300">Usage: website.html?url=https://example.com/course.json</p>
+                        </div>
+                    </div>
+                `;
             }
             
             // Show status message
@@ -564,35 +426,21 @@
                 }, 3000);
             }
             
-            // Allow pressing Enter to submit
-            urlInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    viewBtn.click();
+            // Copy content to clipboard
+            copyBtn.addEventListener('click', function() {
+                if (contentArea.textContent && !contentArea.textContent.includes('Loading course data')) {
+                    navigator.clipboard.writeText(contentArea.textContent)
+                        .then(() => {
+                            showMessage('Content copied to clipboard', 'success');
+                        })
+                        .catch(err => {
+                            showMessage('Failed to copy content', 'error');
+                        });
                 }
             });
             
-            // Add toggle functions to global scope for onclick handlers
-            window.toggleArrayVisibility = function(button) {
-                const content = button.nextElementSibling;
-                if (content.classList.contains('hidden')) {
-                    content.classList.remove('hidden');
-                    button.textContent = 'Hide items';
-                } else {
-                    content.classList.add('hidden');
-                    button.textContent = 'Show items';
-                }
-            };
-            
-            window.toggleObjectVisibility = function(button) {
-                const content = button.nextElementSibling;
-                if (content.classList.contains('hidden')) {
-                    content.classList.remove('hidden');
-                    button.textContent = 'Hide properties';
-                } else {
-                    content.classList.add('hidden');
-                    button.textContent = 'Show properties';
-                }
-            };
+            // Initialize - load data from URL parameter
+            loadDataFromUrl();
         });
     </script>
 </body>
