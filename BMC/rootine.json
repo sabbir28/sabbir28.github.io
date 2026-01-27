@@ -1,0 +1,38 @@
+{
+  "college": "BM College",
+  "instructors": {
+    "mh": "Monoj Halder",
+    "mrm": "Md. Norrul Mohahmed Mohibullah",
+    "mr": "Mostafij Rohoman"
+  },
+  "schedule": [
+    {
+      "day": "Monday",
+      "start_time": "09:15",
+      "end_time": "10:00",
+      "subject": "Principles of Finance",
+      "instructor_code": "mr"
+    },
+    {
+      "day": "Monday",
+      "start_time": "10:00",
+      "end_time": "10:45",
+      "subject": "Principles of Management",
+      "instructor_code": "mrm"
+    },
+    {
+      "day": "Monday",
+      "start_time": "10:45",
+      "end_time": "11:30",
+      "subject": "Principles of Accounting",
+      "instructor_code": "mh"
+    },
+    {
+      "day": "Monday",
+      "start_time": "11:30",
+      "end_time": "12:15",
+      "subject": "History of Bangladesh",
+      "instructor_code": null
+    }
+  ]
+}
