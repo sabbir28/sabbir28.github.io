@@ -1,38 +1,152 @@
 {
-  "college": "BM College",
-  "instructors": {
-    "mh": "Monoj Halder",
-    "mrm": "Md. Norrul Mohahmed Mohibullah",
-    "mr": "Mostafij Rohoman"
-  },
-  "schedule": [
-    {
-      "day": "Monday",
-      "start_time": "09:15",
-      "end_time": "10:00",
-      "subject": "Principles of Finance",
-      "instructor_code": "mr"
-    },
-    {
-      "day": "Monday",
-      "start_time": "10:00",
-      "end_time": "10:45",
-      "subject": "Principles of Management",
-      "instructor_code": "mrm"
-    },
-    {
-      "day": "Monday",
-      "start_time": "10:45",
-      "end_time": "11:30",
-      "subject": "Principles of Accounting",
-      "instructor_code": "mh"
-    },
-    {
-      "day": "Monday",
-      "start_time": "11:30",
-      "end_time": "12:15",
-      "subject": "History of Bangladesh",
-      "instructor_code": null
-    }
-  ]
+  "schedule": {
+    "Monday": [
+      {
+        "subject_code": "PF",
+        "subject_name": "Principles of Finance",
+        "instructor_code": "MR",
+        "instructor_name": "Motiur Rahman",
+        "room": "202"
+      },
+      {
+        "subject_code": "MGT",
+        "subject_name": "Principles of Management",
+        "instructor_code": "MRM",
+        "instructor_name": "Md. Mizanur Rahman",
+        "room": "202"
+      },
+      {
+        "subject_code": "PA",
+        "subject_name": "Principles of Accounting",
+        "instructor_code": "MH",
+        "instructor_name": "Monoj Halder",
+        "room": "202"
+      },
+      {
+        "subject_code": "HIS",
+        "subject_name": "History",
+        "instructor_code": null,
+        "instructor_name": null,
+        "room": "404"
+      },
+      {
+        "subject_code": "IB",
+        "subject_name": "Introduction to Business",
+        "instructor_code": "MNI",
+        "instructor_name": "Mohammad Nazibul Islam",
+        "room": "201"
+      }
+    ],
+    "Tuesday": [
+      {
+        "subject_code": "MKT",
+        "subject_name": "Marketing",
+        "instructor_code": "HH",
+        "instructor_name": "Helal Hossain",
+        "room": "202"
+      },
+      {
+        "subject_code": "PF",
+        "subject_name": "Principles of Finance",
+        "instructor_code": "MMR",
+        "instructor_name": "Md. Mostafizur Rahman",
+        "room": "202"
+      },
+      {
+        "subject_code": "PD",
+        "subject_name": "Professional Development",
+        "instructor_code": "MH",
+        "instructor_name": "Monoj Halder",
+        "room": "202"
+      },
+      {
+        "subject_code": "ECO",
+        "subject_name": "Economics",
+        "instructor_code": "MML",
+        "instructor_name": null,
+        "room": "202"
+      },
+      {
+        "subject_code": "IT",
+        "subject_name": "Information Technology",
+        "instructor_code": "ML",
+        "instructor_name": null,
+        "room": "202"
+      }
+    ],
+    "Wednesday": [
+      {
+        "subject_code": null,
+        "subject_name": null,
+        "instructor_code": null,
+        "instructor_name": null,
+        "room": null
+      },
+      {
+        "subject_code": "PA",
+        "subject_name": "Principles of Accounting",
+        "instructor_code": "SKD",
+        "instructor_name": "Dr. Sanjoy Kumar Das",
+        "room": "104"
+      },
+      {
+        "subject_code": "PF",
+        "subject_name": "Principles of Finance",
+        "instructor_code": "MR",
+        "instructor_name": "Motiur Rahman",
+        "room": "104"
+      },
+      {
+        "subject_code": "MGT",
+        "subject_name": "Principles of Management",
+        "instructor_code": "MRM",
+        "instructor_name": "Md. Mizanur Rahman",
+        "room": "104"
+      },
+      {
+        "subject_code": "MKT",
+        "subject_name": "Marketing",
+        "instructor_code": "HH",
+        "instructor_name": "Helal Hossain",
+        "room": "104"
+      }
+    ],
+    "Thursday": [
+      {
+        "subject_code": null,
+        "subject_name": null,
+        "instructor_code": null,
+        "instructor_name": null,
+        "room": null
+      },
+      {
+        "subject_code": "IT",
+        "subject_name": "Information Technology",
+        "instructor_code": "MR",
+        "instructor_name": "Motiur Rahman",
+        "room": "201"
+      },
+      {
+        "subject_code": "PF",
+        "subject_name": "Principles of Finance",
+        "instructor_code": "MMR",
+        "instructor_name": "Md. Mostafizur Rahman",
+        "room": "101"
+      },
+      {
+        "subject_code": "PA",
+        "subject_name": "Principles of Accounting",
+        "instructor_code": "SKD",
+        "instructor_name": "Dr. Sanjoy Kumar Das",
+        "room": "101"
+      },
+      {
+        "subject_code": "IB",
+        "subject_name": "Introduction to Business",
+        "instructor_code": "SKD",
+        "instructor_name": "Dr. Sanjoy Kumar Das",
+        "room": "202"
+      }
+    ]
+  }
 }
