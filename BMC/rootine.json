@@ -1,6 +1,6 @@
 {
   "schedule": {
-    "Monday": [
+    "MONDAY": [
       {
         "subject_code": "PF",
         "subject_name": "Principles of Finance",
@@ -37,7 +37,7 @@
         "room": "201"
       }
     ],
-    "Tuesday": [
+    "TUESDAY": [
       {
         "subject_code": "MKT",
         "subject_name": "Marketing",
@@ -74,7 +74,7 @@
         "room": "202"
       }
     ],
-    "Wednesday": [
+    "WEDNESDAY": [
       {
         "subject_code": null,
         "subject_name": null,
@@ -111,7 +111,7 @@
         "room": "104"
       }
     ],
-    "Thursday": [
+    "THURSDAY": [
       {
         "subject_code": null,
         "subject_name": null,
