@@ -10,8 +10,10 @@ const CONFIG = {
   iconUrl:
     "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png",
 
-  // Temporary placeholders
-  placeholderScreenshots: [
+  bannerUrl:
+    "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/final.png?raw=true",
+
+  screenshots: [
     "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/1.png?raw=true",
     "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/2.png?raw=true",
     "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/3.png?raw=true",
@@ -21,6 +23,7 @@ const CONFIG = {
 
 /**
  * DEBUG-only APK selector
+ * Governance decision: debug builds only
  */
 function selectDebugApk(assets) {
   if (!Array.isArray(assets)) return null;
@@ -42,31 +45,47 @@ function formatDate(iso) {
  * UI bootstrap
  */
 fetch(CONFIG.apiUrl)
-  .then(r => {
-    if (!r.ok) throw new Error("GitHub API failed");
-    return r.json();
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("GitHub API request failed");
+    }
+    return res.json();
   })
   .then(release => {
     const apk = selectDebugApk(release.assets);
-    if (!apk) throw new Error("Debug APK not found");
+    if (!apk) {
+      throw new Error("DEBUG APK not found in release");
+    }
 
-    /* Header */
+    /* ================= HEADER ================= */
+
     document.getElementById("appIcon").src = CONFIG.iconUrl;
     document.getElementById("appName").textContent = CONFIG.appName;
     document.getElementById("appVersion").textContent =
       `Version ${release.tag_name} • DEBUG`;
 
-    /* Description */
-    document.getElementById("appDescription").textContent =
-      release.body?.trim() ||
-      "Official DEBUG build distributed via GitHub Releases.";
+    /* ================= BANNER ================= */
 
-    /* Action */
+    const banner = document.getElementById("banner");
+    if (banner) {
+      banner.src = CONFIG.bannerUrl;
+    }
+
+    /* ================= DESCRIPTION ================= */
+
+    document.getElementById("appDescription").textContent =
+      "The Government Brojomohun College application provides students with a centralized platform to access regular class updates, schedules, and official announcements. " +
+      "Students receive real-time notifications for class activities, schedule changes, and important academic information. " +
+      "The app is designed to simplify daily academic coordination and ensure timely communication.";
+
+    /* ================= ACTION ================= */
+
     const actionBtn = document.getElementById("actionBtn");
     actionBtn.href = apk.browser_download_url;
     actionBtn.textContent = "INSTALL";
 
-    /* Play-Store-style metadata row */
+    /* ================= PLAY-STORE METRICS ================= */
+
     const meta = document.createElement("div");
     meta.className = "store-meta";
     meta.innerHTML = `
@@ -86,21 +105,23 @@ fetch(CONFIG.apiUrl)
 
     document.querySelector(".header").after(meta);
 
-    /* Screenshots */
+    /* ================= SCREENSHOTS ================= */
+
     const screenshots = document.getElementById("screenshots");
     screenshots.innerHTML = "";
 
-    CONFIG.placeholderScreenshots.forEach(url => {
+    CONFIG.screenshots.forEach(url => {
       const img = document.createElement("img");
       img.src = url;
-      img.alt = "App screenshot";
+      img.alt = "Application screenshot";
       screenshots.appendChild(img);
     });
   })
   .catch(err => {
     console.error(err);
+
     document.getElementById("appName").textContent =
-      "Unable to load application";
+      "Application unavailable";
     document.getElementById("appDescription").textContent =
-      "GitHub API error or rate limit reached.";
+      "Unable to load application data. Please retry later.";
   });
