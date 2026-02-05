@@ -12,8 +12,8 @@ const CONFIG = {
 
   // Temporary placeholders – replace later
   placeholderScreenshots: [
-    "https://via.placeholder.com/240x480?text=Screenshot+1",
-    "https://via.placeholder.com/240x480?text=Screenshot+2"
+    "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png",
+    "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png"
   ]
 };
 
@@ -25,7 +25,6 @@ function selectApk(assets) {
   if (!Array.isArray(assets)) return null;
 
   return (
-    assets.find(a => a.name === "app-release.apk") ||
     assets.find(a => a.name === "app-debug.apk") ||
     assets.find(a => a.name.endsWith(".apk")) ||
     null
