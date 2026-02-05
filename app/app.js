@@ -10,7 +10,7 @@ const CONFIG = {
   iconUrl:
     "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png",
 
-  // Temporary placeholders – replace later
+  // Temporary placeholders
   placeholderScreenshots: [
     "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png",
     "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png"
@@ -18,53 +18,73 @@ const CONFIG = {
 };
 
 /**
- * Utility: Select preferred APK
- * Strategy: release > debug > first apk
+ * DEBUG-only APK selector
  */
-function selectApk(assets) {
+function selectDebugApk(assets) {
   if (!Array.isArray(assets)) return null;
+  return assets.find(a => a.name === "app-debug.apk") || null;
+}
 
-  return (
-    assets.find(a => a.name === "app-debug.apk") ||
-    assets.find(a => a.name.endsWith(".apk")) ||
-    null
-  );
+/**
+ * Utilities
+ */
+function formatSize(bytes) {
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString();
 }
 
 /**
  * UI bootstrap
  */
 fetch(CONFIG.apiUrl)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("GitHub API request failed");
-    }
-    return response.json();
+  .then(r => {
+    if (!r.ok) throw new Error("GitHub API failed");
+    return r.json();
   })
   .then(release => {
-    const apk = selectApk(release.assets);
+    const apk = selectDebugApk(release.assets);
+    if (!apk) throw new Error("Debug APK not found");
 
-    if (!apk) {
-      throw new Error("No APK asset found in release");
-    }
-
-    // Header
+    /* Header */
     document.getElementById("appIcon").src = CONFIG.iconUrl;
     document.getElementById("appName").textContent = CONFIG.appName;
     document.getElementById("appVersion").textContent =
-      `Version ${release.tag_name}`;
+      `Version ${release.tag_name} • DEBUG`;
 
-    // Description (null-safe)
+    /* Description */
     document.getElementById("appDescription").textContent =
       release.body?.trim() ||
-      "Official Android application. Download the latest version below.";
+      "Official DEBUG build distributed via GitHub Releases.";
 
-    // Install / Update CTA
+    /* Action */
     const actionBtn = document.getElementById("actionBtn");
     actionBtn.href = apk.browser_download_url;
     actionBtn.textContent = "INSTALL";
 
-    // Screenshots (placeholder for now)
+    /* Play-Store-style metadata row */
+    const meta = document.createElement("div");
+    meta.className = "store-meta";
+    meta.innerHTML = `
+      <div>
+        <span>${formatSize(apk.size)}</span>
+        <label>Size</label>
+      </div>
+      <div>
+        <span>${apk.download_count}</span>
+        <label>Downloads</label>
+      </div>
+      <div>
+        <span>${formatDate(release.published_at)}</span>
+        <label>Updated</label>
+      </div>
+    `;
+
+    document.querySelector(".header").after(meta);
+
+    /* Screenshots */
     const screenshots = document.getElementById("screenshots");
     screenshots.innerHTML = "";
 
@@ -75,11 +95,10 @@ fetch(CONFIG.apiUrl)
       screenshots.appendChild(img);
     });
   })
-  .catch(error => {
-    console.error(error);
-
+  .catch(err => {
+    console.error(err);
     document.getElementById("appName").textContent =
       "Unable to load application";
     document.getElementById("appDescription").textContent =
-      "Please check your network connection or try again later.";
+      "GitHub API error or rate limit reached.";
   });
