@@ -12,8 +12,10 @@ const CONFIG = {
 
   // Temporary placeholders
   placeholderScreenshots: [
-    "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png",
-    "https://raw.githubusercontent.com/sabbir28/GBC/main/app/src/main/res/drawable/bm_college_logo.png"
+    "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/1.png?raw=true",
+    "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/2.png?raw=true",
+    "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/3.png?raw=true",
+    "https://github.com/sabbir28/sabbir28.github.io/blob/main/app/img/4.png?raw=true"
   ]
 };
 
