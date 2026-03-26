@@ -1,0 +1,476 @@
+:root {
+    /* Dark Theme (Default) - Ultra Premium */
+    --bg-color: #05070a;
+    --card-bg: #0d1117;
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(13, 17, 23, 0.7);
+    --accent-blue: #2563eb;
+    --accent-blue-hover: #3b82f6;
+    --accent-purple: #10b981;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
+    --nav-height: 70px;
+    --theme-btn-color: #fbd38d;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+body.light-theme {
+    /* Light Theme - Clean Premium Corporate */
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --accent-blue: #1d4ed8;
+    --accent-blue-hover: #2563eb;
+    --accent-purple: #059669;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --theme-btn-color: #334155;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #05070a; /* IE Fallback */
+    background-color: var(--bg-color);
+    color: #f8fafc; /* IE Fallback */
+    color: var(--text-main);
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Background image for depth */
+.bg-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: var(--bg-color);
+    /* For modern browsers */
+    background: var(--bg-color) url('../img/bg.jpg') no-repeat center center;
+    background-size: cover;
+    background-blend-mode: overlay;
+    transition: background 0.4s ease;
+    opacity: 0.8;
+}
+
+/* Clean Navigation */
+nav {
+    height: var(--nav-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 16px;
+    background-color: #0d1117; /* Solid fallback for IE */
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-sm);
+    z-index: 1000;
+    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Advanced Browser support */
+@supports (backdrop-filter: blur(12px)) {
+    nav {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover {
+    color: var(--accent-blue);
+    transform: translateY(-1px);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent-blue);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--text-main);
+}
+
+.nav-links a.active::after,
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.theme-toggle-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--theme-btn-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--glass-border);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(251, 211, 141, 0.2);
+}
+
+/* Hero Section */
+.hero {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+    text-align: center;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3rem; /* IE fallback */
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+    margin-bottom: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.hero-content p {
+    font-size: 1.1rem; /* IE fallback */
+    font-size: clamp(1rem, 2vw + 0.5rem, 1.25rem);
+    color: var(--text-muted);
+    margin: 0 auto 2.5rem;
+    max-width: 650px;
+    line-height: 1.8;
+}
+
+.profile-img-main {
+    width: 160px;
+    height: 160px;
+    border-radius: 24px;
+    object-fit: cover;
+    margin-bottom: 1.8rem;
+    border: 4px solid var(--bg-color);
+    box-shadow: var(--shadow-lg), 0 0 0 2px var(--accent-blue);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+.profile-img-main:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: var(--shadow-lg), 0 0 0 3px var(--accent-blue), 0 15px 30px rgba(59, 130, 246, 0.3);
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-hover) 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+    filter: brightness(1.1);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: var(--glass-border);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsive Grid/Cards */
+.grid-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    /* gracefully degraded logic: browser ignores if grid not fully supported */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+/* For IE 10/11 - Float fallback, modern browsers override it via @supports or cascading */
+.glass-card {
+    background: #0d1117; /* Solid fallback */
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+@supports (backdrop-filter: blur(10px)) {
+    .glass-card {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.glass-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* Typography Helpers */
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent-blue), #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.light-theme .gradient-text {
+    background: linear-gradient(135deg, var(--accent-blue), #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.accent-text-secondary {
+    color: var(--accent-purple);
+    font-weight: inherit;
+}
+
+/* Scroll Animations */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+
+/* Mobile Nav Structure */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0d1117; /* IE Fallback */
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 0.8rem 2.5rem;
+    border-radius: 50px;
+    z-index: 1000;
+    gap: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+@supports (backdrop-filter: blur(10px)) {
+    .mobile-nav {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+}
+
+.mobile-nav a {
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.mobile-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-nav a.active {
+    color: var(--accent-blue);
+    transform: translateY(-2px);
+}
+.mobile-nav a.active::after {
+    opacity: 1;
+}
+
+footer {
+    text-align: center;
+    padding: 4rem 5% 5rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    border-top: 1px solid var(--glass-border);
+    margin-top: 5rem;
+}
+
+/* =====================================================================
+   RESPONSIVENESS AND BUTTON PHONE SUPPORT 
+   ===================================================================== */
+
+/* Tablet & Smaller */
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero { min-height: 80vh; }
+    .hero-content h1 { font-size: 2.5rem; }
+    .profile-img-main { width: 130px; height: 130px; }
+    .mobile-nav { display: flex; }
+    
+    .grid-container {
+        grid-template-columns: 1fr; /* Stack vertically */
+    }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+    nav { width: 95%; padding: 0 1rem; }
+    .hero-content h1 { font-size: 2rem; }
+    .btn-primary, .btn-secondary { width: 100%; margin-bottom: 0.8rem; }
+    .glass-card { padding: 1.5rem; }
+    .mobile-nav { padding: 0.8rem 1.5rem; gap: 1.5rem; width: 90%; justify-content: space-around; }
+}
+
+/* Button Phones & Ultra Small Screens (KaiOS, older devices) */
+@media (max-width: 320px) {
+    nav { top: 10px; height: 60px; }
+    .logo { font-size: 1.2rem; }
+    .theme-toggle-btn { width: 35px; height: 35px; }
+    .hero-content h1 { font-size: 1.8rem; letter-spacing: -0.5px; }
+    .hero-content p { font-size: 0.95rem; }
+    .profile-img-main { width: 100px; height: 100px; border-width: 2px; }
+    .glass-card h3 { font-size: 1.1rem; }
+    .mobile-nav { width: 95%; gap: 1rem; padding: 0.6rem 1rem; }
+    .mobile-nav a { font-size: 1.1rem; }
+    footer { padding-top: 2rem; padding-bottom: 5rem; }
+}
+
+/* Extreme Button Phone (240px width - e.g., standard KaiOS screen in portrait) */
+@media (max-width: 280px) {
+    nav { padding: 0 0.5rem; border-radius: 8px; }
+    .logo { font-size: 1rem; }
+    .theme-toggle-btn { width: 30px; height: 30px; font-size: 1rem; }
+    main { padding-top: 5rem !important; }
+    .hero { min-height: auto; padding: 2rem 5%; }
+    .hero-content h1 { font-size: 1.5rem; }
+    .profile-img-main { width: 80px; height: 80px; }
+    .glass-card { padding: 1rem; }
+    .glass-card h3 { font-size: 1rem; }
+    .glass-card p { font-size: 0.85rem; line-height: 1.4; }
+    .mobile-nav { border-radius: 20px; padding: 0.5rem; gap: 0.5rem; }
+    .mobile-nav a { font-size: 1rem; }
+}

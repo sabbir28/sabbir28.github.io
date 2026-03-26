@@ -1,245 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to SABBIR28</title>
-
-  <!-- Favicon -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css" />
-
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="script/css/style.css" />
-
-  <!-- PureCounter for animation -->
-  <script src="https://cdn.jsdelivr.net/npm/purecounterjs@1.5.0/dist/purecounter_vanilla.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabbir | Software Developer & Accounting Student</title>
+    <!-- Script initialized early to prevent theme flashing -->
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">SABBIR28</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="/service.html">Service</a></li>
-          <li class="nav-item"><a class="nav-link" href="/work.html">Work</a></li>
+<body class="">
+    <!-- Base background (cleaner than glowing orbs) -->
+    <div class="bg-glow"></div>
+
+    <nav>
+        <a href="/" class="logo">SABBIR28</a>
+        <ul class="nav-links">
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/service.html">Services</a></li>
+            <li><a href="/work.html">Work</a></li>
+            <li><a href="/need-gf.html" style="color: var(--accent-purple); font-weight: 600;">Need GF</a></li>
         </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Section -->
-  <div class="d-flex justify-content-center align-items-center min-vh-100 pt-5">
-    <div class="container">
-      <div class="row justify-content-center align-items-center bg-white bg-opacity-75 rounded shadow p-4">
-        <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
-          <img src="https://sabbir28.github.io/assets/profile.webp" alt="Sabbir Profile Picture" class="img-fluid profile-img">
-        </div>
-        <div class="col-12 col-md-8 text-center text-md-start">
-          <h3 class="text-primary">Hello, I’m Sabbir</h3>
-          <p class="lead text-dark">
-            I'm a passionate developer who builds websites, mobile applications, and backend APIs.
-            If you're looking for custom solutions or project collaboration, feel free to reach out!
-          </p>
-          <div class="contact-section d-flex flex-wrap align-items-center gap-3 justify-content-center justify-content-md-start">
-            <span>Connect with me:</span>
-            <a href="https://facebook.com/sabbir28.github.io" target="_blank" class="text-decoration-none text-primary">
-              <i class="bi bi-facebook"></i> Facebook
-            </a>
-            <a href="https://github.com/sabbir28" target="_blank" class="text-decoration-none text-dark">
-              <i class="bi bi-github"></i> GitHub
-            </a>
-            <a href="mailto:sabbirb228@gmail.com" class="text-decoration-none text-danger">
-              <i class="bi bi-envelope"></i> Email
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Services Section -->
-<div class="container my-5">
-  <div class="row g-4 justify-content-center">
-
-    <!-- Card 1: Unity -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card text-center shadow-lg border-0 position-relative pt-5">
-        <div class="position-absolute rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; top: -30px; left: 50%; transform: translateX(-50%);">
-          <i class="bi bi-unity"></i>
-        </div>
-        <div class="card-body mt-4 pt-3">
-          <h5 class="card-title fw-bold">UNITY</h5>
-          <p class="card-text text-muted">
-            Unity is the first thing that I started with on my development journey.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 2: Python -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card text-center shadow-lg border-0 position-relative pt-5">
-        <div class="position-absolute rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; top: -30px; left: 50%; transform: translateX(-50%);">
-          <i class="bi bi-filetype-py"></i>
-        </div>
-        <div class="card-body mt-4 pt-3">
-          <h5 class="card-title fw-bold">PYTHON</h5>
-          <p class="card-text text-muted">
-            Python is the next thing I found — I realized I can do anything with it.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3: Android -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card text-center shadow-lg border-0 position-relative pt-5">
-        <div class="position-absolute rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; top: -30px; left: 50%; transform: translateX(-50%);">
-          <i class="bi bi-android2"></i>
-        </div>
-        <div class="card-body mt-4 pt-3">
-          <h5 class="card-title fw-bold">ANDROID DEVELOPMENT</h5>
-          <p class="card-text text-muted">
-            It's the only thing I learned in one of my shortest times — and it mattered.
-          </p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-  <!-- About Section -->
-  <div class="container my-5">
-    <div class="container-lg px-3 px-sm-4 px-lg-0 py-5">
-      <!-- Title -->
-      <div class="mb-4 text-center text-md-start">
-        <h2 class="display-5 fw-semibold serif-font">About Me</h2>
-        <div>
-          <span class="d-inline-block rounded" style="width: 64px; height: 4px; background-color: #e11d48;"></span>
-          <span class="d-inline-block rounded ms-2" style="width: 32px; height: 4px; background-color: #e11d48;"></span>
-        </div>
-      </div>
-
-      <div class="row gy-4 justify-content-between">
-        <!-- Left column -->
-        <div class="col-12 col-lg-6 d-flex flex-column gap-3">
-          <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 gap-sm-5">
-            <!-- List 1 -->
-            <ul class="list-unstyled text-dark mb-0 w-100 w-sm-50">
-              <li class="border-bottom py-2"><strong>Birthday:</strong> 10 Sep 2004</li>
-              <li class="border-bottom py-2"><strong>Degree:</strong> BBA (Bachelor of Business Administration), Honours 1st Year</li>
-              <li class="border-bottom py-2"><strong>Institution:</strong>Brojomohun College (BM)</li>
-              <li class="border-bottom py-2"><strong>Location:</strong> Bangladesh, Betagi, Barguna</li>
-            </ul>
-            <!-- List 2 -->
-            <ul class="list-unstyled text-dark mb-0 w-100 w-sm-50">
-              <li class="border-bottom py-2"><strong>Email:</strong> sabbirb228@gmail.com</li>
-              <li class="border-bottom py-2"><strong>Phone No:</strong> +8801614933357 <small class="text-muted">(Available: 6 PM – 8 PM only)</small></li>
-              <li class="border-bottom py-2"><strong>Employment:</strong> Unavailable</li>
-              <li class="border-bottom py-2"><strong>Freelance:</strong> Unavailable</li>
-            </ul>
-          </div>
-
-          <!-- Buttons -->
-          <div class="d-flex gap-3 justify-content-center justify-content-sm-start mt-3">
-            <a href="" class="btn btn-danger rounded-pill fw-bold px-4 px-sm-5">Download CV</a>
-            <a href="" class="btn btn-danger rounded-pill fw-bold px-4 px-sm-5">Hire me</a>
-          </div>
-        </div>
-
-        <!-- Right column -->
-        <div class="col-12 col-lg-5">
-
-          <div class="mb-3">
-            <div class="d-flex justify-content-between fw-semibold mb-1">
-              <span>HTML/CSS/Javascript/WordPress</span><span>70%</span>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                <i id="theme-icon" class="bi bi-sun-fill"></i>
+            </button>
+            <div class="social-icons d-none d-md-flex" style="display: flex; gap: 1rem;">
+                <a href="https://github.com/sabbir28" target="_blank" style="color: var(--text-muted);"><i
+                        class="bi bi-github"></i></a>
+                <a href="https://facebook.com/sabbir28.github.io" target="_blank" style="color: var(--text-muted);"><i
+                        class="bi bi-facebook"></i></a>
             </div>
-            <div class="progress" style="height: 8px;">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <div class="d-flex justify-content-between fw-semibold mb-1">
-              <span>Python</span><span>90%</span>
-            </div>
-            <div class="progress" style="height: 8px;">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <div class="d-flex justify-content-between fw-semibold mb-1">
-              <span>Adnroid Studio</span><span>85%</span>
-            </div>
-            <div class="progress" style="height: 8px;">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
         </div>
-      </div>
+    </nav>
+
+    <main style="padding-top: calc(var(--nav-height) + 2rem);">
+        <section class="hero">
+            <div class="hero-content">
+                <img src="assets/MyPhato/465783742_1795988934544627_8139255824473982833_n.jpg" alt="Sabbir Profile"
+                    class="profile-img-main animate-on-scroll visible">
+                <div style="margin-bottom: 1.5rem;">
+                    <span
+                        style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 1.5px; background: rgba(59, 130, 246, 0.1); padding: 6px 16px; border-radius: 20px;">
+                        Technology & Business Strategy
+                    </span>
+                </div>
+                <h1 style="font-weight: 800; letter-spacing: -1.5px;">Architecting Systems. <br><span
+                        class="gradient-text">Driving Growth.</span></h1>
+                <p
+                    style="font-size: 1.15rem; color: var(--text-muted); margin: 0 auto 2.5rem; max-width: 650px; line-height: 1.7;">
+                    Hi, I'm Sabbir. I combine years of technical expertise in software engineering with a formal
+                    education in accounting to build intelligent, scalable solutions for modern businesses.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/service.html" class="btn-primary">View Services</a>
+                    <a href="/about.html" class="btn-secondary">My Background</a>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding: 2rem 5% 6rem;">
+            <div
+                style="max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+
+                <div class="glass-card animate-on-scroll visible">
+                    <div
+                        style="width: 50px; height: 50px; background: rgba(59, 130, 246, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="bi bi-terminal" style="font-size: 1.8rem; color: var(--accent-blue);"></i>
+                    </div>
+                    <h3 style="margin: 0 0 1rem; font-size: 1.3rem;">Engineering Systems</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        Extensive practical experience architecting Python automation, Android applications, and robust
+                        web infrastructures. I engineer solutions that scale reliably.
+                    </p>
+                </div>
+
+                <div class="glass-card animate-on-scroll visible delay-100">
+                    <div
+                        style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                        <i class="bi bi-graph-up-arrow" style="font-size: 1.8rem; color: var(--accent-purple);"></i>
+                    </div>
+                    <h3 style="margin: 0 0 1rem; font-size: 1.3rem;">Business Acumen</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        Pursuing a BBA in Accounting. I bridge the critical gap between technical execution and
+                        high-level corporate financial strategy.
+                    </p>
+                </div>
+
+                <div class="glass-card animate-on-scroll visible delay-200"
+                    style="border-top: 4px solid var(--accent-blue);">
+                    <i class="bi bi-envelope-heart" style="font-size: 2rem; color: var(--accent-blue);"></i>
+                    <h3 style="margin: 1rem 0; font-size: 1.3rem;">Need GF</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6;">
+                        I value honesty, directness, and transparency in all aspects of life. I wrote an open letter
+                        outlining my personal philosophy and what I'm looking for.
+                    </p>
+                    <a href="/need-gf.html"
+                        style="color: var(--accent-blue); font-weight: 600; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px;">
+                        Read more <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <div class="mobile-nav">
+        <a href="/" class="active"><i class="bi bi-house-door-fill"></i></a>
+        <a href="/about.html"><i class="bi bi-person-fill"></i></a>
+        <a href="/work.html"><i class="bi bi-briefcase-fill"></i></a>
+        <a href="/need-gf.html" style="color: var(--accent-purple);"><i class="bi bi-envelope-heart-fill"></i></a>
     </div>
-  </div>
 
-  <!-- Footer Section (Hidden on mobile) -->
-<footer class="text-muted mt-5 px-3 d-none d-md-block">
-  <br>
-  <div class="container border-top pt-4 pb-5">
-    <div class="row justify-content-between align-items-center">
-      
-      <!-- Left Content -->
-      <div class="col-md-auto mb-3 mb-md-0">
-        <small>&copy; 2021 - 2025</small>
-        <span class="ms-3 border-start ps-3">
-          <a href="https://github.com/sabbir28" class="text-decoration-none text-muted hover-text-dark">SABBIR28</a>
-        </span>
-      </div>
-      
-      <!-- Right Content -->
-      <div class="col-md-auto">
-        <a href="https://github.com/sabbir28" class="text-muted me-4" target="_blank">
-          <i class="bi bi-github fs-5"></i>
-          <span class="visually-hidden">GitHub</span>
-        </a>
-        <a href="https://facebook.com/sabbir28.github.io" class="text-muted" target="_blank">
-          <i class="bi bi-facebook fs-5"></i>
-          <span class="visually-hidden">Facebook</span>
-        </a>
-      </div>
+    <footer>
+        <p>&copy; 2026 MD. Sabbir Hoshen Howlader. <br>Bridging Technical Execution and Business Strategy.</p>
+        <div style="margin-top: 1.5rem;">
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Page Views</p>
+            <img src="https://komarev.com/ghpvc/?username=sabbir28" alt="Visitors" style="border-radius: 6px;" />
+        </div>
+    </footer>
 
-    </div>
-  </div>
-</footer>
-
-
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav d-lg-none">
-    <a href="/"><div>🏠<br>Home</div></a>
-    <a href="/about.html"><div>ℹ️<br>About</div></a>
-    <a href="/service.html"><div>🛠️<br>Service</div></a>
-    <a href="/work.html"><div>📁<br>Work</div></a>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- Theme toggle script -->
+    <script src="assets/js/theme.js"></script>
+    <script>
+        // Apply theme classes from localStorage immediately to sync with the script tag in head
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+        }
+    </script>
 </body>
 
-
-</body>
 </html>

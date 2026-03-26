@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#c5a880">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>A Life Built on Purpose | MD. Sabbir Hoshen</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Premium Luxury Palette */
+            --lux-gold: #c5a880;
+            --lux-gold-light: #e6ceaa;
+            --lux-dark: #0a0a0c;
+            --lux-card: rgba(18, 18, 20, 0.6);
+            --lux-border: rgba(197, 168, 128, 0.2);
+            --text-lux: #fdfcfb;
+            --text-lux-muted: #a19d98;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--lux-dark);
+            color: var(--text-lux);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Sophisticated Background */
+        .lux-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 0%, rgba(197, 168, 128, 0.05) 0%, var(--lux-dark) 60%);
+            background-size: cover;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+        }
+
+        .gold-text {
+            color: var(--lux-gold);
+            background: linear-gradient(135deg, var(--lux-gold-light) 0%, var(--lux-gold) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hero Section */
+        .hero-lux {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 8rem 5% 5rem;
+            position: relative;
+        }
+
+        .hero-lux img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--lux-gold);
+            padding: 4px;
+            box-shadow: 0 10px 40px rgba(197, 168, 128, 0.15);
+            margin-bottom: 2rem;
+            opacity: 0;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: luxFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards, floatImage 6s ease-in-out infinite 1s;
+        }
+
+        .hero-lux img:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 20px 60px rgba(197, 168, 128, 0.3);
+            border-color: var(--lux-gold-light);
+        }
+
+        @keyframes floatImage {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: luxFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--text-lux-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: luxFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+        }
+
+        @keyframes luxFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Narrative Container */
+        .narrative-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 5% 6rem;
+        }
+
+        /* Grid specific to this page */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-card {
+            background: var(--lux-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--lux-border);
+            padding: 3rem 2.5rem;
+            border-radius: 2px;
+            /* Sharp, premium edges */
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--lux-gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            background: rgba(22, 22, 24, 0.8);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(197, 168, 128, 0.05);
+        }
+
+        .info-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .info-card h3 {
+            font-size: 1.8rem;
+            color: var(--lux-gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .info-card p,
+        .info-card li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-lux-muted);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-card li {
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        .info-card li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--lux-gold);
+            font-size: 1.5rem;
+            line-height: 1;
+            top: -2px;
+        }
+
+        /* Statement Block */
+        .statement-block {
+            text-align: center;
+            padding: 5rem 2rem;
+            border-top: 1px solid var(--lux-border);
+            border-bottom: 1px solid var(--lux-border);
+            margin: 4rem 0;
+            position: relative;
+        }
+
+        .statement-block i {
+            font-size: 2.5rem;
+            color: var(--lux-gold);
+            opacity: 0.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .statement-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-style: italic;
+            color: var(--text-lux);
+            line-height: 1.5;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Contact Button */
+        .lux-btn {
+            display: inline-block;
+            background: transparent;
+            color: var(--lux-gold);
+            border: 1px solid var(--lux-gold);
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .lux-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--lux-gold);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lux-btn:hover {
+            color: var(--lux-dark);
+        }
+
+        .lux-btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image Modal (Lightbox) */
+        .lux-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 12, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lux-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lux-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 4px;
+            border: 2px solid var(--lux-gold);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8), 0 0 60px rgba(197, 168, 128, 0.15);
+            transform: scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lux-modal.active img {
+            transform: scale(1);
+        }
+
+        .lux-modal-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 2.5rem;
+            color: var(--lux-gold);
+            cursor: pointer;
+            transition: transform 0.4s ease, color 0.4s ease;
+        }
+
+        .lux-modal-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            color: var(--lux-gold-light);
+        }
+
+        /* Continuous Pulse Animation for Highlights */
+        .pulse-icon {
+            animation: goldenPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes goldenPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+                filter: brightness(1.2);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="lux-bg"></div>
+
+    <div class="lux-modal" id="luxModal" onclick="closeModal(event)">
+        <i class="bi bi-x-lg lux-modal-close" onclick="closeModal(event)"></i>
+        <img src="" id="luxModalImg" alt="Full Screen User Photo">
+    </div>
+
+    <nav style="background: rgba(10,10,12,0.8); border: 1px solid var(--lux-border); border-radius: 0;">
+        <a href="/" class="logo"
+            style="color: var(--lux-gold); font-family: 'Playfair Display', serif; letter-spacing: 2px;">SABBIR28</a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/service.html">Services</a></li>
+            <li><a href="/work.html">Work</a></li>
+            <li><a href="/need-gf.html"
+                    style="color: var(--lux-gold); font-weight: 400; font-family: 'Playfair Display', serif; font-style: italic;">The
+                    Journey</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="hero-lux">
+            <img src="assets/MyPhato/486602102_1898432044300315_7034389853923374296_n.jpg"
+                alt="MD. Sabbir Hoshen Howlader" onclick="openModal(this.src)" title="Click to view full screen">
+            <h1 class="hero-title">Seeking a Partner in <span class="gold-text">Life & Success</span></h1>
+            <p class="hero-subtitle">
+                An open invitation to a woman of substance, maturity, and vision. This is not about casual dating; it is
+                about finding my cornerstone for a lifetime.
+            </p>
+        </section>
+
+        <div class="narrative-container">
+
+            <div class="statement-block fade-up">
+                <i class="bi bi-quote"></i>
+                <p class="statement-text">
+                    "A truly successful man requires a peaceful home and a fiercely loyal partner. I am building the
+                    empire; I am seeking the queen who will stand by my side to rule it."
+                </p>
+            </div>
+
+            <!-- Detailed Sections -->
+            <div class="info-grid">
+
+                <div class="info-card fade-up">
+                    <h3><i class="bi bi-person-lines-fill pulse-icon" style="font-size: 1.4rem;"></i> Who I Am</h3>
+                    <p>
+                        I am MD. Sabbir Hoshen Howlader. Professionally, I am an experienced software engineer and
+                        business automation expert. Academically, I am pursuing my BBA in Accounting at BM College to
+                        merge technical execution with high-level corporate finance.
+                    </p>
+                    <p>
+                        I value discipline, continuous growth, and absolute honesty. I do not engage in "games" or toxic
+                        modern dating trends. My life is structured around building real, lasting wealth and deeply
+                        protected peace.
+                    </p>
+                </div>
+
+                <div class="info-card fade-up" style="transition-delay: 0.1s;">
+                    <h3><i class="bi bi-shield-check pulse-icon" style="font-size: 1.4rem;"></i> What I Provide</h3>
+                    <ul>
+                        <li><strong style="color: var(--text-lux);">Financial Security & Ambition:</strong> A clear path
+                            to absolute financial independence and a luxurious future.</li>
+                        <li><strong style="color: var(--text-lux);">Unwavering Loyalty:</strong> A traditional mindset
+                            where my partner is my ultimate priority.</li>
+                        <li><strong style="color: var(--text-lux);">Emotional Safety:</strong> Transparent
+                            communication. I say what I mean, and I mean what I say. No guessing.</li>
+                        <li><strong style="color: var(--text-lux);">Leadership:</strong> A man who takes full
+                            accountability, protects his family, and leads by example.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card fade-up">
+                    <h3><i class="bi bi-gem pulse-icon" style="font-size: 1.4rem;"></i> The Woman I Seek</h3>
+                    <p>
+                        I am looking for a woman who understands the value of traditional loyalty combined with modern
+                        maturity. You must be deeply honest, inherently kind, and completely authentic.
+                    </p>
+                    <ul>
+                        <li><strong style="color: var(--text-lux);">Substance Over Surface:</strong> You prioritize a
+                            real, private connection over social media validation.</li>
+                        <li><strong style="color: var(--text-lux);">Peaceful Nature:</strong> You bring peace to a man's
+                            life, not unnecessary drama.</li>
+                        <li><strong style="color: var(--text-lux);">Future-Oriented:</strong> You are ready to build a
+                            serious, lasting foundation leading to marriage.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card fade-up" style="transition-delay: 0.1s;">
+                    <h3><i class="bi bi-calendar-check pulse-icon" style="font-size: 1.4rem;"></i> The 2026 Vision</h3>
+                    <p>
+                        My timeline is deliberate. While my current focus is solidifying my career and education,
+                        establishing the right emotional connection now is critical.
+                    </p>
+                    <p>
+                        I am opening this door in 2026 specifically to find the One. Once I find her, my search ends
+                        permanently. We will spend our time building trust, aligning our goals, and preparing for a
+                        deeply wealthy—both financially and emotionally—future together.
+                    </p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 6rem;" class="fade-up">
+                <p style="font-size: 1.1rem; color: var(--text-lux-muted); margin-bottom: 2.5rem; letter-spacing: 1px;">
+                    If this resonates with your soul, do not hesitate. Reach out securely here:
+                </p>
+                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://wa.me/8801986929243" target="_blank" class="lux-btn" style="padding: 1rem 2rem;"><i
+                            class="bi bi-whatsapp" style="margin-right: 8px;"></i> WhatsApp</a>
+                    <a href="https://facebook.com/sabbir28.github.io" target="_blank" class="lux-btn"
+                        style="padding: 1rem 2rem;"><i class="bi bi-facebook" style="margin-right: 8px;"></i>
+                        Facebook</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="mobile-nav" style="background: var(--lux-card); border: 1px solid var(--lux-border); border-radius: 0;">
+        <a href="/"><i class="bi bi-house-door-fill"></i></a>
+        <a href="/about.html"><i class="bi bi-person-fill"></i></a>
+        <a href="/work.html"><i class="bi bi-briefcase-fill"></i></a>
+        <a href="/need-gf.html" class="active" style="color: var(--lux-gold);"><i class="bi bi-gem"></i></a>
+    </div>
+
+    <footer
+        style="text-align: center; padding: 4rem; color: var(--lux-border); font-size: 0.85rem; font-family: 'Playfair Display', serif; letter-spacing: 1px;">
+        © 2026 MD. SABBIR HOSHEN HOWLADER. ALL RIGHTS RESERVED.
+    </footer>
+
+    <script>
+        // Intersection Observer for Fade Animations
+        document.addEventListener("DOMContentLoaded", function () {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
+
+            document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+        });
+
+        // Lightbox scripts
+        function openModal(src) {
+            document.getElementById('luxModalImg').src = src;
+            document.getElementById('luxModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent background scrolling
+        }
+
+        function closeModal(event) {
+            // Only close if clicking the background or the close button
+            if (event.target === document.getElementById('luxModal') || event.target.classList.contains('lux-modal-close')) {
+                document.getElementById('luxModal').classList.remove('active');
+                document.body.style.overflow = 'auto'; // allow background scroll again
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <link rel="stylesheet" href="/assets/css/old_paperart/style.css">
+    <link rel="stylesheet" href="/assets/css/old_paperart/loading.css">
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div class="container loader" id="loadingSpinner">
+        <span>L</span>
+        <span>O</span>
+        <span>A</span>
+        <span>D</span>
+        <span>I</span>
+        <span>N</span>
+        <span>G</span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="card" id="blogCard" style="display:none;">
+        <header>
+            <h1 id="blog-title"></h1>
+            <h4 id="creator-link"></h4>
+            <span id="blog-category"></span> | <span id="blog-date"></span>
+        </header>
+
+        <article id="blog-content" class="drop-cap">
+            <!-- Blog content will be dynamically inserted here -->
+        </article>
+
+        <!-- Comments Section -->
+        <div>
+            <h3 id="comment-title"></h3>
+            <ul id="comments-list"></ul>
+        </div>
+
+        <!-- Comment Form -->
+        <form id="commentForm">
+            <div>
+                <label for="inputName">Your Name</label>
+                <input type="text" id="inputName" name="name" required>
+            </div>
+            <div>
+                <label for="textMessage">Your Comment</label>
+                <textarea id="textMessage" name="comment" required></textarea>
+            </div>
+            <button type="submit">Post Comment</button>
+        </form>
+
+        <footer>
+            <span>&copy; <span id="current-year"></span> All Rights Reserved</span>
+        </footer>
+    </div>
+
+    <script>
+        // Function to get query parameter by name
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Set the current year dynamically
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Function to update the blog header details
+        function updateBlogHeader(title, category, date) {
+            const blogTitle = document.getElementById('blog-title');
+            const blogCategory = document.getElementById('blog-category');
+            const blogDate = document.getElementById('blog-date');
+
+            blogTitle.textContent = title;
+            blogCategory.textContent = `Category: ${category}`;
+            blogDate.textContent = `Published: ${new Date(date).toLocaleDateString()}`;
+        }
+
+        // Helper function to escape potentially dangerous HTML characters
+        function escapeHTML(unsafeString) {
+            const div = document.createElement('div');
+            div.textContent = unsafeString;
+            return div.innerHTML;
+        }
+
+        // Get blog ID from the query parameter in the URL
+        const blogId = getQueryParam('id');
+
+        if (!blogId) {
+            alert("Blog ID is missing in the URL.");
+            window.location = "/";
+        } else {
+            // API URL for fetching blog data
+            const apiUrl = `https://s28-core-api.vercel.app/api/v1/blog/${blogId}`;
+
+            // Function to fetch and update blog details
+            async function fetchBlogDetails() {
+                try {
+                    // Show the loading spinner while fetching data
+                    document.getElementById('loadingSpinner').style.display = 'block';
+
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch data: ${response.statusText}`);
+                    }
+                    const blog = await response.json();
+                    updatePageContent(blog);
+                } catch (error) {
+                    displayError('Failed to load blog data. Please try again later.');
+                    console.error(error);
+                } finally {
+                    // Hide the loading spinner once the content is loaded
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    document.getElementById('blogCard').style.display = 'block';
+                }
+            }
+
+            // Function to update the page content with the blog data
+            function updatePageContent(blog) {
+                // Update blog title, creator, category, and date
+                document.getElementById('blog-title').textContent = blog.title;
+                document.getElementById('creator-link').textContent = `By ${blog.creator}`;
+                document.getElementById('blog-category').textContent = `Category: ${blog.category}`;
+                document.getElementById('blog-date').textContent = `Published: ${new Date(blog.createdAt).toLocaleDateString()}`;
+                document.getElementById('blog-content').innerHTML = blog.content; // Insert the HTML content
+
+                // Update the comments section
+                const commentsList = document.getElementById('comments-list');
+                commentsList.innerHTML = ''; // Clear existing comments
+
+                blog.comments.forEach(comment => {
+                    const commentItem = document.createElement('li');
+                    const safeCommenterName = escapeHTML(comment.commenterName);
+                    const safeCommentText = escapeHTML(comment.commentText);
+                    const safeTimestamp = new Date(comment.timestamp).toLocaleDateString();
+
+                    commentItem.innerHTML = `
+                        <div class="comment-details">
+                            <h4 class="comment-author">${safeCommenterName}</h4>
+                            <span>${safeTimestamp}</span>
+                            <p>${safeCommentText}</p>
+                        </div>
+                    `;
+                    commentsList.appendChild(commentItem);
+                });
+
+                document.getElementById('comment-title').textContent = `Comments (${blog.commentCount})`;
+            }
+
+            // Function to display error message
+            function displayError(message) {
+                const errorContainer = document.createElement('div');
+                errorContainer.classList.add('error-message');
+                errorContainer.textContent = message;
+                document.body.prepend(errorContainer);
+            }
+
+            // Fetch blog details on page load
+            fetchBlogDetails();
+
+            // API URL for posting a comment
+            const apiUrlk = `https://s28-core-api.vercel.app/api/v1/blog/${blogId}/comment`;
+
+            // Function to submit the comment form
+            document.getElementById('commentForm').addEventListener('submit', async function (e) {
+                e.preventDefault(); // Prevent form from refreshing the page
+
+                const commenterName = document.getElementById('inputName').value;
+                const commentText = document.getElementById('textMessage').value;
+
+                if (!commenterName || !commentText) {
+                    alert('Please provide both a name and a comment.');
+                    return;
+                }
+
+                const commentData = {
+                    commenterName,
+                    commentText,
+                    timestamp: new Date().toISOString()
+                };
+
+                // Use Fetch to submit the comment
+                try {
+                    const response = await fetch(apiUrlk, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(commentData),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to submit comment');
+                    }
+
+                    const data = await response.json();
+                    alert(data.message);
+                    fetchBlogDetails(); // Refresh the comments list
+                } catch (error) {
+                    alert('An error occurred while submitting your comment. Please try again.');
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
