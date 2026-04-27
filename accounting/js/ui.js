@@ -63,13 +63,13 @@ function createCard(id, title, x, y, content, typeClass = '') {
 
     const handle = card.querySelector('.grab-handle');
     handle.onmousedown = (e) => {
-        e.stopPropagation(); // CRITICAL: Stop canvas from panning while dragging card
-        const startX = e.clientX / state.canvas.scale - pos.x;
-        const startY = e.clientY / state.canvas.scale - pos.y;
+        e.stopPropagation();
+        const startX = (e.clientX - state.canvas.x) / state.canvas.scale - pos.x;
+        const startY = (e.clientY - state.canvas.y) / state.canvas.scale - pos.y;
 
         const move = (me) => {
-            const nx = me.clientX / state.canvas.scale - startX;
-            const ny = me.clientY / state.canvas.scale - startY;
+            const nx = (me.clientX - state.canvas.x) / state.canvas.scale - startX;
+            const ny = (me.clientY - state.canvas.y) / state.canvas.scale - startY;
             pos.x = nx; pos.y = ny;
             card.style.left = `${nx}px`;
             card.style.top = `${ny}px`;
@@ -83,6 +83,7 @@ function createCard(id, title, x, y, content, typeClass = '') {
         window.addEventListener('mousemove', move);
         window.addEventListener('mouseup', up);
     };
+
 
 
     return card;
