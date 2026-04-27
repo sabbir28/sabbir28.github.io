@@ -4,134 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accounting Cycle Visualizer | Premium Dashboard</title>
+    <title>AccuFlow | Canvas Accounting Cycle</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="dark-theme">
-    <nav class="sidebar">
-        <div class="logo">
-            <span class="logo-icon">📊</span>
-            <h1>AccuFlow</h1>
+<body class="bg-light">
+
+    <!-- Desktop Only Overlay -->
+    <div id="desktop-warning"
+        class="d-md-none position-fixed top-0 start-0 w-100 h-100 bg-dark text-white d-flex align-items-center justify-content-center z-3 text-center p-4">
+        <div>
+            <h1 class="display-1">🖥️</h1>
+            <h2 class="mt-4">Desktop Recommended</h2>
+            <p>This interactive accounting canvas is optimized for large screens and mouse interaction. Please open this
+                page on a desktop or laptop to see the visualization.</p>
         </div>
-        <ul class="nav-links">
-            <li class="active" data-step="1">
-                <span class="icon">📝</span>
-                <span>Journal entries</span>
-            </li>
-            <li data-step="2">
-                <span class="icon">📖</span>
-                <span>General Ledger</span>
-            </li>
-            <li data-step="3">
-                <span class="icon">⚖️</span>
-                <span>Trial Balance</span>
-            </li>
-            <li data-step="4">
-                <span class="icon">✏️</span>
-                <span>Adjusting Entries</span>
-            </li>
-            <li data-step="5">
-                <span class="icon">✔️</span>
-                <span>Adjusted Trial</span>
-            </li>
-            <li data-step="6">
-                <span class="icon">📈</span>
-                <span>Financial Statements</span>
-            </li>
-        </ul>
-        <div class="theme-toggle">
-            <button id="toggle-btn">🌙 Dark Mode</button>
-        </div>
-    </nav>
+    </div>
 
-    <main class="content-area">
-        <header class="top-bar">
-            <h2 id="current-step-title">General Journal</h2>
-            <div class="cycle-progress">
-                <div class="progress-track">
-                    <div class="progress-fill" style="width: 16.66%;"></div>
+    <!-- UI Overlay Controls -->
+    <div class="ui-controls position-fixed top-0 start-0 p-4 z-2">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">AccuFlow Canvas</h5>
+                <p class="text-muted small">Grab and move the page to see the cycle.</p>
+                <div class="d-grid gap-2">
+                    <button id="reset-view" class="btn btn-outline-primary btn-sm">Reset View</button>
+                    <button id="re-draw" class="btn btn-outline-secondary btn-sm">Recalculate Lines</button>
                 </div>
-                <span id="step-indicator">Step 1 of 6</span>
-            </div>
-        </header>
-
-        <section class="visualizer-container" id="visual-content">
-            <!-- Content will be dynamically injected here -->
-            <div class="journal-view">
-                <div class="controls">
-                    <button class="btn btn-primary" id="add-entry">Add Transaction</button>
-                    <button class="btn btn-secondary" id="reset-data">Reset All</button>
-                </div>
-                <div class="table-container glass-card">
-                    <table id="journal-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description / Account</th>
-                                <th>Ref</th>
-                                <th>Debit ($)</th>
-                                <th>Credit ($)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="journal-body">
-                            <!-- Sample entries injected via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <div class="flow-overlay">
-            <div class="flow-path" id="flow-animation"></div>
-        </div>
-    </main>
-
-    <!-- Modals for adding entries -->
-    <div id="entry-modal" class="modal">
-        <div class="modal-content glass-card">
-            <h3>New Transaction</h3>
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="t-date" value="2026-04-27">
-            </div>
-            <div class="form-group">
-                <label>Debit Account</label>
-                <select id="t-debit-acc">
-                    <option value="Cash">Cash (Asset)</option>
-                    <option value="Accounts Receivable">Accounts Receivable (Asset)</option>
-                    <option value="Supplies">Supplies (Asset)</option>
-                    <option value="Equipment">Equipment (Asset)</option>
-                    <option value="Accounts Payable">Accounts Payable (Liability)</option>
-                    <option value="Common Stock">Common Stock (Equity)</option>
-                    <option value="Service Revenue">Service Revenue (Revenue)</option>
-                    <option value="Rent Expense">Rent Expense (Expense)</option>
-                    <option value="Salary Expense">Salary Expense (Expense)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Credit Account</label>
-                <select id="t-credit-acc">
-                    <option value="Common Stock">Common Stock (Equity)</option>
-                    <option value="Cash">Cash (Asset)</option>
-                    <option value="Service Revenue">Service Revenue (Revenue)</option>
-                    <option value="Accounts Payable">Accounts Payable (Liability)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Amount ($)</label>
-                <input type="number" id="t-amount" placeholder="0.00">
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
-                <button class="btn btn-primary" id="modal-save">Post Entry</button>
             </div>
         </div>
     </div>
 
+    <!-- Main Infinite Canvas -->
+    <div id="viewport" class="viewport">
+        <div id="canvas" class="canvas-board">
+            <!-- SVG Overlay for connecting lines -->
+            <svg id="connections-svg" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none;">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#6c757d" />
+                    </marker>
+                </defs>
+            </svg>
+
+            <!-- Cards will be injected by script.js -->
+            <div id="cards-container" class="position-relative w-100 h-100"></div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 

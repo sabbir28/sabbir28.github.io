@@ -1,297 +1,247 @@
 /**
- * AccuFlow - Accounting Cycle Logic
+ * AccuFlow Canvas - Infinite Accounting Board
  */
 
-// --- State Management ---
+// --- Configuration & State ---
 const state = {
-    currentStep: 1,
     transactions: [
-        { id: 1, date: '2026-04-01', debit: 'Cash', credit: 'Common Stock', amount: 10000, desc: 'Initial investment' },
-        { id: 2, date: '2026-04-05', debit: 'Supplies', credit: 'Accounts Payable', amount: 500, desc: 'Purchased supplies on account' },
-        { id: 3, date: '2026-04-10', debit: 'Accounts Receivable', credit: 'Service Revenue', amount: 3000, desc: 'Billed client for services' },
-        { id: 4, date: '2026-04-15', debit: 'Rent Expense', credit: 'Cash', amount: 1200, desc: 'Paid monthly rent' }
+        { id: 't1', date: 'Jan 1', debitAcc: 'Cash', creditAcc: 'Common Stock', amount: 50000, desc: 'Started company with cash investment' },
+        { id: 't2', date: 'Jan 3', debitAcc: 'Equipment', creditAcc: 'Cash', amount: 15000, desc: 'Purchased machinery with cash' },
+        { id: 't3', date: 'Jan 5', debitAcc: 'Supplies', creditAcc: 'Accounts Payable', amount: 2000, desc: 'Bought office supplies on credit' },
+        { id: 't4', date: 'Jan 8', debitAcc: 'Accounts Receivable', creditAcc: 'Service Revenue', amount: 8000, desc: 'Performed consulting services on account' },
+        { id: 't5', date: 'Jan 15', debitAcc: 'Cash', creditAcc: 'Accounts Receivable', amount: 4000, desc: 'Received partial payment from client' },
+        { id: 't6', date: 'Jan 20', debitAcc: 'Accounts Payable', creditAcc: 'Cash', amount: 1000, desc: 'Paid part of the library owed' },
+        { id: 't7', date: 'Jan 30', debitAcc: 'Salary Expense', creditAcc: 'Cash', amount: 3500, desc: 'Paid employee salaries' },
+        { id: 't8', date: 'Feb 1', debitAcc: 'Prepaid Rent', creditAcc: 'Cash', amount: 6000, desc: 'Paid 6 months rent in advance' },
+        { id: 't9', date: 'Feb 5', debitAcc: 'Cash', creditAcc: 'Service Revenue', amount: 12000, desc: 'Received cash for consulting services' },
+        { id: 't10', date: 'Feb 10', debitAcc: 'Drawings', creditAcc: 'Cash', amount: 1000, desc: 'Owner withdrew cash for personal use' }
     ],
     accounts: {
         'Cash': { type: 'Asset', normal: 'Debit' },
         'Accounts Receivable': { type: 'Asset', normal: 'Debit' },
         'Supplies': { type: 'Asset', normal: 'Debit' },
         'Equipment': { type: 'Asset', normal: 'Debit' },
+        'Prepaid Rent': { type: 'Asset', normal: 'Debit' },
         'Accounts Payable': { type: 'Liability', normal: 'Credit' },
         'Common Stock': { type: 'Equity', normal: 'Credit' },
-        'Retained Earnings': { type: 'Equity', normal: 'Credit' },
+        'Drawings': { type: 'Equity', normal: 'Debit' },
         'Service Revenue': { type: 'Revenue', normal: 'Credit' },
-        'Rent Expense': { type: 'Expense', normal: 'Debit' },
         'Salary Expense': { type: 'Expense', normal: 'Debit' }
-    }
+    },
+
+    canvas: { x: 0, y: 0, scale: 1, isDragging: false, startX: 0, startY: 0 }
 };
 
-// --- Core Logic ---
+// --- Panning Logic ---
+const viewport = document.getElementById('viewport');
+const canvas = document.getElementById('canvas');
+
+viewport.onmousedown = (e) => {
+    state.canvas.isDragging = true;
+    state.canvas.startX = e.clientX - state.canvas.x;
+    state.canvas.startY = e.clientY - state.canvas.y;
+};
+
+window.onmousemove = (e) => {
+    if (!state.canvas.isDragging) return;
+    state.canvas.x = e.clientX - state.canvas.startX;
+    state.canvas.y = e.clientY - state.canvas.startY;
+    updateTransform();
+};
+
+window.onmouseup = () => {
+    state.canvas.isDragging = false;
+};
+
+function updateTransform() {
+    canvas.style.transform = `translate(calc(-50% + ${state.canvas.x}px), calc(-50% + ${state.canvas.y}px))`;
+    drawConnections(); // Redraw lines when moving
+}
+
+document.getElementById('reset-view').onclick = () => {
+    state.canvas.x = 0;
+    state.canvas.y = 0;
+    updateTransform();
+};
+
+// --- Accounting Logic ---
 
 function getLedger() {
     const ledger = {};
-    // Initialize ledger
-    Object.keys(state.accounts).forEach(acc => {
-        ledger[acc] = { debits: [], credits: [] };
-    });
-
-    // Populate from transactions
+    Object.keys(state.accounts).forEach(acc => ledger[acc] = { d: [], c: [] });
     state.transactions.forEach(t => {
-        if (ledger[t.debit]) ledger[t.debit].debits.push({ date: t.date, amount: t.amount, desc: t.desc });
-        if (ledger[t.credit]) ledger[t.credit].credits.push({ date: t.date, amount: t.amount, desc: t.desc });
+        ledger[t.debitAcc].d.push({ amount: t.amount, ref: t.id });
+        ledger[t.creditAcc].c.push({ amount: t.amount, ref: t.id });
     });
-
     return ledger;
 }
 
 function getTrialBalance() {
     const ledger = getLedger();
     const tb = [];
-    let totalDebit = 0;
-    let totalCredit = 0;
-
-    Object.keys(state.accounts).forEach(acc => {
-        const dSum = ledger[acc].debits.reduce((sum, item) => sum + item.amount, 0);
-        const cSum = ledger[acc].credits.reduce((sum, item) => sum + item.amount, 0);
-        const balance = state.accounts[acc].normal === 'Debit' ? dSum - cSum : cSum - dSum;
-
-        if (balance !== 0) {
-            tb.push({
-                account: acc,
-                debit: state.accounts[acc].normal === 'Debit' ? balance : 0,
-                credit: state.accounts[acc].normal === 'Credit' ? balance : 0
-            });
-            totalDebit += (state.accounts[acc].normal === 'Debit' ? balance : 0);
-            totalCredit += (state.accounts[acc].normal === 'Credit' ? balance : 0);
+    Object.keys(ledger).forEach(acc => {
+        const dSum = ledger[acc].d.reduce((s, i) => s + i.amount, 0);
+        const cSum = ledger[acc].c.reduce((s, i) => s + i.amount, 0);
+        const bal = state.accounts[acc].normal === 'Debit' ? dSum - cSum : cSum - dSum;
+        if (bal !== 0) {
+            tb.push({ acc, d: state.accounts[acc].normal === 'Debit' ? bal : 0, c: state.accounts[acc].normal === 'Credit' ? bal : 0 });
         }
     });
-
-    return { entries: tb, totalDebit, totalCredit };
+    return tb;
 }
 
-function getFinancialStatements() {
-    const tb = getTrialBalance();
-    const incomeStatement = { revenue: [], expenses: [], netIncome: 0 };
-    const balanceSheet = { assets: [], liabilities: [], equity: [], totalAssets: 0, totalLiabilitiesEquity: 0 };
+// --- Rendering Logic ---
 
-    tb.entries.forEach(e => {
-        const type = state.accounts[e.account].type;
-        const balance = e.debit || e.credit;
+function createCard(id, title, x, y, content) {
+    const card = document.createElement('div');
+    card.id = id;
+    card.className = 'card animate-fade';
+    card.style.left = `${x}px`;
+    card.style.top = `${y}px`;
+    card.innerHTML = `
+        <div class="card-header"><h6 class="m-0 fw-bold">${title}</h6></div>
+        <div class="card-body p-0">${content}</div>
+        <div class="connection-point dot-in"></div>
+        <div class="connection-point dot-out"></div>
+    `;
+    return card;
+}
 
-        if (type === 'Revenue') incomeStatement.revenue.push({ account: e.account, amount: balance });
-        else if (type === 'Expense') incomeStatement.expenses.push({ account: e.account, amount: balance });
-        else if (type === 'Asset') balanceSheet.assets.push({ account: e.account, amount: balance });
-        else if (type === 'Liability') balanceSheet.liabilities.push({ account: e.account, amount: balance });
-        else if (type === 'Equity') balanceSheet.equity.push({ account: e.account, amount: balance });
+function renderAll() {
+    const container = document.getElementById('cards-container');
+    container.innerHTML = '';
+
+    // 1. Transaction Source Cards (Column 1)
+    state.transactions.forEach((t, i) => {
+        const card = createCard(`t-card-${t.id}`, `Source: ${t.date}`, 100, 100 + (i * 220), `
+            <div class="p-3">
+                <p class="small mb-1">${t.desc}</p>
+                <div class="fw-bold">$${t.amount.toLocaleString()}</div>
+            </div>
+        `);
+        container.appendChild(card);
     });
 
-    const totalRev = incomeStatement.revenue.reduce((s, i) => s + i.amount, 0);
-    const totalExp = incomeStatement.expenses.reduce((s, i) => s + i.amount, 0);
-    incomeStatement.netIncome = totalRev - totalExp;
+    // 2. General Journal Card (Column 2)
+    const journalContent = `
+        <table class="table table-sm m-0">
+            <thead><tr><th>Date</th><th>Entry</th><th>Debit</th><th>Credit</th></tr></thead>
+            <tbody>
+                ${state.transactions.map(t => `
+                    <tr id="j-row-${t.id}">
+                        <td>${t.date}</td>
+                        <td><div class="fw-bold">${t.debitAcc}</div><div class="ps-3 text-muted">${t.creditAcc}</div></td>
+                        <td class="debit-val">$${t.amount}</td>
+                        <td class="credit-val">$${t.amount}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+    container.appendChild(createCard('journal-card', 'General Journal', 600, 100, journalContent));
 
-    balanceSheet.equity.push({ account: 'Retained Earnings (Net Income)', amount: incomeStatement.netIncome });
+    // 3. General Ledger T-Accounts (Column 3)
+    const ledger = getLedger();
+    Object.keys(ledger).forEach((acc, i) => {
+        const tContent = `
+            <table class="table table-sm t-account-table m-0">
+                <thead><tr><th>Debit</th><th>Credit</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>${ledger[acc].d.map(item => `<div>$${item.amount}</div>`).join('')}</td>
+                        <td>${ledger[acc].c.map(item => `<div>$${item.amount}</div>`).join('')}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="p-2 border-top text-center fw-bold small">Balance: $${(ledger[acc].d.reduce((s, i) => s + i.amount, 0) - ledger[acc].c.reduce((s, i) => s + i.amount, 0)).toLocaleString()}</div>
+        `;
+        container.appendChild(createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 180), tContent));
+    });
 
-    balanceSheet.totalAssets = balanceSheet.assets.reduce((s, i) => s + i.amount, 0);
-    balanceSheet.totalLiabilitiesEquity =
-        balanceSheet.liabilities.reduce((s, i) => s + i.amount, 0) +
-        balanceSheet.equity.reduce((s, i) => s + i.amount, 0);
+    // 4. Trial Balance (Column 4)
+    const tb = getTrialBalance();
+    const tbContent = `
+        <table class="table table-sm m-0">
+            <thead><tr><th>Account</th><th>Debit</th><th>Credit</th></tr></thead>
+            <tbody>
+                ${tb.map(e => `<tr><td>${e.acc}</td><td class="debit-val">${e.d ? '$' + e.d : ''}</td><td class="credit-val">${e.c ? '$' + e.c : ''}</td></tr>`).join('')}
+                <tr class="fw-bold table-secondary"><td>Total</td><td>$${tb.reduce((s, i) => s + i.d, 0)}</td><td>$${tb.reduce((s, i) => s + i.c, 0)}</td></tr>
+            </tbody>
+        </table>
+    `;
+    container.appendChild(createCard('tb-card', 'Trial Balance', 1600, 100, tbContent));
 
-    return { incomeStatement, balanceSheet };
-}
-
-// --- Rendering Engine ---
-
-const containers = {
-    journal: () => `
-        <div class="journal-view animate-fade">
-            <div class="controls">
-                <button class="btn btn-primary" id="add-entry">Add Transaction</button>
-            </div>
-            <div class="table-container glass-card">
-                <table>
-                    <thead>
-                        <tr><th>Date</th><th>Account & Description</th><th>Debit</th><th>Credit</th></tr>
-                    </thead>
-                    <tbody>
-                        ${state.transactions.map(t => `
-                            <tr>
-                                <td>${t.date}</td>
-                                <td><div class="debit-line">${t.debit}</div><div class="credit-line">${t.credit}</div><small style="margin-left:2rem; font-style:italic; color:var(--text-secondary)">(${t.desc})</small></td>
-                                <td>$${t.amount.toLocaleString()}</td>
-                                <td></td>
-                            </tr>
-                            <tr><td></td><td></td><td></td><td>$${t.amount.toLocaleString()}</td></tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+    // 5. Balance Sheet (Column 5)
+    const bsContent = `
+        <div class="p-3">
+            <h6 class="fw-bold border-bottom pb-2">Assets</h6>
+            ${tb.filter(e => state.accounts[e.acc].type === 'Asset').map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
+            <h6 class="fw-bold border-bottom pb-2 mt-3">Liabilities & Equity</h6>
+            ${tb.filter(e => ['Liability', 'Equity'].includes(state.accounts[e.acc].type)).map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c || e.d}</span></div>`).join('')}
+            <div class="mt-3 pt-2 border-top fw-bold text-primary d-flex justify-content-between">
+                <span>Total Assets</span>
+                <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0)}</span>
             </div>
         </div>
-    `,
-    ledger: () => {
-        const ledger = getLedger();
-        return `
-            <div class="ledger-grid animate-fade">
-                ${Object.keys(ledger).map(acc => {
-                    const dItems = ledger[acc].debits;
-                    const cItems = ledger[acc].credits;
-                    const dSum = dItems.reduce((s, i) => s + i.amount, 0);
-                    const cSum = cItems.reduce((s, i) => s + i.amount, 0);
-                    const bal = state.accounts[acc].normal === 'Debit' ? dSum - cSum : cSum - dSum;
+    `;
+    container.appendChild(createCard('bs-card', 'Balance Sheet', 2100, 100, bsContent));
 
-                    return `
-                        <div class="glass-card t-account">
-                            <div class="t-account-title">${acc}</div>
-                            <div class="t-account-body">
-                                <div class="t-side">
-                                    ${dItems.map(i => `<div class="t-entry"><span>${i.date}</span><span>$${i.amount}</span></div>`).join('')}
-                                </div>
-                                <div class="t-side">
-                                    ${cItems.map(i => `<div class="t-entry"><span>${i.date}</span><span>$${i.amount}</span></div>`).join('')}
-                                </div>
-                            </div>
-                            <div class="t-balance">Balance: $${bal.toLocaleString()}</div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        `;
-    },
-    trial: () => {
-        const tb = getTrialBalance();
-        return `
-            <div class="glass-card animate-fade">
-                <table>
-                    <thead>
-                        <tr><th>Account</th><th>Debit</th><th>Credit</th></tr>
-                    </thead>
-                    <tbody>
-                        ${tb.entries.map(e => `
-                            <tr>
-                                <td>${e.account}</td>
-                                <td>${e.debit ? '$' + e.debit.toLocaleString() : ''}</td>
-                                <td>${e.credit ? '$' + e.credit.toLocaleString() : ''}</td>
-                            </tr>
-                        `).join('')}
-                        <tr class="statement-total">
-                            <td>TOTAL</td>
-                            <td>$${tb.totalDebit.toLocaleString()}</td>
-                            <td>$${tb.totalCredit.toLocaleString()}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
-    },
-    statements: () => {
-        const { incomeStatement, balanceSheet } = getFinancialStatements();
-        return `
-            <div class="grid-2 animate-fade">
-                <div class="glass-card">
-                    <h3 style="margin-bottom:1.5rem; text-align:center">Income Statement</h3>
-                    <div class="statement-row"><strong>Revenues</strong></div>
-                    ${incomeStatement.revenue.map(r => `<div class="statement-row indent-1"><span>${r.account}</span><span>$${r.amount.toLocaleString()}</span></div>`).join('')}
-                    <div class="statement-row"><strong>Expenses</strong></div>
-                    ${incomeStatement.expenses.map(e => `<div class="statement-row indent-1"><span>${e.account}</span><span>($${e.amount.toLocaleString()})</span></div>`).join('')}
-                    <div class="statement-row statement-total"><strong>Net Income</strong><span>$${incomeStatement.netIncome.toLocaleString()}</span></div>
-                </div>
 
-                <div class="glass-card" style="margin-top:2rem">
-                    <h3 style="margin-bottom:1.5rem; text-align:center">Balance Sheet</h3>
-                    <div class="statement-row"><strong>Assets</strong></div>
-                    ${balanceSheet.assets.map(a => `<div class="statement-row indent-1"><span>${a.account}</span><span>$${a.amount.toLocaleString()}</span></div>`).join('')}
-                    <div class="statement-row statement-total"><strong>Total Assets</strong><span>$${balanceSheet.totalAssets.toLocaleString()}</span></div>
-
-                    <div class="statement-row" style="margin-top:1rem"><strong>Liabilities</strong></div>
-                    ${balanceSheet.liabilities.map(l => `<div class="statement-row indent-1"><span>${l.account}</span><span>$${l.amount.toLocaleString()}</span></div>`).join('')}
-
-                    <div class="statement-row" style="margin-top:1rem"><strong>Equity</strong></div>
-                    ${balanceSheet.equity.map(e => `<div class="statement-row indent-1"><span>${e.account}</span><span>$${e.amount.toLocaleString()}</span></div>`).join('')}
-                    <div class="statement-row statement-total"><strong>Total Liabilities & Equity</strong><span>$${balanceSheet.totalLiabilitiesEquity.toLocaleString()}</span></div>
-                </div>
-            </div>
-        `;
-    }
-};
-
-function render() {
-    const main = document.getElementById('visual-content');
-    const title = document.getElementById('current-step-title');
-    const indicator = document.getElementById('step-indicator');
-    const fill = document.querySelector('.progress-fill');
-
-    fill.style.width = `${(state.currentStep / 6) * 100}%`;
-    indicator.innerText = `Step ${state.currentStep} of 6`;
-
-    switch(state.currentStep) {
-        case 1:
-            title.innerText = "General Journal";
-            main.innerHTML = containers.journal();
-            setupJournalEvents();
-            break;
-        case 2:
-            title.innerText = "General Ledger (T-Accounts)";
-            main.innerHTML = containers.ledger();
-            break;
-        case 3:
-            title.innerText = "Unadjusted Trial Balance";
-            main.innerHTML = containers.trial();
-            break;
-        case 4:
-            title.innerText = "Adjusting Entries (WIP)";
-            main.innerHTML = containers.journal(); // Reuse journal for adjustments for now
-            break;
-        case 5:
-            title.innerText = "Adjusted Trial Balance";
-            main.innerHTML = containers.trial();
-            break;
-        case 6:
-            title.innerText = "Financial Statements";
-            main.innerHTML = containers.statements();
-            break;
-    }
+    // Wait for DOM to settle then draw lines
+    setTimeout(drawConnections, 100);
 }
 
-// --- Event Listeners ---
+// --- Connection Drawing ---
 
-function setupJournalEvents() {
-    const addBtn = document.getElementById('add-entry');
-    const modal = document.getElementById('entry-modal');
-    const cancel = document.getElementById('modal-cancel');
-    const save = document.getElementById('modal-save');
+function drawConnections() {
+    const svg = document.getElementById('connections-svg');
+    svg.innerHTML = svg.innerHTML.split('</defs>')[0] + '</defs>'; // Keep defs
 
-    if (addBtn) addBtn.onclick = () => modal.classList.add('active');
-    cancel.onclick = () => modal.classList.remove('active');
+    // Connect Source to Journal
+    state.transactions.forEach(t => {
+        drawLine(`t-card-${t.id}`, 'journal-card');
+    });
 
-    save.onclick = () => {
-        const date = document.getElementById('t-date').value;
-        const debit = document.getElementById('t-debit-acc').value;
-        const credit = document.getElementById('t-credit-acc').value;
-        const amount = parseFloat(document.getElementById('t-amount').value);
+    // Connect Journal to Ledger
+    Object.keys(state.accounts).forEach(acc => {
+        drawLine('journal-card', `ledger-${acc.replace(/\s/g, '')}`);
+    });
 
-        if (date && debit && credit && !isNaN(amount)) {
-            state.transactions.push({
-                id: Date.now(),
-                date,
-                debit,
-                credit,
-                amount,
-                desc: `Manual entry: ${debit}/${credit}`
-            });
-            modal.classList.remove('active');
-            render();
-        } else {
-            alert('Please fill all fields correctly.');
-        }
-    };
+    // Connect Ledger to TB
+    drawLine('ledger-Cash', 'tb-card'); // Just show one for demo or all
+    drawLine('tb-card', 'bs-card');
 }
 
-document.querySelectorAll('.nav-links li').forEach(li => {
-    li.onclick = () => {
-        document.querySelectorAll('.nav-links li').forEach(el => el.classList.remove('active'));
-        li.classList.add('active');
-        state.currentStep = parseInt(li.getAttribute('data-step'));
-        render();
-    };
-});
+function drawLine(fromId, toId) {
+    const fromEl = document.getElementById(fromId);
+    const toEl = document.getElementById(toId);
+    const svg = document.getElementById('connections-svg');
+
+    if (!fromEl || !toEl) return;
+
+    const fromRect = fromEl.getBoundingClientRect();
+    const toRect = toEl.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
+
+    // Calculate relative coordinates in canvas space
+    const x1 = (fromRect.right - canvasRect.left);
+    const y1 = (fromRect.top + fromRect.height / 2 - canvasRect.top);
+    const x2 = (toRect.left - canvasRect.left);
+    const y2 = (toRect.top + toRect.height / 2 - canvasRect.top);
+
+    const cp1x = x1 + (x2 - x1) / 2;
+    const cp2x = x1 + (x2 - x1) / 2;
+
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const d = `M ${x1} ${y1} C ${cp1x} ${y1}, ${cp2x} ${y2}, ${x2} ${y2}`;
+    path.setAttribute("d", d);
+    path.setAttribute("class", "svg-line");
+    svg.appendChild(path);
+}
+
+document.getElementById('re-draw').onclick = drawConnections;
+window.onresize = drawConnections;
 
 // Initialize
-render();
+renderAll();
+updateTransform();
