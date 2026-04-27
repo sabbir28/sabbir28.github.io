@@ -110,13 +110,62 @@ class AccuFlowApp {
         this.container.appendChild(createCard('tb', 'Trial Balance', 1100, 100, tbHTML));
 
         // 4. Master Control
-        const totalAssets = tb.filter(e => data.accounts[e.acc].type === 'Asset').reduce((s, i) => s + (e.d - e.c), 0); // Need fix here in loop
-        // Simplified for now
-        this.container.appendChild(createCard('eq', 'Master Dashboard', 100, -200, '<div class="p-3 text-center h4 fw-bold">System Online</div>'));
+        const netIncome = tb.filter(e => data.accounts[e.acc].type === 'Revenue').reduce((s, i) => s + i.c, 0) - tb.filter(e => data.accounts[e.acc].type === 'Expense').reduce((s, i) => s + i.d, 0);
+        const totalAssets = tb.filter(e => data.accounts[e.acc].type === 'Asset').reduce((s, i) => s + (i.d - i.c), 0);
+        const totalLE = (tb.filter(e => ['Liability', 'Equity'].includes(data.accounts[e.acc].type)).reduce((s, i) => s + (i.c - i.d), 0) + netIncome);
 
-        setTimeout(() => drawConnections(), 300);
+        const eqContent = `
+            <div class="p-3 text-center">
+                <div class="row align-items-center">
+                    <div class="col-5"><div class="h3 fw-bold text-primary">$${totalAssets.toLocaleString()}</div><small>ASSETS</small></div>
+                    <div class="col-2 h3 text-muted">=</div>
+                    <div class="col-5"><div class="h3 fw-bold text-dark">$${totalLE.toLocaleString()}</div><small>L + E</small></div>
+                </div>
+                <div class="mt-3 py-1 rounded shadow-sm ${Math.abs(totalAssets - totalLE) < 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} fw-bold">
+                    ${Math.abs(totalAssets - totalLE) < 1 ? '✓ SYSTEM BALANCED' : '✗ SYSTEM UNBALANCED'}
+                </div>
+            </div>
+        `;
+        this.container.appendChild(createCard('eq', 'Master Dashboard', 1600, -200, eqContent));
+
+        // 5. Income Statement (Comparative)
+        const isHTML = `
+            <div class="p-3">
+                <div class="row fw-bold border-bottom pb-1 mb-2 small text-muted"><div class="col-6">Description</div><div class="col-3 text-end">2026</div><div class="col-3 text-end">2025</div></div>
+                <div class="fw-bold text-success mb-1 small">REVENUES</div>
+                ${tb.filter(e => data.accounts[e.acc].type === 'Revenue').map(e => `<div id="is-row-${e.acc.replace(/\s/g, '')}" class="row small mb-1"><div class="col-6">${e.acc}</div><div class="col-3 text-end">$${e.c.toLocaleString()}</div><div class="col-3 text-end">$5,000</div></div>`).join('')}
+                <div class="fw-bold text-danger mt-3 mb-1 small">EXPENSES</div>
+                ${tb.filter(e => data.accounts[e.acc].type === 'Expense').map(e => `<div id="is-row-${e.acc.replace(/\s/g, '')}" class="row small mb-1"><div class="col-6">${e.acc}</div><div class="col-3 text-end">$${e.d.toLocaleString()}</div><div class="col-3 text-end">$0</div></div>`).join('')}
+                <div class="row fw-bold border-top mt-3 pt-2 text-primary"><div class="col-6">NET INCOME</div><div class="col-3 text-end">$${netIncome.toLocaleString()}</div><div class="col-3 text-end">$5,000</div></div>
+            </div>
+        `;
+        this.container.appendChild(createCard('is', 'Income Statement (Comparative)', 2100, -200, isHTML));
+
+        // 6. Balance Sheet
+        const bsHTML = `
+            <div class="row g-0">
+                <div class="col-6 border-end p-3">
+                    <h6 class="fw-bold text-primary border-bottom small">ASSETS</h6>
+                    ${tb.filter(e => data.accounts[e.acc].type === 'Asset').map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small"><span>${e.acc}</span><span>$${(e.d - e.c).toLocaleString()}</span></div>`).join('')}
+                    <div class="d-flex justify-content-between fw-bold border-top mt-1 pt-1 text-primary"><span>Total</span><span>$${totalAssets.toLocaleString()}</span></div>
+                </div>
+                <div class="col-6 p-3">
+                    <h6 class="fw-bold text-danger border-bottom small">LIAB & EQU</h6>
+                    ${tb.filter(e => data.accounts[e.acc].type === 'Liability').map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small"><span>${e.acc}</span><span>$${(e.c - e.d).toLocaleString()}</span></div>`).join('')}
+                    ${tb.filter(e => data.accounts[e.acc].type === 'Equity').map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small"><span>${e.acc}</span><span>$${(e.c - e.d).toLocaleString()}</span></div>`).join('')}
+                    <div class="d-flex justify-content-between small text-success"><span>RE</span><span>$${netIncome.toLocaleString()}</span></div>
+                    <div class="d-flex justify-content-between fw-bold border-top mt-1 pt-1 text-danger"><span>Total</span><span>$${totalLE.toLocaleString()}</span></div>
+                </div>
+            </div>
+        `;
+        const bsCard = createCard('bs', 'Balance Sheet (Enterprise)', 2600, -200, bsHTML);
+        bsCard.style.width = '600px';
+        this.container.appendChild(bsCard);
+
+        setTimeout(() => drawConnections(), 500);
         this.updateTransform();
     }
+
 }
 
 window.onload = () => { window.app = new AccuFlowApp(); };
