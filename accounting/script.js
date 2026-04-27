@@ -83,7 +83,43 @@ class AccuFlowEngine {
         return ledger;
     }
 
-    // --- UI Engine ---
+    // --- Helpers ---
+    getAccColor(acc) {
+        const data = this.getYearData();
+        const type = data.accounts[acc]?.type;
+        if (type === 'Asset') return '#0d6efd';
+        if (type === 'Liability') return '#dc3545';
+        if (type === 'Equity') return '#6f42c1';
+        if (type === 'Revenue') return '#198754';
+        if (type === 'Expense') return '#fd7e14';
+        return '#6c757d';
+    }
+
+    getAccTypeClass(acc) {
+        const data = this.getYearData();
+        const type = data.accounts[acc]?.type;
+        return type ? `card-${type.toLowerCase()}` : '';
+    }
+
+    getAccTypeRowClass(acc) {
+        const data = this.getYearData();
+        const type = data.accounts[acc]?.type;
+        return type ? `row-${type.toLowerCase()}` : '';
+    }
+
+    calculateTrialBalance(year = this.state.activeYear) {
+        const ledger = this.calculateBalances(year);
+        const data = this.getYearData(year);
+        const tb = [];
+        Object.keys(ledger).forEach(acc => {
+            const bal = data.accounts[acc].normal === 'Debit' ? ledger[acc].d - ledger[acc].c : ledger[acc].c - ledger[acc].d;
+            if (bal !== 0) {
+                tb.push({ acc, d: data.accounts[acc].normal === 'Debit' ? bal : 0, c: data.accounts[acc].normal === 'Credit' ? bal : 0 });
+            }
+        });
+        return tb;
+    }
+
     createCard(id, title, x, y, content, typeClass = '') {
         const pos = this.state.positions[id] || { x, y };
         const card = document.createElement('div');
@@ -164,15 +200,63 @@ class AccuFlowEngine {
         `;
         this.container.appendChild(this.createCard('inventory', 'Inventory Ledger (FIFO)', 1100, -200, invContent));
 
-        // 4. Standard Cycle Cards (Legacy Migration with 2.0 visuals)
-        data.transactions.forEach((t, i) => {
-            this.container.appendChild(this.createCard(`t-${t.id}`, `Source: ${t.date}`, 100, 100 + (i * 150), `<div class="p-3 small">${t.desc}<br><b>$${t.amount.toLocaleString()}</b></div>`));
+        // 4. Standard Cycle Cards (Premium Enterprise Style)
+
+        // 4a. General Journal
+        const journalContent = `
+            <table class="table table-sm m-0 small">
+                <thead><tr><th>Date</th><th>Entry</th><th>Debit</th><th>Credit</th></tr></thead>
+                <tbody>
+                    ${data.transactions.map(t => `
+                        <tr id="j-row-${t.id}" class="${this.getAccTypeRowClass(t.debitAcc)}">
+                            <td>${t.date}</td>
+                            <td>
+                                <div class="fw-bold" style="color: ${this.getAccColor(t.debitAcc)}">${t.debitAcc}</div>
+                                <div class="ps-3 text-muted" style="color: ${this.getAccColor(t.creditAcc)}">${t.creditAcc}</div>
+                                ${t.isAdjustment ? '<span class="badge bg-info-subtle text-info p-1" style="font-size:0.5rem">ADJUSTMENT</span>' : ''}
+                            </td>
+                            <td class="text-primary fw-bold">$${t.amount.toLocaleString()}</td>
+                            <td class="text-success fw-bold">$${t.amount.toLocaleString()}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        this.container.appendChild(this.createCard('journal', 'General Journal (Verified)', 600, 100, journalContent));
+
+        // 4b. Ledgers
+        const tb = this.calculateTrialBalance();
+        Object.keys(ledger).forEach((acc, i) => {
+            const bal = data.accounts[acc].normal === 'Debit' ? ledger[acc].d - ledger[acc].c : ledger[acc].c - ledger[acc].d;
+            const content = `
+                <div class="row g-0 text-center border-bottom pb-1 small">
+                    <div class="col-6 border-end">Debit</div><div class="col-6">Credit</div>
+                </div>
+                <div class="row g-0 text-center py-2 min-vh-10" style="min-height: 50px;">
+                    <div class="col-6 border-end text-primary">${ledger[acc].d ? '$' + ledger[acc].d.toLocaleString() : ''}</div>
+                    <div class="col-6 text-success">${ledger[acc].c ? '$' + ledger[acc].c.toLocaleString() : ''}</div>
+                </div>
+                <div id="bal-${acc.replace(/\s/g, '')}" class="p-2 border-top text-center fw-bold" style="color: ${this.getAccColor(acc)}">Ending Balance: $${bal.toLocaleString()}</div>
+            `;
+            this.container.appendChild(this.createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 160), content, this.getAccTypeClass(acc)));
         });
+
+        // 4c. Trial Balance
+        const tbContent = `
+            <table class="table table-sm m-0 small">
+                <thead><tr><th>Account</th><th>Debit</th><th>Credit</th></tr></thead>
+                <tbody>
+                    ${tb.map(e => `<tr id="tb-${e.acc.replace(/\s/g, '')}"><td style="color: ${this.getAccColor(e.acc)}; font-weight: 600;">${e.acc}</td><td class="text-primary">${e.d ? '$' + e.d.toLocaleString() : ''}</td><td class="text-success">${e.c ? '$' + e.c.toLocaleString() : ''}</td></tr>`).join('')}
+                </tbody>
+            </table>
+        `;
+        this.container.appendChild(this.createCard('tb', 'Working Trial Balance', 1600, 100, tbContent));
 
         // Trigger connections
         setTimeout(() => this.drawConnections(), 200);
         this.updateTransform();
     }
+
 
     // --- Interaction Systems ---
     setupPanning() {
@@ -224,8 +308,42 @@ class AccuFlowEngine {
 
     drawConnections() {
         this.svg.innerHTML = '';
-        // Placeholder for new advanced curved paths
+        const s = this.state.canvas.scale;
+        const canvasRect = this.canvas.getBoundingClientRect();
+
+        const drawPath = (fromId, toId, color = '#6c757d') => {
+            const fromEl = document.getElementById(fromId);
+            const toEl = document.getElementById(toId);
+            if (!fromEl || !toEl) return;
+
+            const fromRect = fromEl.getBoundingClientRect();
+            const toRect = toEl.getBoundingClientRect();
+
+            const x1 = (fromRect.right - canvasRect.left) / s;
+            const y1 = (fromRect.top + fromRect.height / 2 - canvasRect.top) / s;
+            const x2 = (toRect.left - canvasRect.left) / s;
+            const y2 = (toRect.top + toRect.height / 2 - canvasRect.top) / s;
+
+            const cp1x = x1 + (x2 - x1) / 2;
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", `M ${x1} ${y1} C ${cp1x} ${y1}, ${cp1x} ${y2}, ${x2} ${y2}`);
+            path.setAttribute("class", "svg-line");
+            path.style.stroke = color;
+            this.svg.appendChild(path);
+        };
+
+        const data = this.getYearData();
+        data.transactions.forEach(t => {
+            drawPath(`j-row-${t.id}`, `ledger-${t.debitAcc.replace(/\s/g, '')}`, this.getAccColor(t.debitAcc));
+            drawPath(`j-row-${t.id}`, `ledger-${t.creditAcc.replace(/\s/g, '')}`, this.getAccColor(t.creditAcc));
+        });
+
+        Object.keys(data.accounts).forEach(acc => {
+            const slug = acc.replace(/\s/g, '');
+            drawPath(`bal-${slug}`, `tb-${slug}`, this.getAccColor(acc));
+        });
     }
+
 
     showInsight(id) {
         alert("AccuFlow 2.0 Business Insight for: " + id);
