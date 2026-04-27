@@ -6,20 +6,20 @@
 function drawPath(fromId, toId, color = '#6c757d') {
     const fromEl = document.getElementById(fromId);
     const toEl = document.getElementById(toId);
-    const canvas = document.getElementById('canvas');
     const svg = document.getElementById('connections-svg');
 
-    if (!fromEl || !toEl || !canvas || !svg) return;
+    if (!fromEl || !toEl || !svg) return;
 
     const s = state.canvas.scale;
-    const canvasRect = canvas.getBoundingClientRect();
-    const fromRect = fromEl.getBoundingClientRect();
-    const toRect = toEl.getBoundingClientRect();
+    const canvasEl = document.getElementById('canvas');
+    const cRect = canvasEl.getBoundingClientRect();
+    const fRect = fromEl.getBoundingClientRect();
+    const tRect = toEl.getBoundingClientRect();
 
-    const x1 = (fromRect.right - canvasRect.left) / s;
-    const y1 = (fromRect.top + fromRect.height / 2 - canvasRect.top) / s;
-    const x2 = (toRect.left - canvasRect.left) / s;
-    const y2 = (toRect.top + toRect.height / 2 - canvasRect.top) / s;
+    const x1 = (fRect.right - cRect.left) / s;
+    const y1 = (fRect.top + fRect.height / 2 - cRect.top) / s;
+    const x2 = (tRect.left - cRect.left) / s;
+    const y2 = (tRect.top + tRect.height / 2 - cRect.top) / s;
 
     const cp1x = x1 + (x2 - x1) / 2;
     const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -28,6 +28,7 @@ function drawPath(fromId, toId, color = '#6c757d') {
     path.style.stroke = color;
     svg.appendChild(path);
 }
+
 
 function drawConnections() {
     const svg = document.getElementById('connections-svg');
@@ -62,8 +63,14 @@ function drawConnections() {
         if (document.getElementById(`bs-row-${slug}`)) {
             drawPath(`tb-row-${slug}`, `bs-row-${slug}`, getAccColor(acc));
         }
+
+        // Cash Flow Connection
+        if (acc === 'Cash') {
+            drawPath(`ledger-bal-${slug}`, 'cf', getAccColor(acc));
+        }
     });
 }
+
 
 
 window.drawPath = drawPath;

@@ -61,7 +61,7 @@ function createCard(id, title, x, y, content, typeClass = '') {
         <div class="card-body p-0">${content}</div>
     `;
 
-    // Drag Logic (jQuery Powered)
+    // Drag Logic (High-Performance)
     const $card = $(card);
     const $handle = $card.find('.grab-handle');
 
@@ -69,24 +69,38 @@ function createCard(id, title, x, y, content, typeClass = '') {
         e.preventDefault();
         e.stopPropagation();
 
+        $card.css('z-index', 1000).siblings().css('z-index', 1);
+
         const vRect = document.getElementById('viewport').getBoundingClientRect();
-        const startX = (e.clientX - vRect.left - state.canvas.x) / state.canvas.scale - pos.x;
-        const startY = (e.clientY - vRect.top - state.canvas.y) / state.canvas.scale - pos.y;
+        const startLeft = parseFloat($card.css('left')) || 0;
+        const startTop = parseFloat($card.css('top')) || 0;
+
+        const startX = (e.clientX - vRect.left - state.canvas.x) / state.canvas.scale - startLeft;
+        const startY = (e.clientY - vRect.top - state.canvas.y) / state.canvas.scale - startTop;
+
+        let frameRequested = false;
 
         $(window).on('mousemove.drag', function (me) {
-            const nx = (me.clientX - vRect.left - state.canvas.x) / state.canvas.scale - startX;
-            const ny = (me.clientY - vRect.top - state.canvas.y) / state.canvas.scale - startY;
+            if (frameRequested) return;
+            frameRequested = true;
 
-            pos.x = nx; pos.y = ny;
-            $card.css({ left: nx + 'px', top: ny + 'px' });
-            state.positions[id] = { x: nx, y: ny };
-            if (window.drawConnections) window.drawConnections();
+            requestAnimationFrame(() => {
+                const nx = (me.clientX - vRect.left - state.canvas.x) / state.canvas.scale - startX;
+                const ny = (me.clientY - vRect.top - state.canvas.y) / state.canvas.scale - startY;
+
+                $card.css({ left: nx + 'px', top: ny + 'px' });
+                state.positions[id] = { x: nx, y: ny };
+                if (window.drawConnections) window.drawConnections();
+                frameRequested = false;
+            });
         });
 
         $(window).on('mouseup.drag', function () {
             $(window).off('mousemove.drag mouseup.drag');
+            $card.css('z-index', 100);
         });
     });
+
 
     // Hover Intelligence (Enhanced)
     $card.on('mouseenter', function () {
