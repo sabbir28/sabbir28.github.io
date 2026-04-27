@@ -29,8 +29,11 @@ const state = {
         'Salary Expense': { type: 'Expense', normal: 'Debit' }
     },
 
-    canvas: { x: 50, y: 50, scale: 1, isDragging: false, startX: 0, startY: 0 }
+    canvas: { x: 50, y: 50, scale: 1, isDragging: false, startX: 0, startY: 0 },
+    cardDragging: { id: null, startX: 0, startY: 0 },
+    positions: {} // Persistence for card positions
 };
+
 
 
 // --- Panning Logic ---
@@ -95,20 +98,61 @@ function getTrialBalance() {
 
 // --- Rendering Logic ---
 
-function createCard(id, title, x, y, content) {
+function createCard(id, title, x, y, content, typeClass = '') {
+    const pos = state.positions[id] || { x, y };
     const card = document.createElement('div');
     card.id = id;
-    card.className = 'card animate-fade';
-    card.style.left = `${x}px`;
-    card.style.top = `${y}px`;
+    card.className = `card animate-fade ${typeClass}`;
+    card.style.left = `${pos.x}px`;
+    card.style.top = `${pos.y}px`;
     card.innerHTML = `
-        <div class="card-header"><h6 class="m-0 fw-bold">${title}</h6></div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 fw-bold">${title}</h6>
+            <i class="bi bi-arrows-move small text-muted"></i>
+        </div>
         <div class="card-body p-0">${content}</div>
         <div class="connection-point dot-in"></div>
         <div class="connection-point dot-out"></div>
     `;
+
+    // Interactivity: Dragging
+    const header = card.querySelector('.card-header');
+    header.onmousedown = (e) => {
+        e.stopPropagation();
+        state.cardDragging.id = id;
+        state.cardDragging.startX = e.clientX / state.canvas.scale - pos.x;
+        state.cardDragging.startY = e.clientY / state.canvas.scale - pos.y;
+    };
+
     return card;
 }
+
+window.addEventListener('mousemove', (e) => {
+    if (state.cardDragging.id) {
+        const el = document.getElementById(state.cardDragging.id);
+        const x = e.clientX / state.canvas.scale - state.cardDragging.startX;
+        const y = e.clientY / state.canvas.scale - state.cardDragging.startY;
+        state.positions[state.cardDragging.id] = { x, y };
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+        drawConnections();
+    }
+});
+
+window.addEventListener('mouseup', () => {
+    state.cardDragging.id = null;
+});
+
+function getAccTypeClass(acc) {
+    const type = state.accounts[acc]?.type;
+    if (type === 'Asset') return 'card-asset';
+    if (type === 'Liability') return 'card-liability';
+    if (type === 'Equity') return 'card-equity';
+    if (type === 'Revenue') return 'card-revenue';
+    if (type === 'Expense') return 'card-expense';
+    return '';
+}
+
 
 function renderAll() {
     const container = document.getElementById('cards-container');
@@ -159,7 +203,8 @@ function renderAll() {
             </table>
             <div id="ledger-bal-${acc.replace(/\s/g, '')}" class="p-2 border-top text-center fw-bold small">Balance: $${(ledger[acc].d.reduce((s, i) => s + i.amount, 0) - ledger[acc].c.reduce((s, i) => s + i.amount, 0)).toLocaleString()}</div>
         `;
-        container.appendChild(createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 180), tContent));
+        container.appendChild(createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 180), tContent, getAccTypeClass(acc)));
+
 
     });
 

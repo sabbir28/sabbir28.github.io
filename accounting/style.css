@@ -137,3 +137,41 @@ html {
 #desktop-warning {
     backdrop-filter: blur(10px);
 }
+
+/* Card Type Colors */
+.card-asset {
+    border-left: 5px solid #0d6efd !important;
+}
+
+.card-liability {
+    border-left: 5px solid #dc3545 !important;
+}
+
+.card-equity {
+    border-left: 5px solid #6f42c1 !important;
+}
+
+.card-revenue {
+    border-left: 5px solid #198754 !important;
+}
+
+.card-expense {
+    border-left: 5px solid #fd7e14 !important;
+}
+
+/* Interactive Card Styles */
+.card-header {
+    cursor: move;
+    user-select: none;
+}
+
+.card {
+    resize: both;
+    overflow: hidden;
+    min-width: 250px;
+    min-height: 100px;
+}
+
+.canvas-board {
+    transform-origin: 0 0;
+}
