@@ -173,6 +173,29 @@ function getAccTypeClass(acc) {
     return '';
 }
 
+function getAccTypeRowClass(acc) {
+    const type = state.accounts[acc]?.type;
+    if (type === 'Asset') return 'row-asset';
+    if (type === 'Liability') return 'row-liability';
+    if (type === 'Equity') return 'row-equity';
+    if (type === 'Revenue') return 'row-revenue';
+    if (type === 'Expense') return 'row-expense';
+    return '';
+}
+
+function getAccColor(acc) {
+    const type = state.accounts[acc]?.type;
+    if (type === 'Asset') return '#0d6efd';
+    if (type === 'Liability') return '#dc3545';
+    if (type === 'Equity') return '#6f42c1';
+    if (type === 'Revenue') return '#198754';
+    if (type === 'Expense') return '#fd7e14';
+    return '#6c757d';
+}
+
+
+
+
 
 function renderAll() {
     const container = document.getElementById('cards-container');
@@ -195,13 +218,14 @@ function renderAll() {
             <thead><tr><th>Date</th><th>Entry</th><th>Debit</th><th>Credit</th></tr></thead>
             <tbody>
                 ${state.transactions.map(t => `
-                    <tr id="j-row-${t.id}">
+                    <tr id="j-row-${t.id}" class="${getAccTypeRowClass(t.debitAcc)}">
                         <td>${t.date}</td>
                         <td id="j-acc-${t.id}"><div class="fw-bold">${t.debitAcc}</div><div class="ps-3 text-muted">${t.creditAcc}</div></td>
                         <td class="debit-val">$${t.amount}</td>
                         <td class="credit-val">$${t.amount}</td>
                     </tr>
                 `).join('')}
+
 
             </tbody>
         </table>
@@ -402,29 +426,30 @@ function drawConnections() {
 
     // Connect Source to Journal Rows
     state.transactions.forEach(t => {
-        drawLine(`t-card-${t.id}`, `j-row-${t.id}`);
+        drawLine(`t-card-${t.id}`, `j-row-${t.id}`, '#6c757d');
 
-        // Connect Journal Acc names to specific Ledger Cards
-        drawLine(`j-row-${t.id}`, `ledger-${t.debitAcc.replace(/\s/g, '')}`);
-        drawLine(`j-row-${t.id}`, `ledger-${t.creditAcc.replace(/\s/g, '')}`);
+        // Connect Journal Acc names to specific Ledger Cards with unique colors
+        drawLine(`j-row-${t.id}`, `ledger-${t.debitAcc.replace(/\s/g, '')}`, getAccColor(t.debitAcc));
+        drawLine(`j-row-${t.id}`, `ledger-${t.creditAcc.replace(/\s/g, '')}`, getAccColor(t.creditAcc));
     });
 
-    // Granular Row tracking for every account
+    // Granular Row tracking with unique account colors
     Object.keys(state.accounts).forEach(acc => {
         const slug = acc.replace(/\s/g, '');
+        const color = getAccColor(acc);
 
         // Ledger Balance -> Trial Balance Row
-        drawLine(`ledger-bal-${slug}`, `tb-row-${slug}`);
+        drawLine(`ledger-bal-${slug}`, `tb-row-${slug}`, color);
 
         // Trial Balance Row -> Worksheet Row
-        drawLine(`tb-row-${slug}`, `ws-row-${slug}`);
+        drawLine(`tb-row-${slug}`, `ws-row-${slug}`, color);
 
-        // Worksheet Row -> Statement Row (Income Statement or Balance Sheet)
+        // Worksheet Row -> Statement Row
         const isRow = document.getElementById(`is-row-${slug}`);
         const bsRow = document.getElementById(`bs-row-${slug}`);
 
-        if (isRow) drawLine(`ws-row-${slug}`, `is-row-${slug}`);
-        if (bsRow) drawLine(`ws-row-${slug}`, `bs-row-${slug}`);
+        if (isRow) drawLine(`ws-row-${slug}`, `is-row-${slug}`, color);
+        if (bsRow) drawLine(`ws-row-${slug}`, `bs-row-${slug}`, color);
     });
 }
 
@@ -432,7 +457,8 @@ function drawConnections() {
 
 
 
-function drawLine(fromId, toId) {
+
+function drawLine(fromId, toId, color = '#6c757d') {
     const fromEl = document.getElementById(fromId);
     const toEl = document.getElementById(toId);
     const svg = document.getElementById('connections-svg');
@@ -458,8 +484,10 @@ function drawLine(fromId, toId) {
     const d = `M ${x1} ${y1} C ${cp1x} ${y1}, ${cp2x} ${y2}, ${x2} ${y2}`;
     path.setAttribute("d", d);
     path.setAttribute("class", "svg-line");
+    path.style.stroke = color;
     svg.appendChild(path);
 }
+
 
 document.getElementById('re-draw').onclick = drawConnections;
 window.onresize = drawConnections;

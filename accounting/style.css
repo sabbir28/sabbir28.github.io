@@ -159,6 +159,28 @@ html {
     border-left: 5px solid #fd7e14 !important;
 }
 
+/* Row Colors */
+.row-asset {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.row-liability {
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.row-equity {
+    background-color: rgba(111, 66, 193, 0.1);
+}
+
+.row-revenue {
+    background-color: rgba(25, 135, 84, 0.05);
+}
+
+.row-expense {
+    background-color: rgba(253, 126, 20, 0.05);
+}
+
+
 /* Interactive Card Styles */
 .card-header {
     cursor: move;
