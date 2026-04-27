@@ -22,12 +22,16 @@ class AccuFlowApp {
         let isPanning = false;
         let startX, startY;
         this.viewport.onmousedown = (e) => {
-            if (e.target !== this.viewport && e.target !== this.canvas) return;
+            // Allow panning if clicking backgrounds (viewport, canvas, container, title)
+            const allowed = ['viewport', 'canvas', 'cards-container', 'canvas-title'];
+            if (!allowed.some(id => e.target.id === id || e.target.closest('#' + id))) return;
+
             isPanning = true;
             startX = e.clientX - state.canvas.x;
             startY = e.clientY - state.canvas.y;
             this.viewport.style.cursor = 'grabbing';
         };
+
         window.onmousemove = (e) => {
             if (!isPanning) return;
             state.canvas.x = e.clientX - startX;
@@ -109,6 +113,38 @@ class AccuFlowApp {
         `;
         this.container.appendChild(createCard('tb', 'Trial Balance', 1100, 100, tbHTML));
 
+        // 4. Worksheet
+        const wsHTML = `
+            <div class="table-responsive">
+                <table class="table table-sm m-0 small text-center" style="min-width: 1000px; font-size: 0.65rem;">
+                    <thead>
+                        <tr class="bg-light">
+                            <th rowspan="2" class="text-start">Account</th>
+                            <th colspan="2">Unadj TB</th><th colspan="2">Adj Entry</th><th colspan="2">Adj TB</th><th colspan="2">Income</th><th colspan="2">Balance</th>
+                        </tr>
+                        <tr class="bg-light"><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th></tr>
+                    </thead>
+                    <tbody>
+                        ${tb.map(e => `
+                            <tr id="ws-row-${e.acc.replace(/\s/g, '')}">
+                                <td class="text-start fw-bold" style="color: ${getAccColor(e.acc)}">${e.acc}</td>
+                                <td>${e.d || ''}</td><td>${e.c || ''}</td>
+                                <td class="text-primary"></td><td class="text-danger"></td>
+                                <td class="fw-bold">${e.d || ''}</td><td class="fw-bold">${e.c || ''}</td>
+                                <td>${data.accounts[e.acc].type === 'Expense' ? e.d : ''}</td><td>${data.accounts[e.acc].type === 'Revenue' ? e.c : ''}</td>
+                                <td>${['Asset', 'Liability', 'Equity'].includes(data.accounts[e.acc].type) ? (e.d || '') : ''}</td>
+                                <td>${['Asset', 'Liability', 'Equity'].includes(data.accounts[e.acc].type) ? (e.c || '') : ''}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        const wsCard = createCard('ws', 'Enterprise 10-Column Worksheet', 1600, 100, wsHTML);
+        wsCard.style.width = '1000px';
+        this.container.appendChild(wsCard);
+
+
         // 4. Master Control
         const netIncome = tb.filter(e => data.accounts[e.acc].type === 'Revenue').reduce((s, i) => s + i.c, 0) - tb.filter(e => data.accounts[e.acc].type === 'Expense').reduce((s, i) => s + i.d, 0);
         const totalAssets = tb.filter(e => data.accounts[e.acc].type === 'Asset').reduce((s, i) => s + (i.d - i.c), 0);
@@ -126,7 +162,23 @@ class AccuFlowApp {
                 </div>
             </div>
         `;
-        this.container.appendChild(createCard('eq', 'Master Dashboard', 1600, -200, eqContent));
+        this.container.appendChild(createCard('eq', 'Master Dashboard', 1100, -200, eqContent));
+
+        // 4b. Cash Flow Statement
+        const cfHTML = `
+            <div class="p-3 small">
+                <div class="fw-bold text-primary mb-2">OPERATING ACTIVITIES</div>
+                <div class="d-flex justify-content-between"><span>Net Income</span><span>$${netIncome.toLocaleString()}</span></div>
+                <div class="d-flex justify-content-between text-muted italic"><span>+ Non-cash adjustments</span><span>$0</span></div>
+                <div class="fw-bold border-top mt-2">INVESTING ACTIVITIES</div>
+                <div class="d-flex justify-content-between text-danger"><span>Equipment Purchase</span><span>($20,000)</span></div>
+                <div class="fw-bold border-top mt-2">FINANCING ACTIVITIES</div>
+                <div class="d-flex justify-content-between text-success"><span>Stock Issuance</span><span>$50,000</span></div>
+                <div class="h5 fw-bold border-top mt-3 pt-2 text-dark d-flex justify-content-between"><span>Net Cash Increase</span><span>$30,000</span></div>
+            </div>
+        `;
+        this.container.appendChild(createCard('cf', 'Statement of Cash Flows', 600, -450, cfHTML));
+
 
         // 5. Income Statement (Comparative)
         const isHTML = `
