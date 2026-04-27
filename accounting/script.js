@@ -421,7 +421,7 @@ function renderAll() {
                     `).join('')}
                     <div class="mt-4 pt-2 border-top fw-bold text-primary d-flex justify-content-between">
                         <span>Total Assets</span>
-                        <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0).toLocaleString()}</span>
+                        <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + (i.d - i.c), 0).toLocaleString()}</span>
                     </div>
                 </div>
                 <div class="col-6 p-3 bg-light">
@@ -430,7 +430,7 @@ function renderAll() {
                         <small class="text-muted fw-bold">LIABILITIES</small>
                         ${tb.filter(e => state.accounts[e.acc].type === 'Liability').map(e => `
                             <div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small mb-1">
-                                <span>${e.acc}</span><span class="fw-bold">$${e.c.toLocaleString()}</span>
+                                <span>${e.acc}</span><span class="fw-bold">$${(e.c - e.d).toLocaleString()}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -438,7 +438,7 @@ function renderAll() {
                         <small class="text-muted fw-bold">EQUITY</small>
                         ${tb.filter(e => state.accounts[e.acc].type === 'Equity').map(e => `
                             <div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small mb-1">
-                                <span>${e.acc}</span><span class="fw-bold">$${e.c || e.d}</span>
+                                <span>${e.acc}</span><span class="fw-bold">$${(e.c - e.d).toLocaleString()}</span>
                             </div>
                         `).join('')}
                         <div class="d-flex justify-content-between small text-success">
@@ -453,6 +453,7 @@ function renderAll() {
             </div>
         </div>
     `;
+
     const bsCard = createCard('bs-card', 'Balance Sheet (Position Statement)', 3600, 100, bsContent);
     bsCard.style.width = '700px';
     container.appendChild(bsCard);
