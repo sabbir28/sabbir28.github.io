@@ -32,13 +32,12 @@ html {
 }
 
 .canvas-board {
-    width: 5000px;
-    height: 3000px;
+    width: 6000px;
+    height: 4000px;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* Initial center */
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
     transition: transform 0.1s ease-out;
 }
 

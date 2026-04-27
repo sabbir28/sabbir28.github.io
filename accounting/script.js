@@ -133,11 +133,12 @@ function renderAll() {
                 ${state.transactions.map(t => `
                     <tr id="j-row-${t.id}">
                         <td>${t.date}</td>
-                        <td><div class="fw-bold">${t.debitAcc}</div><div class="ps-3 text-muted">${t.creditAcc}</div></td>
+                        <td id="j-acc-${t.id}"><div class="fw-bold">${t.debitAcc}</div><div class="ps-3 text-muted">${t.creditAcc}</div></td>
                         <td class="debit-val">$${t.amount}</td>
                         <td class="credit-val">$${t.amount}</td>
                     </tr>
                 `).join('')}
+
             </tbody>
         </table>
     `;
@@ -221,21 +222,24 @@ function drawConnections() {
     const svg = document.getElementById('connections-svg');
     svg.innerHTML = svg.innerHTML.split('</defs>')[0] + '</defs>'; // Keep defs
 
-    // Connect Source to Journal
+    // Connect Source to Journal Rows
     state.transactions.forEach(t => {
-        drawLine(`t-card-${t.id}`, 'journal-card');
-    });
+        drawLine(`t-card-${t.id}`, `j-row-${t.id}`);
 
-    // Connect Journal to Ledger
-    Object.keys(state.accounts).forEach(acc => {
-        drawLine('journal-card', `ledger-${acc.replace(/\s/g, '')}`);
+        // Connect Journal Acc names to specific Ledger Cards
+        drawLine(`j-row-${t.id}`, `ledger-${t.debitAcc.replace(/\s/g, '')}`);
+        drawLine(`j-row-${t.id}`, `ledger-${t.creditAcc.replace(/\s/g, '')}`);
     });
 
     // Connect Ledger to TB
-    drawLine('ledger-Cash', 'tb-card');
+    Object.keys(state.accounts).forEach(acc => {
+        drawLine(`ledger-${acc.replace(/\s/g, '')}`, 'tb-card');
+    });
+
     drawLine('tb-card', 'is-card');
     drawLine('is-card', 'bs-card');
 }
+
 
 
 function drawLine(fromId, toId) {
