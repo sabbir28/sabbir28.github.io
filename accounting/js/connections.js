@@ -64,12 +64,14 @@ function drawConnections() {
             drawPath(`tb-row-${slug}`, `bs-row-${slug}`, getAccColor(acc));
         }
 
-        // Cash Flow Connection
+        // Cash Flow & Bank Rec Connection
         if (acc === 'Cash') {
             drawPath(`ledger-bal-${slug}`, 'cf', getAccColor(acc));
+            drawPath(`ledger-bal-${slug}`, 'bank-rec', getAccColor(acc));
         }
     });
 }
+
 
 
 

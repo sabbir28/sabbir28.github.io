@@ -69,7 +69,7 @@ function createCard(id, title, x, y, content, typeClass = '') {
         e.preventDefault();
         e.stopPropagation();
 
-        $card.css('z-index', 1000).siblings().css('z-index', 1);
+        $card.addClass('dragging no-transition');
 
         const vRect = document.getElementById('viewport').getBoundingClientRect();
         const startLeft = parseFloat($card.css('left')) || 0;
@@ -97,9 +97,10 @@ function createCard(id, title, x, y, content, typeClass = '') {
 
         $(window).on('mouseup.drag', function () {
             $(window).off('mousemove.drag mouseup.drag');
-            $card.css('z-index', 100);
+            $card.removeClass('dragging no-transition');
         });
     });
+
 
 
     // Hover Intelligence (Enhanced)

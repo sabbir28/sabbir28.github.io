@@ -347,6 +347,40 @@ class AccuFlowApp {
         bsCard.style.width = '600px';
         this.container.appendChild(bsCard);
 
+        // 9. Inventory Tracker
+        const totalInv = state.inventory.reduce((s, i) => s + (i.qty * i.cost), 0);
+        const invHTML = `
+            <div class="p-3">
+                <table class="table table-sm m-0 small">
+                    <thead><tr><th>Item</th><th>Qty</th><th>Cost</th><th>Total</th></tr></thead>
+                    <tbody>
+                        ${state.inventory.map(i => `<tr><td>${i.name}</td><td>${i.qty}</td><td>$${i.cost}</td><td>$${(i.qty * i.cost).toLocaleString()}</td></tr>`).join('')}
+                    </tbody>
+                </table>
+                <div class="mt-2 text-end fw-bold text-primary">VALUATION: $${totalInv.toLocaleString()}</div>
+            </div>
+        `;
+        this.container.appendChild(createCard('inventory', 'Real-Time Inventory (FIFO)', 3200, -200, invHTML));
+
+        // 10. Bank Reconciliation
+        state.bank.bookBalance = balances['Cash'].d - balances['Cash'].c;
+        const adjBank = state.bank.bankBalance + state.bank.depositsInTransit - state.bank.outstandingChecks;
+        const bankHTML = `
+            <div class="p-3 small">
+                <div class="d-flex justify-content-between text-muted mb-1"><span>Bank Statement</span><span>$${state.bank.bankBalance.toLocaleString()}</span></div>
+                <div class="d-flex justify-content-between text-success"><span>(+) Deposits in Transit</span><span>$${state.bank.depositsInTransit.toLocaleString()}</span></div>
+                <div class="d-flex justify-content-between text-danger"><span>(-) Outstanding Checks</span><span>($${state.bank.outstandingChecks.toLocaleString()})</span></div>
+                <div class="d-flex justify-content-between fw-bold border-top pt-1 mb-3"><span>Adjusted Bank Balance</span><span>$${adjBank.toLocaleString()}</span></div>
+                
+                <div class="d-flex justify-content-between text-muted mb-1"><span>Company Books (Cash)</span><span>$${state.bank.bookBalance.toLocaleString()}</span></div>
+                <div class="mt-2 py-1 rounded text-center fw-bold ${Math.abs(adjBank - state.bank.bookBalance) < 1 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'} small">
+                    ${Math.abs(adjBank - state.bank.bookBalance) < 1 ? '✓ RECONCILED' : '⚠ OUTSIDE RECONCILIATION'}
+                </div>
+            </div>
+        `;
+        this.container.appendChild(createCard('bank-rec', 'Enterprise Bank Reconciliation', 3600, -200, bankHTML));
+
+
         setTimeout(() => drawConnections(), 500);
         this.updateTransform();
     }
