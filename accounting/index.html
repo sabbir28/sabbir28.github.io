@@ -26,17 +26,32 @@
 
     <!-- UI Overlay Controls -->
     <div class="ui-controls position-fixed top-0 start-0 p-4 z-2">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm border-0 bg-white bg-opacity-75 backdrop-blur">
             <div class="card-body">
                 <h5 class="card-title fw-bold">AccuFlow Canvas</h5>
-                <p class="text-muted small">Grab and move the page to see the cycle.</p>
+                <p class="text-muted small">Enterprise Financial Visualization</p>
                 <div class="d-grid gap-2">
-                    <button id="reset-view" class="btn btn-outline-primary btn-sm">Reset View</button>
-                    <button id="re-draw" class="btn btn-outline-secondary btn-sm">Recalculate Lines</button>
+                    <button id="reset-view" class="btn btn-outline-primary btn-sm rounded-pill">Reset View</button>
+                    <button id="auto-layout" class="btn btn-outline-success btn-sm rounded-pill">Auto-Layout</button>
+                    <button id="re-draw" class="btn btn-outline-secondary btn-sm rounded-pill">Re-render Cycle</button>
                 </div>
             </div>
         </div>
+
+        <!-- Component Navigator -->
+        <div class="nav-sidebar mt-4">
+            <div class="small fw-bold text-muted mb-2 tracking-widest text-uppercase">Jump to Section</div>
+            <div class="d-flex flex-column gap-2">
+                <button class="btn btn-focus btn-sm text-start" onclick="app.focusOn('journal')">📌 General
+                    Journal</button>
+                <button class="btn btn-focus btn-sm text-start" onclick="app.focusOn('ledger')">📊 T-Accounts</button>
+                <button class="btn btn-focus btn-sm text-start" onclick="app.focusOn('tb')">🔍 Trial Balance</button>
+                <button class="btn btn-focus btn-sm text-start" onclick="app.focusOn('is')">💰 Income Statement</button>
+                <button class="btn btn-focus btn-sm text-start" onclick="app.focusOn('bs')">🏛️ Balance Sheet</button>
+            </div>
+        </div>
     </div>
+
 
     <!-- Main Infinite Canvas -->
     <div id="viewport" class="viewport">
