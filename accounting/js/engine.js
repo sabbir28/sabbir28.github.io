@@ -65,6 +65,10 @@ class AccuFlowApp {
         document.getElementById('auto-layout').onclick = () => {
             this.autoLayout();
         };
+        document.getElementById('randomize-layout').onclick = () => {
+            this.randomizeLayout();
+        };
+
     }
 
     focusOn(compId) {
