@@ -137,8 +137,12 @@ function createCard(id, title, x, y, content, typeClass = '') {
     card.innerHTML = `
         <div class="card-header d-flex justify-content-between align-items-center">
             <h6 class="m-0 fw-bold">${title}</h6>
-            <i class="bi bi-arrows-move small text-muted"></i>
+            <div class="d-flex gap-2 align-items-center">
+                <i class="bi bi-question-circle text-primary cursor-pointer" onclick="showHelp('${id}')" title="Explain This"></i>
+                <i class="bi bi-arrows-move small text-muted"></i>
+            </div>
         </div>
+
         <div class="card-body p-0">${content}</div>
         <div class="connection-point dot-in"></div>
         <div class="connection-point dot-out"></div>
@@ -155,6 +159,43 @@ function createCard(id, title, x, y, content, typeClass = '') {
 
     return card;
 }
+
+const explanations = {
+    'journal-card': 'The General Journal is the book of original entry where transactions are recorded in chronological order using double-entry accounting (Debits = Credits).',
+    'ledger': 'The General Ledger (T-Accounts) categorizes transactions by account, allowing you to see the individual flow of every dollar and the final ending balance.',
+    'tb-card': 'The Trial Balance verifies that total debits equal total credits after all ledger postings, ensuring the mathematical accuracy of the books.',
+    'ws-card': 'The 10-Column Worksheet is an internal tool used to calculate adjustments (like used supplies or expired rent) before preparing formal financial statements.',
+    'is-card': 'The Income Statement reports the company\'s financial performance over a specific period by subtracting Expenses from Revenues to find Net Income.',
+    'bs-card': 'The Balance Sheet (Position Statement) shows the company\'s financial standing at a point in time, following the Master Equation: Assets = Liabilities + Equity.',
+    'equation-card': 'The Accounting Equation (A = L + E) is the foundation of all accounting. Every transaction affects at least two accounts to keep this equation in perfect balance.',
+    'cf-card': 'The Statement of Cash Flows shows where cash came from and where it went, categorized into Operating (daily business), Investing (assets), and Financing (owners/loans).'
+};
+
+function showHelp(id) {
+    const key = Object.keys(explanations).find(k => id.startsWith(k)) || 'ledger';
+    const text = explanations[key];
+
+    // Create a simple toast-like overlay
+    let overlay = document.getElementById('help-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'help-overlay';
+        overlay.className = 'fixed-top w-100 h-100 d-flex align-items-center justify-content-center';
+        overlay.style.background = 'rgba(0,0,0,0.5)';
+        overlay.style.zIndex = '9999';
+        overlay.onclick = () => overlay.remove();
+        document.body.appendChild(overlay);
+    }
+
+    overlay.innerHTML = `
+        <div class="bg-white p-4 rounded shadow-lg animate-fade" style="max-width: 500px;">
+            <h5 class="fw-bold border-bottom pb-2 mb-3">Accounting Insight</h5>
+            <p>${text}</p>
+            <div class="text-end mt-3"><button class="btn btn-primary btn-sm">Got it!</button></div>
+        </div>
+    `;
+}
+
 
 window.addEventListener('mousemove', (e) => {
     if (state.cardDragging.id) {
@@ -447,6 +488,50 @@ function renderAll() {
     const eqCard = createCard('equation-card', 'Accounting Equation', 1100, -200, eqContent);
     eqCard.style.width = '600px';
     container.appendChild(eqCard);
+
+    // 9. Cash Flow Statement (Column 8) - Indirect Method
+    const cashStart = 0;
+    const depExp = state.transactions.filter(t => t.debitAcc === 'Depreciation Expense').reduce((s, i) => s + i.amount, 0);
+    const arInc = tb.find(e => e.acc === 'Accounts Receivable')?.d || 0;
+    const suppInc = tb.find(e => e.acc === 'Supplies')?.d || 0;
+    const rentInc = tb.find(e => e.acc === 'Prepaid Rent')?.d || 0;
+    const apInc = tb.find(e => e.acc === 'Accounts Payable')?.c || 0;
+
+    const opCash = netIncome + depExp - arInc - suppInc - rentInc + apInc;
+    const invCash = -state.transactions.filter(t => t.debitAcc === 'Equipment' && t.creditAcc === 'Cash').reduce((s, i) => s + i.amount, 0);
+    const finCash = state.transactions.filter(t => t.creditAcc === 'Common Stock').reduce((s, i) => s + i.amount, 0) - state.transactions.filter(t => t.debitAcc === 'Drawings').reduce((s, i) => s + i.amount, 0);
+    const netCash = opCash + invCash + finCash;
+
+    const cfContent = `
+        <div class="p-3 small">
+            <h6 class="fw-bold border-bottom pb-1">Operating Activities</h6>
+            <div class="d-flex justify-content-between"><span>Net Income</span><span>$${netIncome.toLocaleString()}</span></div>
+            <div class="d-flex justify-content-between text-muted"><span>+ Depreciation</span><span>$${depExp.toLocaleString()}</span></div>
+            <div class="d-flex justify-content-between text-muted"><span>- Increase in AR</span><span>($${arInc.toLocaleString()})</span></div>
+            <div class="d-flex justify-content-between text-muted"><span>- Increase in Supplies</span><span>($${suppInc.toLocaleString()})</span></div>
+            <div class="d-flex justify-content-between text-muted"><span>- Increase in Prepaid</span><span>($${rentInc.toLocaleString()})</span></div>
+            <div class="d-flex justify-content-between text-muted"><span>+ Increase in AP</span><span>$${apInc.toLocaleString()}</span></div>
+            <div class="fw-bold border-top mt-1 d-flex justify-content-between"><span>Net Operating</span><span>$${opCash.toLocaleString()}</span></div>
+
+            <h6 class="fw-bold border-bottom pb-1 mt-3">Investing Activities</h6>
+            <div class="d-flex justify-content-between text-muted"><span>Purchase Equipment</span><span>($${Math.abs(invCash).toLocaleString()})</span></div>
+            <div class="fw-bold border-top mt-1 d-flex justify-content-between"><span>Net Investing</span><span>($${Math.abs(invCash).toLocaleString()})</span></div>
+
+            <h6 class="fw-bold border-bottom pb-1 mt-3">Financing Activities</h6>
+            <div class="d-flex justify-content-between text-muted"><span>Common Stock Inv.</span><span>$${state.transactions.filter(t => t.creditAcc === 'Common Stock').reduce((s, i) => s + i.amount, 0).toLocaleString()}</span></div>
+            <div class="d-flex justify-content-between text-muted"><span>Owner Drawings</span><span>($${state.transactions.filter(t => t.debitAcc === 'Drawings').reduce((s, i) => s + i.amount, 0).toLocaleString()})</span></div>
+            <div class="fw-bold border-top mt-1 d-flex justify-content-between"><span>Net Financing</span><span>$${finCash.toLocaleString()}</span></div>
+
+            <div class="h5 fw-bold border-top pt-2 mt-3 text-primary d-flex justify-content-between">
+                <span>Net Cash Flow</span>
+                <span>$${netCash.toLocaleString()}</span>
+            </div>
+        </div>
+    `;
+    const cfCard = createCard('cf-card', 'Statement of Cash Flows', 4400, 100, cfContent);
+    cfCard.style.width = '350px';
+    container.appendChild(cfCard);
+
 
 
 
