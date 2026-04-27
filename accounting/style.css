@@ -47,8 +47,8 @@ html {
     top: 0;
     left: 0;
     transform: translate(0, 0);
-    transition: transform 0.1s ease-out;
 }
+
 
 #cards-container {
     transition: none;
@@ -63,8 +63,8 @@ html {
     border: 1px solid var(--glass-border);
     border-radius: 16px;
     box-shadow: var(--card-shadow);
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
 }
+
 
 .card:hover {
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
@@ -214,6 +214,13 @@ html {
     min-height: 100px;
 }
 
-.canvas-board {
-    transform-origin: 0 0;
+.no-transition {
+    transition: none !important;
+}
+
+.dragging {
+    opacity: 0.85;
+    transform: scale(1.02);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2) !important;
+    z-index: 9999 !important;
 }
