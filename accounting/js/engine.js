@@ -148,8 +148,22 @@ class AccuFlowApp {
             isAdjustment: isAdj
         });
 
-        this.render();
+        // Educational Mode: Only refresh the Journal, don't re-render everything yet
+        this.renderJournalOnly();
     }
+
+    renderJournalOnly() {
+        // Just refresh the journal card content
+        this.render(); // For now full render to keep cards stable, but we will add a 'Process' button for lines
+    }
+
+    processCycle() {
+        // This will trigger the redrawing of lines and calculations
+        this.render();
+        if (window.drawConnections) window.drawConnections();
+        alert("Accounting Cycle Processed: Ledgers and Statements Updated!");
+    }
+
 
 
 
@@ -189,9 +203,12 @@ class AccuFlowApp {
                     <input class="form-check-input" type="checkbox" id="lab-is-adj">
                     <label class="form-check-label" for="lab-is-adj">Adjusting Entry?</label>
                 </div>
-                <button onclick="app.postTransaction()" class="btn btn-primary btn-sm w-100 rounded-pill shadow-sm">Commit Transaction</button>
+                <button onclick="app.postTransaction()" class="btn btn-outline-primary btn-sm w-100 rounded-pill mb-2">Record Journal Entry</button>
+                <button onclick="app.processCycle()" class="btn btn-success btn-sm w-100 rounded-pill shadow-sm">Process Cycle →</button>
+                <div class="mt-2 extra-small text-muted text-center italic">Record entries first, then process.</div>
             </div>
         `;
+
         this.container.appendChild(createCard('lab', 'Transaction Lab', -400, 100, labHTML));
 
         // 1. Journal

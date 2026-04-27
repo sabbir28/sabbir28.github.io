@@ -16,14 +16,9 @@ const state = {
             }
         },
         2026: {
-            transactions: [
-                { id: 't1', date: 'Jan 1', debitAcc: 'Cash', creditAcc: 'Common Stock', amount: 50000, desc: 'Initial investment' },
-                { id: 't2', date: 'Jan 15', debitAcc: 'Equipment', creditAcc: 'Cash', amount: 20000, desc: 'Asset purchase' },
-                { id: 't3', date: 'Feb 1', debitAcc: 'Supplies', creditAcc: 'Accounts Payable', amount: 3000, desc: 'Credit purchase' },
-                { id: 'a1', date: 'Feb 28', debitAcc: 'Supplies Expense', creditAcc: 'Supplies', amount: 2000, desc: 'Monthly adjustment', isAdjustment: true },
-                { id: 'a2', date: 'Feb 28', debitAcc: 'Depreciation Expense', creditAcc: 'Accumulated Depreciation', amount: 500, desc: 'Monthly depreciation', isAdjustment: true }
-            ],
+            transactions: [],
             accounts: {
+
                 'Cash': { type: 'Asset', normal: 'Debit' },
                 'Supplies': { type: 'Asset', normal: 'Debit' },
                 'Equipment': { type: 'Asset', normal: 'Debit' },
