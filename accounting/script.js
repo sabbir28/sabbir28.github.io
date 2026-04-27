@@ -29,8 +29,9 @@ const state = {
         'Salary Expense': { type: 'Expense', normal: 'Debit' }
     },
 
-    canvas: { x: 0, y: 0, scale: 1, isDragging: false, startX: 0, startY: 0 }
+    canvas: { x: 50, y: 50, scale: 1, isDragging: false, startX: 0, startY: 0 }
 };
+
 
 // --- Panning Logic ---
 const viewport = document.getElementById('viewport');
@@ -54,15 +55,17 @@ window.onmouseup = () => {
 };
 
 function updateTransform() {
-    canvas.style.transform = `translate(calc(-50% + ${state.canvas.x}px), calc(-50% + ${state.canvas.y}px))`;
-    drawConnections(); // Redraw lines when moving
+    canvas.style.transform = `translate(${state.canvas.x}px, ${state.canvas.y}px)`;
+    drawConnections();
 }
 
+
 document.getElementById('reset-view').onclick = () => {
-    state.canvas.x = 0;
-    state.canvas.y = 0;
+    state.canvas.x = 50;
+    state.canvas.y = 50;
     updateTransform();
 };
+
 
 // --- Accounting Logic ---
 
@@ -171,20 +174,41 @@ function renderAll() {
     `;
     container.appendChild(createCard('tb-card', 'Trial Balance', 1600, 100, tbContent));
 
-    // 5. Balance Sheet (Column 5)
+    // 5. Income Statement (Column 5)
+    const revs = tb.filter(e => state.accounts[e.acc].type === 'Revenue');
+    const exps = tb.filter(e => state.accounts[e.acc].type === 'Expense');
+    const netIncome = revs.reduce((s, i) => s + i.c, 0) - exps.reduce((s, i) => s + i.d, 0);
+
+    const isContent = `
+        <div class="p-3">
+            <h6 class="fw-bold border-bottom pb-2">Revenues</h6>
+            ${revs.map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c}</span></div>`).join('')}
+            <h6 class="fw-bold border-bottom pb-2 mt-3">Expenses</h6>
+            ${exps.map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
+            <div class="mt-3 pt-2 border-top fw-bold text-success d-flex justify-content-between">
+                <span>Net Income</span>
+                <span>$${netIncome.toLocaleString()}</span>
+            </div>
+        </div>
+    `;
+    container.appendChild(createCard('is-card', 'Income Statement', 2100, 100, isContent));
+
+    // 6. Balance Sheet (Column 6)
     const bsContent = `
         <div class="p-3">
             <h6 class="fw-bold border-bottom pb-2">Assets</h6>
             ${tb.filter(e => state.accounts[e.acc].type === 'Asset').map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
             <h6 class="fw-bold border-bottom pb-2 mt-3">Liabilities & Equity</h6>
             ${tb.filter(e => ['Liability', 'Equity'].includes(state.accounts[e.acc].type)).map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c || e.d}</span></div>`).join('')}
+            <div class="d-flex justify-content-between text-success"><span>Retained Earnings</span><span>$${netIncome.toLocaleString()}</span></div>
             <div class="mt-3 pt-2 border-top fw-bold text-primary d-flex justify-content-between">
                 <span>Total Assets</span>
-                <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0)}</span>
+                <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0).toLocaleString()}</span>
             </div>
         </div>
     `;
-    container.appendChild(createCard('bs-card', 'Balance Sheet', 2100, 100, bsContent));
+    container.appendChild(createCard('bs-card', 'Balance Sheet', 2600, 100, bsContent));
+
 
 
     // Wait for DOM to settle then draw lines
@@ -208,9 +232,11 @@ function drawConnections() {
     });
 
     // Connect Ledger to TB
-    drawLine('ledger-Cash', 'tb-card'); // Just show one for demo or all
-    drawLine('tb-card', 'bs-card');
+    drawLine('ledger-Cash', 'tb-card');
+    drawLine('tb-card', 'is-card');
+    drawLine('is-card', 'bs-card');
 }
+
 
 function drawLine(fromId, toId) {
     const fromEl = document.getElementById(fromId);

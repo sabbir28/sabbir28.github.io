@@ -1,6 +1,6 @@
 :root {
-    --canvas-bg: #f8f9fa;
-    --grid-color: rgba(0, 0, 0, 0.05);
+    --canvas-bg: #ffffff;
+    --grid-color: rgba(0, 0, 0, 0.03);
     --line-color: #6c757d;
 }
 
