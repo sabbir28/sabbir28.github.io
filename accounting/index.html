@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting Cycle Visualizer | Premium Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">📊</span>
+            <h1>AccuFlow</h1>
+        </div>
+        <ul class="nav-links">
+            <li class="active" data-step="1">
+                <span class="icon">📝</span>
+                <span>Journal entries</span>
+            </li>
+            <li data-step="2">
+                <span class="icon">📖</span>
+                <span>General Ledger</span>
+            </li>
+            <li data-step="3">
+                <span class="icon">⚖️</span>
+                <span>Trial Balance</span>
+            </li>
+            <li data-step="4">
+                <span class="icon">✏️</span>
+                <span>Adjusting Entries</span>
+            </li>
+            <li data-step="5">
+                <span class="icon">✔️</span>
+                <span>Adjusted Trial</span>
+            </li>
+            <li data-step="6">
+                <span class="icon">📈</span>
+                <span>Financial Statements</span>
+            </li>
+        </ul>
+        <div class="theme-toggle">
+            <button id="toggle-btn">🌙 Dark Mode</button>
+        </div>
+    </nav>
+
+    <main class="content-area">
+        <header class="top-bar">
+            <h2 id="current-step-title">General Journal</h2>
+            <div class="cycle-progress">
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 16.66%;"></div>
+                </div>
+                <span id="step-indicator">Step 1 of 6</span>
+            </div>
+        </header>
+
+        <section class="visualizer-container" id="visual-content">
+            <!-- Content will be dynamically injected here -->
+            <div class="journal-view">
+                <div class="controls">
+                    <button class="btn btn-primary" id="add-entry">Add Transaction</button>
+                    <button class="btn btn-secondary" id="reset-data">Reset All</button>
+                </div>
+                <div class="table-container glass-card">
+                    <table id="journal-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description / Account</th>
+                                <th>Ref</th>
+                                <th>Debit ($)</th>
+                                <th>Credit ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="journal-body">
+                            <!-- Sample entries injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="flow-overlay">
+            <div class="flow-path" id="flow-animation"></div>
+        </div>
+    </main>
+
+    <!-- Modals for adding entries -->
+    <div id="entry-modal" class="modal">
+        <div class="modal-content glass-card">
+            <h3>New Transaction</h3>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="t-date" value="2026-04-27">
+            </div>
+            <div class="form-group">
+                <label>Debit Account</label>
+                <select id="t-debit-acc">
+                    <option value="Cash">Cash (Asset)</option>
+                    <option value="Accounts Receivable">Accounts Receivable (Asset)</option>
+                    <option value="Supplies">Supplies (Asset)</option>
+                    <option value="Equipment">Equipment (Asset)</option>
+                    <option value="Accounts Payable">Accounts Payable (Liability)</option>
+                    <option value="Common Stock">Common Stock (Equity)</option>
+                    <option value="Service Revenue">Service Revenue (Revenue)</option>
+                    <option value="Rent Expense">Rent Expense (Expense)</option>
+                    <option value="Salary Expense">Salary Expense (Expense)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Credit Account</label>
+                <select id="t-credit-acc">
+                    <option value="Common Stock">Common Stock (Equity)</option>
+                    <option value="Cash">Cash (Asset)</option>
+                    <option value="Service Revenue">Service Revenue (Revenue)</option>
+                    <option value="Accounts Payable">Accounts Payable (Liability)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Amount ($)</label>
+                <input type="number" id="t-amount" placeholder="0.00">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-save">Post Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
