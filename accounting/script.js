@@ -330,7 +330,7 @@ function renderAll() {
                                 <td style="color: ${getAccColor(e.acc)}; font-weight: bold;">${e.acc}</td>
                                 <td>${e.d ? '$' + e.d.toLocaleString() : ''}</td><td>${e.c ? '$' + e.c.toLocaleString() : ''}</td>
                                 <td class="text-primary">${adjD ? '$' + adjD.toLocaleString() : ''}</td><td class="text-danger">${adjC ? '$' + adjC.toLocaleString() : ''}</td>
-                                <td class="fw-bold">${adjBalD ? '$' + adjBalBalD.toLocaleString() : ''}</td><td class="fw-bold">${adjBalC ? '$' + adjBalC.toLocaleString() : ''}</td>
+                                <td class="fw-bold">${adjBalD ? '$' + adjBalD.toLocaleString() : ''}</td><td class="fw-bold">${adjBalC ? '$' + adjBalC.toLocaleString() : ''}</td>
                                 <td>${isExp ? '$' + adjBalD.toLocaleString() : ''}</td><td>${isRev ? '$' + adjBalC.toLocaleString() : ''}</td>
                                 <td>${isAsset ? '$' + adjBalD.toLocaleString() : ''}</td><td>${isLibEq ? '$' + adjBalC.toLocaleString() : ''}</td>
                             </tr>
