@@ -59,26 +59,42 @@ function getActiveYearData() {
     return state.years[state.activeYear];
 }
 
-function calculateBalances(year = state.activeYear) {
+function calculateBalances(year = state.activeYear, includeAdjustments = true) {
     const data = state.years[year];
     const ledger = {};
     Object.keys(data.accounts).forEach(acc => ledger[acc] = { d: 0, c: 0 });
 
     data.transactions.forEach(t => {
+        if (!includeAdjustments && t.isAdjustment) return;
         ledger[t.debitAcc].d += t.amount;
         ledger[t.creditAcc].c += t.amount;
     });
     return ledger;
 }
 
-function calculateTrialBalance(year = state.activeYear) {
-    const ledger = calculateBalances(year);
+function calculateAdjustmentTotals(year = state.activeYear) {
+    const data = state.years[year];
+    const adj = {};
+    Object.keys(data.accounts).forEach(acc => adj[acc] = { d: 0, c: 0 });
+    data.transactions.filter(t => t.isAdjustment).forEach(t => {
+        adj[t.debitAcc].d += t.amount;
+        adj[t.creditAcc].c += t.amount;
+    });
+    return adj;
+}
+
+function calculateTrialBalance(year = state.activeYear, type = 'Adjusted') {
+    const ledger = calculateBalances(year, type === 'Adjusted');
     const data = state.years[year];
     const tb = [];
     Object.keys(ledger).forEach(acc => {
         const bal = data.accounts[acc].normal === 'Debit' ? ledger[acc].d - ledger[acc].c : ledger[acc].c - ledger[acc].d;
         if (bal !== 0 || ledger[acc].d !== 0 || ledger[acc].c !== 0) {
-            tb.push({ acc, d: data.accounts[acc].normal === 'Debit' ? Math.max(0, bal) : Math.max(0, -bal), c: data.accounts[acc].normal === 'Credit' ? Math.max(0, bal) : Math.max(0, -bal) });
+            tb.push({
+                acc,
+                d: data.accounts[acc].normal === 'Debit' ? Math.max(0, bal) : Math.max(0, -bal),
+                c: data.accounts[acc].normal === 'Credit' ? Math.max(0, bal) : Math.max(0, -bal)
+            });
         }
     });
     return tb;
@@ -88,3 +104,5 @@ window.state = state;
 window.getActiveYearData = getActiveYearData;
 window.calculateBalances = calculateBalances;
 window.calculateTrialBalance = calculateTrialBalance;
+window.calculateAdjustmentTotals = calculateAdjustmentTotals;
+

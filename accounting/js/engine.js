@@ -79,20 +79,34 @@ class AccuFlowApp {
         setTimeout(() => card.classList.remove('animate-pulse-gold'), 2000);
     }
 
+    randomizeLayout() {
+        const components = ['journal', 'ledger', 'tb', 'ws', 'is', 'bs', 'eq', 'cf', 'lab'];
+        components.forEach(c => {
+            const x = Math.random() * 3000 - 500;
+            const y = Math.random() * 2000 - 500;
+            state.positions[c] = { x, y };
+        });
+        // Special case for ledgers
+        const ledgers = Object.keys(state.positions).filter(k => k.startsWith('ledger-'));
+        ledgers.forEach((l, i) => { state.positions[l] = { x: 800 + (Math.random() * 200), y: 100 + (i * 180) }; });
+        this.render();
+    }
+
     autoLayout() {
         const layout = {
+            'lab': { x: -400, y: 100 },
             'journal': { x: 100, y: 100 },
             'ledger': { x: 600, y: 100 },
-            'tb': { x: 1100, y: 100 },
-            'ws': { x: 1600, y: 100 },
-            'is': { x: 2700, y: 100 },
-            'bs': { x: 3200, y: 100 },
-            'eq': { x: 1100, y: -300 },
+            'tb': { x: 1200, y: 100 },
+            'ws': { x: 1800, y: 100 },
+            'is': { x: 3000, y: 100 },
+            'bs': { x: 3600, y: 100 },
+            'eq': { x: 1200, y: -300 },
             'cf': { x: 600, y: -450 }
         };
 
         Object.keys(layout).forEach(key => {
-            if (state.positions[key]) state.positions[key] = layout[key];
+            state.positions[key] = layout[key];
             if (key === 'ledger') {
                 const ledgers = Object.keys(state.positions).filter(k => k.startsWith('ledger-'));
                 ledgers.forEach((l, i) => { state.positions[l] = { x: 600, y: 100 + (i * 180) }; });
@@ -100,6 +114,7 @@ class AccuFlowApp {
         });
         this.render();
     }
+
 
     updateTransform() {
         this.canvas.style.transform = `translate(${state.canvas.x}px, ${state.canvas.y}px) scale(${state.canvas.scale})`;
@@ -111,6 +126,7 @@ class AccuFlowApp {
         const dAcc = document.getElementById('lab-debit').value;
         const cAcc = document.getElementById('lab-credit').value;
         const amt = parseFloat(document.getElementById('lab-amount').value) || 0;
+        const isAdj = document.getElementById('lab-is-adj').checked;
 
         if (amt <= 0 || dAcc === cAcc) {
             alert("Invalid Transaction: Check amounts and accounts.");
@@ -119,15 +135,18 @@ class AccuFlowApp {
 
         const data = getActiveYearData();
         data.transactions.push({
-            id: data.transactions.length + 1,
+            id: (isAdj ? 'a' : 't') + (data.transactions.length + 1),
             date,
             debitAcc: dAcc,
             creditAcc: cAcc,
-            amount: amt
+            amount: amt,
+            desc: isAdj ? 'Adjustment Entry' : 'Manual Entry',
+            isAdjustment: isAdj
         });
 
         this.render();
     }
+
 
 
     render() {
@@ -142,7 +161,7 @@ class AccuFlowApp {
             return colors[type] || '#6c757d';
         };
 
-        // 0. Transaction Lab (User Input)
+        // 0. Transaction & Adjustment Lab
         const labHTML = `
             <div class="p-3">
                 <div class="mb-2 text-primary fw-bold small"><i class="bi bi-plus-circle me-1"></i> Post New Entry</div>
@@ -161,30 +180,35 @@ class AccuFlowApp {
                         </select>
                     </div>
                 </div>
-                <input type="number" id="lab-amount" class="form-control form-control-sm mb-3" placeholder="Amount ($)">
-                <button onclick="app.postTransaction()" class="btn btn-primary btn-sm w-100 rounded-pill shadow-sm">Commit to Ledger</button>
-                <div class="mt-2 extra-small text-muted italic">Click commit to update the $1B system.</div>
+                <input type="number" id="lab-amount" class="form-control form-control-sm mb-2" placeholder="Amount ($)">
+                <div class="form-check form-switch mb-3 small">
+                    <input class="form-check-input" type="checkbox" id="lab-is-adj">
+                    <label class="form-check-label" for="lab-is-adj">Adjusting Entry?</label>
+                </div>
+                <button onclick="app.postTransaction()" class="btn btn-primary btn-sm w-100 rounded-pill shadow-sm">Commit Transaction</button>
             </div>
         `;
         this.container.appendChild(createCard('lab', 'Transaction Lab', -400, 100, labHTML));
 
-
         // 1. Journal
         const journalHTML = `
-            <table class="table table-sm m-0 small">
-                <thead><tr><th>Date</th><th>Entry</th><th>Amount</th></tr></thead>
-                <tbody>
-                    ${data.transactions.map(t => `
-                        <tr id="j-row-${t.id}">
-                            <td>${t.date}</td>
-                            <td><div class="fw-bold" style="color: ${getAccColor(t.debitAcc)}">${t.debitAcc}</div><div class="ps-3 text-muted" style="color: ${getAccColor(t.creditAcc)}">${t.creditAcc}</div></td>
-                            <td class="fw-bold text-end">$${t.amount.toLocaleString()}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
+            <div class="table-responsive" style="max-height: 400px;">
+                <table class="table table-sm m-0 small">
+                    <thead><tr><th>Date/ID</th><th>Entry</th><th>Amount</th></tr></thead>
+                    <tbody>
+                        ${data.transactions.map(t => `
+                            <tr id="j-row-${t.id}" class="${t.isAdjustment ? 'bg-warning-subtle' : ''}">
+                                <td><div class="extra-small text-muted">${t.id}</div>${t.date}</td>
+                                <td><div class="fw-bold" style="color: ${getAccColor(t.debitAcc)}">${t.debitAcc}</div><div class="ps-3 text-muted" style="color: ${getAccColor(t.creditAcc)}">${t.creditAcc}</div></td>
+                                <td class="fw-bold text-end ${t.isAdjustment ? 'text-warning' : ''}">$${t.amount.toLocaleString()}</td>
+                            </tr>
+                        `).reverse().join('')}
+                    </tbody>
+                </table>
+            </div>
         `;
-        this.container.appendChild(createCard('journal', 'General Journal', 100, 100, journalHTML));
+        this.container.appendChild(createCard('journal', 'General Journal (Live)', 100, 100, journalHTML));
+
 
         // 2. Ledgers
         Object.keys(data.accounts).forEach((acc, i) => {
@@ -209,34 +233,46 @@ class AccuFlowApp {
         `;
         this.container.appendChild(createCard('tb', 'Trial Balance', 1100, 100, tbHTML));
 
-        // 4. Worksheet
+        // 4. Worksheet (Smart 10-Column)
+        const unadjTB = calculateTrialBalance(state.activeYear, 'Unadjusted');
+        const adjTotals = calculateAdjustmentTotals();
+        const adjTB = calculateTrialBalance(state.activeYear, 'Adjusted');
+
         const wsHTML = `
             <div class="table-responsive">
-                <table class="table table-sm m-0 small text-center" style="min-width: 1000px; font-size: 0.65rem;">
+                <table class="table table-sm m-0 small text-center" style="min-width: 1200px; font-size: 0.65rem;">
                     <thead>
                         <tr class="bg-light">
                             <th rowspan="2" class="text-start">Account</th>
-                            <th colspan="2">Unadj TB</th><th colspan="2">Adj Entry</th><th colspan="2">Adj TB</th><th colspan="2">Income</th><th colspan="2">Balance</th>
+                            <th colspan="2" class="bg-primary-subtle text-primary">Unadj TB</th>
+                            <th colspan="2" class="bg-warning-subtle text-warning">Adjustments</th>
+                            <th colspan="2" class="bg-success-subtle text-success">Adjusted TB</th>
+                            <th colspan="2">Income</th><th colspan="2">Balance</th>
                         </tr>
                         <tr class="bg-light"><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th></tr>
                     </thead>
                     <tbody>
-                        ${tb.map(e => `
-                            <tr id="ws-row-${e.acc.replace(/\s/g, '')}">
-                                <td class="text-start fw-bold" style="color: ${getAccColor(e.acc)}">${e.acc}</td>
-                                <td>${e.d || ''}</td><td>${e.c || ''}</td>
-                                <td class="text-primary"></td><td class="text-danger"></td>
-                                <td class="fw-bold">${e.d || ''}</td><td class="fw-bold">${e.c || ''}</td>
-                                <td>${data.accounts[e.acc].type === 'Expense' ? e.d : ''}</td><td>${data.accounts[e.acc].type === 'Revenue' ? e.c : ''}</td>
-                                <td>${['Asset', 'Liability', 'Equity'].includes(data.accounts[e.acc].type) ? (e.d || '') : ''}</td>
-                                <td>${['Asset', 'Liability', 'Equity'].includes(data.accounts[e.acc].type) ? (e.c || '') : ''}</td>
-                            </tr>
-                        `).join('')}
+                        ${adjTB.map(e => {
+            const u = unadjTB.find(x => x.acc === e.acc) || { d: 0, c: 0 };
+            const a = adjTotals[e.acc] || { d: 0, c: 0 };
+            return `
+                                <tr id="ws-row-${e.acc.replace(/\s/g, '')}">
+                                    <td class="text-start fw-bold" style="color: ${getAccColor(e.acc)}">${e.acc}</td>
+                                    <td>${u.d || ''}</td><td>${u.c || ''}</td>
+                                    <td class="text-warning fw-bold">${a.d || ''}</td><td class="text-warning fw-bold">${a.c || ''}</td>
+                                    <td class="bg-light-subtle">${e.d || ''}</td><td class="bg-light-subtle">${e.c || ''}</td>
+                                    <td>${data.accounts[e.acc].type === 'Expense' ? e.d : ''}</td><td>${data.accounts[e.acc].type === 'Revenue' ? e.c : ''}</td>
+                                    <td>${['Asset', 'Liability', 'Equity'].includes(data.accounts[e.acc].type) ? (e.d || '') : ''}</td>
+                                    <td>${['Asset', 'Liability', 'Equity'].includes(data.accounts[e.acc].type) ? (e.c || '') : ''}</td>
+                                </tr>
+                            `;
+        }).join('')}
                     </tbody>
                 </table>
             </div>
         `;
-        const wsCard = createCard('ws', 'Enterprise 10-Column Worksheet', 1600, 100, wsHTML);
+        const wsCard = createCard('ws', 'Dynamic 10-Column Enterprise Worksheet', 1800, 100, wsHTML);
+
         wsCard.style.width = '1000px';
         this.container.appendChild(wsCard);
 
