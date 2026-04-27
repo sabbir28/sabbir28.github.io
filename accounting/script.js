@@ -58,9 +58,29 @@ window.onmouseup = () => {
 };
 
 function updateTransform() {
-    canvas.style.transform = `translate(${state.canvas.x}px, ${state.canvas.y}px)`;
+    canvas.style.transform = `translate(${state.canvas.x}px, ${state.canvas.y}px) scale(${state.canvas.scale})`;
     drawConnections();
 }
+
+viewport.onwheel = (e) => {
+    e.preventDefault();
+    const zoomSpeed = 0.001;
+    const delta = -e.deltaY;
+    const oldScale = state.canvas.scale;
+    const newScale = Math.min(Math.max(0.1, oldScale + delta * zoomSpeed), 5);
+
+    // Zoom toward mouse pointer
+    const rect = viewport.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    state.canvas.x -= (mouseX - state.canvas.x) * (newScale / oldScale - 1);
+    state.canvas.y -= (mouseY - state.canvas.y) * (newScale / oldScale - 1);
+
+    state.canvas.scale = newScale;
+    updateTransform();
+};
+
 
 
 document.getElementById('reset-view').onclick = () => {
@@ -287,22 +307,88 @@ function renderAll() {
     `;
     container.appendChild(createCard('is-card', 'Income Statement', 3100, 100, isContent));
 
-    // 7. Balance Sheet (Column 7)
+    // 7. Balance Sheet (Column 7) - T-Account Layout
     const bsContent = `
-        <div class="p-3">
-            <h6 class="fw-bold border-bottom pb-2">Assets</h6>
-            ${tb.filter(e => state.accounts[e.acc].type === 'Asset').map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
-            <h6 class="fw-bold border-bottom pb-2 mt-3">Liabilities & Equity</h6>
-            ${tb.filter(e => ['Liability', 'Equity'].includes(state.accounts[e.acc].type)).map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c || e.d}</span></div>`).join('')}
-            <div class="d-flex justify-content-between text-success"><span>Retained Earnings</span><span>$${netIncome.toLocaleString()}</span></div>
-            <div class="mt-3 pt-2 border-top fw-bold text-primary d-flex justify-content-between">
-                <span>Total Assets</span>
-                <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0).toLocaleString()}</span>
+        <div class="p-0 container-fluid">
+            <div class="row g-0">
+                <div class="col-6 border-end p-3">
+                    <h6 class="fw-bold border-bottom pb-2 text-primary">ASSETS</h6>
+                    ${tb.filter(e => state.accounts[e.acc].type === 'Asset').map(e => `
+                        <div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small mb-1">
+                            <span>${e.acc}</span><span class="fw-bold">$${e.d.toLocaleString()}</span>
+                        </div>
+                    `).join('')}
+                    <div class="mt-4 pt-2 border-top fw-bold text-primary d-flex justify-content-between">
+                        <span>Total Assets</span>
+                        <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0).toLocaleString()}</span>
+                    </div>
+                </div>
+                <div class="col-6 p-3 bg-light">
+                    <h6 class="fw-bold border-bottom pb-2 text-danger">LIABILITIES & EQUITY</h6>
+                    <div class="mb-3">
+                        <small class="text-muted fw-bold">LIABILITIES</small>
+                        ${tb.filter(e => state.accounts[e.acc].type === 'Liability').map(e => `
+                            <div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small mb-1">
+                                <span>${e.acc}</span><span class="fw-bold">$${e.c.toLocaleString()}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div>
+                        <small class="text-muted fw-bold">EQUITY</small>
+                        ${tb.filter(e => state.accounts[e.acc].type === 'Equity').map(e => `
+                            <div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between small mb-1">
+                                <span>${e.acc}</span><span class="fw-bold">$${e.c || e.d}</span>
+                            </div>
+                        `).join('')}
+                        <div class="d-flex justify-content-between small text-success">
+                            <span>Retained Earnings</span><span class="fw-bold">$${netIncome.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-top fw-bold text-danger d-flex justify-content-between">
+                        <span>Total L & E</span>
+                        <span>$${(tb.filter(e => ['Liability', 'Equity'].includes(state.accounts[e.acc].type)).reduce((s, i) => s + (i.c - i.d), 0) + netIncome).toLocaleString()}</span>
+                    </div>
+                </div>
             </div>
         </div>
-
     `;
-    container.appendChild(createCard('bs-card', 'Balance Sheet', 3600, 100, bsContent));
+    const bsCard = createCard('bs-card', 'Balance Sheet (Position Statement)', 3600, 100, bsContent);
+    bsCard.style.width = '700px';
+    container.appendChild(bsCard);
+
+    // 8. Accounting Equation Card (Floating at top)
+    const totalAssets = tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0);
+    const totalLiabilities = tb.filter(e => state.accounts[e.acc].type === 'Liability').reduce((s, i) => s + (i.c - i.d), 0);
+    const totalEquity = tb.filter(e => state.accounts[e.acc].type === 'Equity').reduce((s, i) => s + (i.c - i.d), 0) + netIncome;
+
+    const eqContent = `
+        <div class="p-3 text-center">
+            <div class="d-flex justify-content-around align-items-center">
+                <div class="px-3">
+                    <div class="small text-muted">ASSETS</div>
+                    <div class="h4 fw-bold text-primary">$${totalAssets.toLocaleString()}</div>
+                </div>
+                <div class="h4 text-muted">=</div>
+                <div class="px-3">
+                    <div class="small text-muted">LIABILITIES</div>
+                    <div class="h4 fw-bold text-danger">$${totalLiabilities.toLocaleString()}</div>
+                </div>
+                <div class="h4 text-muted">+</div>
+                <div class="px-3">
+                    <div class="small text-muted">EQUITY</div>
+                    <div class="h4 fw-bold text-success">$${totalEquity.toLocaleString()}</div>
+                </div>
+            </div>
+            <div class="mt-2 border-top pt-2 small ${totalAssets === (totalLiabilities + totalEquity) ? 'text-success' : 'text-danger fw-bold'}">
+                ${totalAssets === (totalLiabilities + totalEquity) ? '✓ Equation Balanced' : '✗ Equation Unbalanced'}
+            </div>
+        </div>
+    `;
+    const eqCard = createCard('equation-card', 'Accounting Equation', 1100, -200, eqContent);
+    eqCard.style.width = '600px';
+    container.appendChild(eqCard);
+
+
 
     // Wait for DOM to settle then draw lines
     setTimeout(drawConnections, 100);
@@ -356,12 +442,14 @@ function drawLine(fromId, toId) {
     const fromRect = fromEl.getBoundingClientRect();
     const toRect = toEl.getBoundingClientRect();
     const canvasRect = canvas.getBoundingClientRect();
+    const s = state.canvas.scale;
 
-    // Calculate relative coordinates in canvas space
-    const x1 = (fromRect.right - canvasRect.left);
-    const y1 = (fromRect.top + fromRect.height / 2 - canvasRect.top);
-    const x2 = (toRect.left - canvasRect.left);
-    const y2 = (toRect.top + toRect.height / 2 - canvasRect.top);
+    // Calculate relative coordinates in canvas space (accounting for scale)
+    const x1 = (fromRect.right - canvasRect.left) / s;
+    const y1 = (fromRect.top + fromRect.height / 2 - canvasRect.top) / s;
+    const x2 = (toRect.left - canvasRect.left) / s;
+    const y2 = (toRect.top + toRect.height / 2 - canvasRect.top) / s;
+
 
     const cp1x = x1 + (x2 - x1) / 2;
     const cp2x = x1 + (x2 - x1) / 2;
