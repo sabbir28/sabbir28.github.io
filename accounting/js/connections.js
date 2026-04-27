@@ -49,13 +49,22 @@ function drawConnections() {
         drawPath(`j-row-${t.id}`, `ledger-${slugCredit}`, getAccColor(t.creditAcc));
     });
 
-    // Flow 2: Ledgers -> TB -> Worksheet
+    // Flow 2: Ledgers -> TB -> Worksheet/Statements
     Object.keys(data.accounts).forEach(acc => {
         const slug = acc.replace(/\s/g, '');
+        // Note: Ledger balance element ID in engine.js is ledger-bal-${slug}
         drawPath(`ledger-bal-${slug}`, `tb-row-${slug}`, getAccColor(acc));
-        drawPath(`tb-row-${slug}`, `ws-row-${slug}`, getAccColor(acc));
+
+        // Connections to IS and BS
+        if (document.getElementById(`is-row-${slug}`)) {
+            drawPath(`tb-row-${slug}`, `is-row-${slug}`, getAccColor(acc));
+        }
+        if (document.getElementById(`bs-row-${slug}`)) {
+            drawPath(`tb-row-${slug}`, `bs-row-${slug}`, getAccColor(acc));
+        }
     });
 }
+
 
 window.drawPath = drawPath;
 window.drawConnections = drawConnections;
