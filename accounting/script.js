@@ -157,9 +157,10 @@ function renderAll() {
                     </tr>
                 </tbody>
             </table>
-            <div class="p-2 border-top text-center fw-bold small">Balance: $${(ledger[acc].d.reduce((s, i) => s + i.amount, 0) - ledger[acc].c.reduce((s, i) => s + i.amount, 0)).toLocaleString()}</div>
+            <div id="ledger-bal-${acc.replace(/\s/g, '')}" class="p-2 border-top text-center fw-bold small">Balance: $${(ledger[acc].d.reduce((s, i) => s + i.amount, 0) - ledger[acc].c.reduce((s, i) => s + i.amount, 0)).toLocaleString()}</div>
         `;
         container.appendChild(createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 180), tContent));
+
     });
 
     // 4. Trial Balance (Column 4)
@@ -168,9 +169,10 @@ function renderAll() {
         <table class="table table-sm m-0">
             <thead><tr><th>Account</th><th>Debit</th><th>Credit</th></tr></thead>
             <tbody>
-                ${tb.map(e => `<tr><td>${e.acc}</td><td class="debit-val">${e.d ? '$' + e.d : ''}</td><td class="credit-val">${e.c ? '$' + e.c : ''}</td></tr>`).join('')}
+                ${tb.map(e => `<tr id="tb-row-${e.acc.replace(/\s/g, '')}"><td>${e.acc}</td><td class="debit-val">${e.d ? '$' + e.d : ''}</td><td class="credit-val">${e.c ? '$' + e.c : ''}</td></tr>`).join('')}
                 <tr class="fw-bold table-secondary"><td>Total</td><td>$${tb.reduce((s, i) => s + i.d, 0)}</td><td>$${tb.reduce((s, i) => s + i.c, 0)}</td></tr>
             </tbody>
+
         </table>
     `;
     container.appendChild(createCard('tb-card', 'Trial Balance', 1600, 100, tbContent));
@@ -200,7 +202,7 @@ function renderAll() {
         const isLibEq = ['Liability', 'Equity'].includes(state.accounts[e.acc].type);
 
         return `
-                            <tr>
+                            <tr id="ws-row-${e.acc.replace(/\s/g, '')}">
                                 <td>${e.acc}</td>
                                 <td>${e.d || ''}</td><td>${e.c || ''}</td>
                                 <td></td><td></td>
@@ -211,6 +213,7 @@ function renderAll() {
                         `;
     }).join('')}
                 </tbody>
+
             </table>
         </div>
     `;
@@ -227,14 +230,15 @@ function renderAll() {
     const isContent = `
         <div class="p-3">
             <h6 class="fw-bold border-bottom pb-2">Revenues</h6>
-            ${revs.map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c}</span></div>`).join('')}
+            ${revs.map(e => `<div id="is-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c}</span></div>`).join('')}
             <h6 class="fw-bold border-bottom pb-2 mt-3">Expenses</h6>
-            ${exps.map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
+            ${exps.map(e => `<div id="is-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
             <div class="mt-3 pt-2 border-top fw-bold text-success d-flex justify-content-between">
                 <span>Net Income</span>
                 <span>$${netIncome.toLocaleString()}</span>
             </div>
         </div>
+
     `;
     container.appendChild(createCard('is-card', 'Income Statement', 3100, 100, isContent));
 
@@ -242,15 +246,16 @@ function renderAll() {
     const bsContent = `
         <div class="p-3">
             <h6 class="fw-bold border-bottom pb-2">Assets</h6>
-            ${tb.filter(e => state.accounts[e.acc].type === 'Asset').map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
+            ${tb.filter(e => state.accounts[e.acc].type === 'Asset').map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.d}</span></div>`).join('')}
             <h6 class="fw-bold border-bottom pb-2 mt-3">Liabilities & Equity</h6>
-            ${tb.filter(e => ['Liability', 'Equity'].includes(state.accounts[e.acc].type)).map(e => `<div class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c || e.d}</span></div>`).join('')}
+            ${tb.filter(e => ['Liability', 'Equity'].includes(state.accounts[e.acc].type)).map(e => `<div id="bs-row-${e.acc.replace(/\s/g, '')}" class="d-flex justify-content-between"><span>${e.acc}</span><span>$${e.c || e.d}</span></div>`).join('')}
             <div class="d-flex justify-content-between text-success"><span>Retained Earnings</span><span>$${netIncome.toLocaleString()}</span></div>
             <div class="mt-3 pt-2 border-top fw-bold text-primary d-flex justify-content-between">
                 <span>Total Assets</span>
                 <span>$${tb.filter(e => state.accounts[e.acc].type === 'Asset').reduce((s, i) => s + i.d, 0).toLocaleString()}</span>
             </div>
         </div>
+
     `;
     container.appendChild(createCard('bs-card', 'Balance Sheet', 3600, 100, bsContent));
 
@@ -273,19 +278,25 @@ function drawConnections() {
         drawLine(`j-row-${t.id}`, `ledger-${t.creditAcc.replace(/\s/g, '')}`);
     });
 
-    // Connect Ledger to TB
+    // Granular Row tracking for every account
     Object.keys(state.accounts).forEach(acc => {
-        const ledgerId = `ledger-${acc.replace(/\s/g, '')}`;
-        drawLine(ledgerId, 'tb-card');
+        const slug = acc.replace(/\s/g, '');
+
+        // Ledger Balance -> Trial Balance Row
+        drawLine(`ledger-bal-${slug}`, `tb-row-${slug}`);
+
+        // Trial Balance Row -> Worksheet Row
+        drawLine(`tb-row-${slug}`, `ws-row-${slug}`);
+
+        // Worksheet Row -> Statement Row (Income Statement or Balance Sheet)
+        const isRow = document.getElementById(`is-row-${slug}`);
+        const bsRow = document.getElementById(`bs-row-${slug}`);
+
+        if (isRow) drawLine(`ws-row-${slug}`, `is-row-${slug}`);
+        if (bsRow) drawLine(`ws-row-${slug}`, `bs-row-${slug}`);
     });
-
-    // Connect TB to Worksheet
-    drawLine('tb-card', 'ws-card');
-
-    // Connect Worksheet to Statements
-    drawLine('ws-card', 'is-card');
-    drawLine('is-card', 'bs-card');
 }
+
 
 
 
