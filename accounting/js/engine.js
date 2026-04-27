@@ -142,6 +142,33 @@ class AccuFlowApp {
             return colors[type] || '#6c757d';
         };
 
+        // 0. Transaction Lab (User Input)
+        const labHTML = `
+            <div class="p-3">
+                <div class="mb-2 text-primary fw-bold small"><i class="bi bi-plus-circle me-1"></i> Post New Entry</div>
+                <div class="mb-2">
+                    <input type="text" id="lab-date" class="form-control form-control-sm" value="2026-05-01">
+                </div>
+                <div class="row g-2 mb-2">
+                    <div class="col-6">
+                        <select id="lab-debit" class="form-select form-select-sm">
+                            ${Object.keys(data.accounts).map(a => `<option value="${a}">${a}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select id="lab-credit" class="form-select form-select-sm">
+                            ${Object.keys(data.accounts).map(a => `<option value="${a}">${a}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <input type="number" id="lab-amount" class="form-control form-control-sm mb-3" placeholder="Amount ($)">
+                <button onclick="app.postTransaction()" class="btn btn-primary btn-sm w-100 rounded-pill shadow-sm">Commit to Ledger</button>
+                <div class="mt-2 extra-small text-muted italic">Click commit to update the $1B system.</div>
+            </div>
+        `;
+        this.container.appendChild(createCard('lab', 'Transaction Lab', -400, 100, labHTML));
+
+
         // 1. Journal
         const journalHTML = `
             <table class="table table-sm m-0 small">

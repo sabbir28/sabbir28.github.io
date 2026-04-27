@@ -61,35 +61,44 @@ function createCard(id, title, x, y, content, typeClass = '') {
         <div class="card-body p-0">${content}</div>
     `;
 
-    const handle = card.querySelector('.grab-handle');
-    handle.onmousedown = (e) => {
+    // Drag Logic (jQuery Powered)
+    const $card = $(card);
+    const $handle = $card.find('.grab-handle');
+
+    $handle.on('mousedown', function (e) {
+        e.preventDefault();
         e.stopPropagation();
+
         const vRect = document.getElementById('viewport').getBoundingClientRect();
         const startX = (e.clientX - vRect.left - state.canvas.x) / state.canvas.scale - pos.x;
         const startY = (e.clientY - vRect.top - state.canvas.y) / state.canvas.scale - pos.y;
 
-        const move = (me) => {
+        $(window).on('mousemove.drag', function (me) {
             const nx = (me.clientX - vRect.left - state.canvas.x) / state.canvas.scale - startX;
             const ny = (me.clientY - vRect.top - state.canvas.y) / state.canvas.scale - startY;
+
             pos.x = nx; pos.y = ny;
-            card.style.left = `${nx}px`;
-            card.style.top = `${ny}px`;
+            $card.css({ left: nx + 'px', top: ny + 'px' });
             state.positions[id] = { x: nx, y: ny };
             if (window.drawConnections) window.drawConnections();
-        };
-        const up = () => {
-            window.removeEventListener('mousemove', move);
-            window.removeEventListener('mouseup', up);
-        };
-        window.addEventListener('mousemove', move);
-        window.addEventListener('mouseup', up);
-    };
+        });
 
-    // Hover Intelligence
-    card.onmouseover = () => {
-        const insight = explanations[Object.keys(explanations).find(k => id.startsWith(k))] || 'Click the help icon for details.';
-        card.setAttribute('title', insight);
-    };
+        $(window).on('mouseup.drag', function () {
+            $(window).off('mousemove.drag mouseup.drag');
+        });
+    });
+
+    // Hover Intelligence (Enhanced)
+    $card.on('mouseenter', function () {
+        const key = Object.keys(explanations).find(k => id.startsWith(k));
+        if (key) {
+            $(this).css('box-shadow', '0 15px 45px rgba(0,0,0,0.15)');
+            $(this).attr('title', explanations[key]);
+        }
+    }).on('mouseleave', function () {
+        $(this).css('box-shadow', '');
+    });
+
 
 
 
