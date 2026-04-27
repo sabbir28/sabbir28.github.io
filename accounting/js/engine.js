@@ -157,12 +157,19 @@ class AccuFlowApp {
         this.render(); // For now full render to keep cards stable, but we will add a 'Process' button for lines
     }
 
+    loadAcademicScenario() {
+        if (confirm("Clear all entries and load ABC Traders Scenario?")) {
+            loadScenario('ABC_TRADERS');
+            this.render();
+            if (window.drawConnections) window.drawConnections();
+        }
+    }
+
     processCycle() {
-        // This will trigger the redrawing of lines and calculations
         this.render();
         if (window.drawConnections) window.drawConnections();
-        alert("Accounting Cycle Processed: Ledgers and Statements Updated!");
     }
+
 
 
 
@@ -204,10 +211,11 @@ class AccuFlowApp {
                     <label class="form-check-label" for="lab-is-adj">Adjusting Entry?</label>
                 </div>
                 <button onclick="app.postTransaction()" class="btn btn-outline-primary btn-sm w-100 rounded-pill mb-2">Record Journal Entry</button>
-                <button onclick="app.processCycle()" class="btn btn-success btn-sm w-100 rounded-pill shadow-sm">Process Cycle →</button>
-                <div class="mt-2 extra-small text-muted text-center italic">Record entries first, then process.</div>
+                <button onclick="app.processCycle()" class="btn btn-success btn-sm w-100 rounded-pill mb-3 shadow-sm">Process Cycle →</button>
+                <button onclick="app.loadAcademicScenario()" class="btn btn-warning btn-sm w-100 rounded-pill shadow-sm">Load ABC Traders Scenario</button>
             </div>
         `;
+
 
         this.container.appendChild(createCard('lab', 'Transaction Lab', -400, 100, labHTML));
 
@@ -316,18 +324,26 @@ class AccuFlowApp {
         `;
         this.container.appendChild(createCard('eq', 'Master Dashboard', 1100, -200, eqContent));
 
-        // 6. Cash Flow
+        // 6. Cash Flow (Academic Scenario Focus)
         const cfHTML = `
             <div class="p-3 small">
                 <div class="fw-bold text-primary mb-2">OPERATING ACTIVITIES</div>
-                <div class="d-flex justify-content-between"><span>Net Income</span><span>$${netIncome.toLocaleString()}</span></div>
+                <div class="d-flex justify-content-between"><span>Net Profit</span><span>$${netIncome.toLocaleString()}</span></div>
+                <div class="d-flex justify-content-between text-success"><span>(+) Depreciation</span><span>$1,500</span></div>
+                <div class="d-flex justify-content-between text-danger"><span>(-) Inc in A/R</span><span>($4,000)</span></div>
+                <div class="d-flex justify-content-between text-success"><span>(+) Dec in Inv</span><span>$8,000</span></div>
+                <div class="d-flex justify-content-between text-success"><span>(+) Inc in A/P</span><span>$7,000</span></div>
+                
                 <div class="fw-bold border-top mt-2">INVESTING ACTIVITIES</div>
-                <div class="d-flex justify-content-between text-danger"><span>Equipment Purchase</span><span>($20,000)</span></div>
+                <div class="d-flex justify-content-between text-danger"><span>Purchase of Furniture</span><span>($15,000)</span></div>
+                
                 <div class="fw-bold border-top mt-2">FINANCING ACTIVITIES</div>
-                <div class="d-flex justify-content-between text-success"><span>Stock Issuance</span><span>$50,000</span></div>
-                <div class="h5 fw-bold border-top mt-3 pt-2 text-dark d-flex justify-content-between"><span>Net Cash Increase</span><span>$30,000</span></div>
+                <div class="d-flex justify-content-between text-success"><span>Capital Introduced</span><span>$100,000</span></div>
+                
+                <div class="h5 fw-bold border-top mt-3 pt-2 text-dark d-flex justify-content-between"><span>Net Cash Flow</span><span>$119,000</span></div>
             </div>
         `;
+
         this.container.appendChild(createCard('cf', 'Statement of Cash Flows', 600, -450, cfHTML));
 
         // 7. Income Statement
