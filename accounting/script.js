@@ -175,7 +175,51 @@ function renderAll() {
     `;
     container.appendChild(createCard('tb-card', 'Trial Balance', 1600, 100, tbContent));
 
-    // 5. Income Statement (Column 5)
+    // 5. Worksheet (Column 5) - Wider Card
+    const wsContent = `
+        <div class="table-responsive">
+            <table class="table table-sm m-0" style="min-width: 800px; font-size: 0.7rem;">
+                <thead>
+                    <tr class="text-center">
+                        <th rowspan="2">Account</th>
+                        <th colspan="2">Trial Balance</th>
+                        <th colspan="2">Adjustments</th>
+                        <th colspan="2">Adjusted TB</th>
+                        <th colspan="2">Income Stat.</th>
+                        <th colspan="2">Balance Sheet</th>
+                    </tr>
+                    <tr class="text-center">
+                        <th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th><th>D</th><th>C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tb.map(e => {
+        const isRev = state.accounts[e.acc].type === 'Revenue';
+        const isExp = state.accounts[e.acc].type === 'Expense';
+        const isAsset = state.accounts[e.acc].type === 'Asset';
+        const isLibEq = ['Liability', 'Equity'].includes(state.accounts[e.acc].type);
+
+        return `
+                            <tr>
+                                <td>${e.acc}</td>
+                                <td>${e.d || ''}</td><td>${e.c || ''}</td>
+                                <td></td><td></td>
+                                <td>${e.d || ''}</td><td>${e.c || ''}</td>
+                                <td>${isExp ? e.d : ''}</td><td>${isRev ? e.c : ''}</td>
+                                <td>${isAsset ? e.d : ''}</td><td>${isLibEq ? e.c : ''}</td>
+                            </tr>
+                        `;
+    }).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+    const wsCard = createCard('ws-card', '10-Column Worksheet', 2100, 100, wsContent);
+    wsCard.style.width = '900px';
+    container.appendChild(wsCard);
+
+
+    // 6. Income Statement (Column 6)
     const revs = tb.filter(e => state.accounts[e.acc].type === 'Revenue');
     const exps = tb.filter(e => state.accounts[e.acc].type === 'Expense');
     const netIncome = revs.reduce((s, i) => s + i.c, 0) - exps.reduce((s, i) => s + i.d, 0);
@@ -192,9 +236,9 @@ function renderAll() {
             </div>
         </div>
     `;
-    container.appendChild(createCard('is-card', 'Income Statement', 2100, 100, isContent));
+    container.appendChild(createCard('is-card', 'Income Statement', 3100, 100, isContent));
 
-    // 6. Balance Sheet (Column 6)
+    // 7. Balance Sheet (Column 7)
     const bsContent = `
         <div class="p-3">
             <h6 class="fw-bold border-bottom pb-2">Assets</h6>
@@ -208,9 +252,7 @@ function renderAll() {
             </div>
         </div>
     `;
-    container.appendChild(createCard('bs-card', 'Balance Sheet', 2600, 100, bsContent));
-
-
+    container.appendChild(createCard('bs-card', 'Balance Sheet', 3600, 100, bsContent));
 
     // Wait for DOM to settle then draw lines
     setTimeout(drawConnections, 100);
@@ -233,12 +275,18 @@ function drawConnections() {
 
     // Connect Ledger to TB
     Object.keys(state.accounts).forEach(acc => {
-        drawLine(`ledger-${acc.replace(/\s/g, '')}`, 'tb-card');
+        const ledgerId = `ledger-${acc.replace(/\s/g, '')}`;
+        drawLine(ledgerId, 'tb-card');
     });
 
-    drawLine('tb-card', 'is-card');
+    // Connect TB to Worksheet
+    drawLine('tb-card', 'ws-card');
+
+    // Connect Worksheet to Statements
+    drawLine('ws-card', 'is-card');
     drawLine('is-card', 'bs-card');
 }
+
 
 
 
