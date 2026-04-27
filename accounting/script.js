@@ -14,7 +14,11 @@ const state = {
         { id: 't7', date: 'Jan 30', debitAcc: 'Salary Expense', creditAcc: 'Cash', amount: 3500, desc: 'Paid employee salaries' },
         { id: 't8', date: 'Feb 1', debitAcc: 'Prepaid Rent', creditAcc: 'Cash', amount: 6000, desc: 'Paid 6 months rent in advance' },
         { id: 't9', date: 'Feb 5', debitAcc: 'Cash', creditAcc: 'Service Revenue', amount: 12000, desc: 'Received cash for consulting services' },
-        { id: 't10', date: 'Feb 10', debitAcc: 'Drawings', creditAcc: 'Cash', amount: 1000, desc: 'Owner withdrew cash for personal use' }
+        { id: 't10', date: 'Feb 10', debitAcc: 'Drawings', creditAcc: 'Cash', amount: 1000, desc: 'Owner withdrew cash for personal use' },
+        // Adjustments
+        { id: 'a1', date: 'Feb 28', debitAcc: 'Supplies Expense', creditAcc: 'Supplies', amount: 1500, desc: 'Supplies used during the month', isAdjustment: true },
+        { id: 'a2', date: 'Feb 28', debitAcc: 'Rent Expense', creditAcc: 'Prepaid Rent', amount: 1000, desc: 'Monthly rent expired', isAdjustment: true },
+        { id: 'a3', date: 'Feb 28', debitAcc: 'Depreciation Expense', creditAcc: 'Accumulated Depreciation', amount: 250, desc: 'Monthly depreciation on equipment', isAdjustment: true }
     ],
     accounts: {
         'Cash': { type: 'Asset', normal: 'Debit' },
@@ -22,12 +26,17 @@ const state = {
         'Supplies': { type: 'Asset', normal: 'Debit' },
         'Equipment': { type: 'Asset', normal: 'Debit' },
         'Prepaid Rent': { type: 'Asset', normal: 'Debit' },
+        'Accumulated Depreciation': { type: 'Asset', normal: 'Credit' }, // Contra-asset
         'Accounts Payable': { type: 'Liability', normal: 'Credit' },
         'Common Stock': { type: 'Equity', normal: 'Credit' },
         'Drawings': { type: 'Equity', normal: 'Debit' },
         'Service Revenue': { type: 'Revenue', normal: 'Credit' },
-        'Salary Expense': { type: 'Expense', normal: 'Debit' }
+        'Salary Expense': { type: 'Expense', normal: 'Debit' },
+        'Supplies Expense': { type: 'Expense', normal: 'Debit' },
+        'Rent Expense': { type: 'Expense', normal: 'Debit' },
+        'Depreciation Expense': { type: 'Expense', normal: 'Debit' }
     },
+
 
     canvas: { x: 50, y: 50, scale: 1, isDragging: false, startX: 0, startY: 0 },
     cardDragging: { id: null, startX: 0, startY: 0 },
@@ -220,11 +229,16 @@ function renderAll() {
                 ${state.transactions.map(t => `
                     <tr id="j-row-${t.id}" class="${getAccTypeRowClass(t.debitAcc)}">
                         <td>${t.date}</td>
-                        <td id="j-acc-${t.id}"><div class="fw-bold">${t.debitAcc}</div><div class="ps-3 text-muted">${t.creditAcc}</div></td>
-                        <td class="debit-val">$${t.amount}</td>
-                        <td class="credit-val">$${t.amount}</td>
+                        <td id="j-acc-${t.id}">
+                            <div class="fw-bold" style="color: ${getAccColor(t.debitAcc)}">${t.debitAcc}</div>
+                            <div class="ps-3 text-muted" style="color: ${getAccColor(t.creditAcc)}">${t.creditAcc}</div>
+                            ${t.isAdjustment ? '<span class="badge bg-warning text-dark p-1 mt-1" style="font-size:0.5rem">ADJUSTMENT</span>' : ''}
+                        </td>
+                        <td class="debit-val">$${t.amount.toLocaleString()}</td>
+                        <td class="credit-val">$${t.amount.toLocaleString()}</td>
                     </tr>
                 `).join('')}
+
 
 
             </tbody>
@@ -245,9 +259,12 @@ function renderAll() {
                     </tr>
                 </tbody>
             </table>
-            <div id="ledger-bal-${acc.replace(/\s/g, '')}" class="p-2 border-top text-center fw-bold small">Balance: $${(ledger[acc].d.reduce((s, i) => s + i.amount, 0) - ledger[acc].c.reduce((s, i) => s + i.amount, 0)).toLocaleString()}</div>
+            <div id="ledger-bal-${acc.replace(/\s/g, '')}" class="p-2 border-top text-center fw-bold small" style="color: ${getAccColor(acc)}">Balance: $${(ledger[acc].d.reduce((s, i) => s + i.amount, 0) - ledger[acc].c.reduce((s, i) => s + i.amount, 0)).toLocaleString()}</div>
         `;
-        container.appendChild(createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 180), tContent, getAccTypeClass(acc)));
+        const card = createCard(`ledger-${acc.replace(/\s/g, '')}`, `Ledger: ${acc}`, 1100, 100 + (i * 180), tContent, getAccTypeClass(acc));
+        card.querySelector('.card-header h6').style.color = getAccColor(acc);
+        container.appendChild(card);
+
 
 
     });
@@ -258,9 +275,10 @@ function renderAll() {
         <table class="table table-sm m-0">
             <thead><tr><th>Account</th><th>Debit</th><th>Credit</th></tr></thead>
             <tbody>
-                ${tb.map(e => `<tr id="tb-row-${e.acc.replace(/\s/g, '')}"><td>${e.acc}</td><td class="debit-val">${e.d ? '$' + e.d : ''}</td><td class="credit-val">${e.c ? '$' + e.c : ''}</td></tr>`).join('')}
-                <tr class="fw-bold table-secondary"><td>Total</td><td>$${tb.reduce((s, i) => s + i.d, 0)}</td><td>$${tb.reduce((s, i) => s + i.c, 0)}</td></tr>
+                ${tb.map(e => `<tr id="tb-row-${e.acc.replace(/\s/g, '')}"><td style="color: ${getAccColor(e.acc)}; font-weight: 600;">${e.acc}</td><td class="debit-val">${e.d ? '$' + e.d.toLocaleString() : ''}</td><td class="credit-val">${e.c ? '$' + e.c.toLocaleString() : ''}</td></tr>`).join('')}
+                <tr class="fw-bold table-secondary"><td>Total</td><td>$${tb.reduce((s, i) => s + i.d, 0).toLocaleString()}</td><td>$${tb.reduce((s, i) => s + i.c, 0).toLocaleString()}</td></tr>
             </tbody>
+
 
         </table>
     `;
@@ -290,17 +308,35 @@ function renderAll() {
         const isAsset = state.accounts[e.acc].type === 'Asset';
         const isLibEq = ['Liability', 'Equity'].includes(state.accounts[e.acc].type);
 
+        // Calculate adjustments
+        const adjD = state.transactions.filter(t => t.isAdjustment && t.debitAcc === e.acc).reduce((s, i) => s + i.amount, 0);
+        const adjC = state.transactions.filter(t => t.isAdjustment && t.creditAcc === e.acc).reduce((s, i) => s + i.amount, 0);
+
+        // Adjusted Balance
+        let adjBalD = e.d + adjD;
+        let adjBalC = e.c + adjC;
+
+        // Netting
+        if (state.accounts[e.acc].normal === 'Debit') {
+            adjBalD = (e.d || 0) + adjD - adjC;
+            adjBalC = 0;
+        } else {
+            adjBalC = (e.c || 0) + adjC - adjD;
+            adjBalD = 0;
+        }
+
         return `
                             <tr id="ws-row-${e.acc.replace(/\s/g, '')}">
-                                <td>${e.acc}</td>
-                                <td>${e.d || ''}</td><td>${e.c || ''}</td>
-                                <td></td><td></td>
-                                <td>${e.d || ''}</td><td>${e.c || ''}</td>
-                                <td>${isExp ? e.d : ''}</td><td>${isRev ? e.c : ''}</td>
-                                <td>${isAsset ? e.d : ''}</td><td>${isLibEq ? e.c : ''}</td>
+                                <td style="color: ${getAccColor(e.acc)}; font-weight: bold;">${e.acc}</td>
+                                <td>${e.d ? '$' + e.d.toLocaleString() : ''}</td><td>${e.c ? '$' + e.c.toLocaleString() : ''}</td>
+                                <td class="text-primary">${adjD ? '$' + adjD.toLocaleString() : ''}</td><td class="text-danger">${adjC ? '$' + adjC.toLocaleString() : ''}</td>
+                                <td class="fw-bold">${adjBalD ? '$' + adjBalBalD.toLocaleString() : ''}</td><td class="fw-bold">${adjBalC ? '$' + adjBalC.toLocaleString() : ''}</td>
+                                <td>${isExp ? '$' + adjBalD.toLocaleString() : ''}</td><td>${isRev ? '$' + adjBalC.toLocaleString() : ''}</td>
+                                <td>${isAsset ? '$' + adjBalD.toLocaleString() : ''}</td><td>${isLibEq ? '$' + adjBalC.toLocaleString() : ''}</td>
                             </tr>
                         `;
     }).join('')}
+
                 </tbody>
 
             </table>
