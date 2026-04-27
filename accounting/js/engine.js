@@ -40,23 +40,75 @@ class AccuFlowApp {
         };
         window.onmouseup = () => { isPanning = false; this.viewport.style.cursor = 'grab'; };
 
-        // Zooming
     };
 
-        // UI Control Buttons
-        document.getElementById('reset-view').onclick = () => {
-        state.canvas = { x: 50, y: 50, scale: 0.8 };
-        this.updateTransform();
+        // Zooming
+        this.viewport.onwheel = (e) => {
+    e.preventDefault();
+    const s = state.canvas.scale;
+    const ns = Math.min(Math.max(0.1, s + (e.deltaY > 0 ? -0.1 : 0.1)), 3);
+    const rect = this.viewport.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    state.canvas.x -= (mx - state.canvas.x) * (ns / s - 1);
+    state.canvas.y -= (my - state.canvas.y) * (ns / s - 1);
+    state.canvas.scale = ns;
+    this.updateTransform();
+};
+
+// UI Control Buttons
+document.getElementById('reset-view').onclick = () => {
+    state.canvas = { x: 50, y: 50, scale: 0.8 };
+    this.updateTransform();
+};
+document.getElementById('re-draw').onclick = () => {
+    this.render();
+};
+document.getElementById('auto-layout').onclick = () => {
+    this.autoLayout();
+};
+    }
+
+focusOn(compId) {
+    const card = document.getElementById(compId);
+    if (!card) return;
+    const x = parseFloat(card.style.left);
+    const y = parseFloat(card.style.top);
+    state.canvas.x = -x * state.canvas.scale + (window.innerWidth / 2) - 200;
+    state.canvas.y = -y * state.canvas.scale + (window.innerHeight / 2) - 150;
+    this.updateTransform();
+    card.classList.add('animate-pulse-gold');
+    setTimeout(() => card.classList.remove('animate-pulse-gold'), 2000);
+}
+
+autoLayout() {
+    const layout = {
+        'journal': { x: 100, y: 100 },
+        'ledger': { x: 600, y: 100 },
+        'tb': { x: 1100, y: 100 },
+        'ws': { x: 1600, y: 100 },
+        'is': { x: 2700, y: 100 },
+        'bs': { x: 3200, y: 100 },
+        'eq': { x: 1100, y: -300 },
+        'cf': { x: 600, y: -450 }
     };
-        document.getElementById('re-draw').onclick = () => {
-        this.render();
-    };
+
+    Object.keys(layout).forEach(key => {
+        if (state.positions[key]) state.positions[key] = layout[key];
+        // Ledger accounts are handled dynamically
+        if (key === 'ledger') {
+            const ledgers = Object.keys(state.positions).filter(k => k.startsWith('ledger-'));
+            ledgers.forEach((l, i) => { state.positions[l] = { x: 600, y: 100 + (i * 180) }; });
+        }
+    });
+    this.render();
 }
 
 updateTransform() {
     this.canvas.style.transform = `translate(${state.canvas.x}px, ${state.canvas.y}px) scale(${state.canvas.scale})`;
     if (window.drawConnections) window.drawConnections();
 }
+
 
 
 render() {
