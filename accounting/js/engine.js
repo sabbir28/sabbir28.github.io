@@ -225,7 +225,8 @@ class AccuFlowApp {
 
         // 1. Journal
         const journalHTML = `
-            <div class="table-responsive" style="max-height: 400px;">
+            <div class="table-responsive">
+
                 <table class="table table-sm m-0 small">
                     <thead><tr><th>Date/ID</th><th>Entry</th><th>Amount</th></tr></thead>
                     <tbody>
