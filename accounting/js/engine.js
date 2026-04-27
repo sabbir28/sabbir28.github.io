@@ -106,6 +106,30 @@ class AccuFlowApp {
         if (window.drawConnections) window.drawConnections();
     }
 
+    postTransaction() {
+        const date = document.getElementById('lab-date').value || '2026-XX-XX';
+        const dAcc = document.getElementById('lab-debit').value;
+        const cAcc = document.getElementById('lab-credit').value;
+        const amt = parseFloat(document.getElementById('lab-amount').value) || 0;
+
+        if (amt <= 0 || dAcc === cAcc) {
+            alert("Invalid Transaction: Check amounts and accounts.");
+            return;
+        }
+
+        const data = getActiveYearData();
+        data.transactions.push({
+            id: data.transactions.length + 1,
+            date,
+            debitAcc: dAcc,
+            creditAcc: cAcc,
+            amount: amt
+        });
+
+        this.render();
+    }
+
+
     render() {
         this.container.innerHTML = '';
         const data = getActiveYearData();

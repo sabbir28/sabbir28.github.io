@@ -64,12 +64,13 @@ function createCard(id, title, x, y, content, typeClass = '') {
     const handle = card.querySelector('.grab-handle');
     handle.onmousedown = (e) => {
         e.stopPropagation();
-        const startX = (e.clientX - state.canvas.x) / state.canvas.scale - pos.x;
-        const startY = (e.clientY - state.canvas.y) / state.canvas.scale - pos.y;
+        const vRect = document.getElementById('viewport').getBoundingClientRect();
+        const startX = (e.clientX - vRect.left - state.canvas.x) / state.canvas.scale - pos.x;
+        const startY = (e.clientY - vRect.top - state.canvas.y) / state.canvas.scale - pos.y;
 
         const move = (me) => {
-            const nx = (me.clientX - state.canvas.x) / state.canvas.scale - startX;
-            const ny = (me.clientY - state.canvas.y) / state.canvas.scale - startY;
+            const nx = (me.clientX - vRect.left - state.canvas.x) / state.canvas.scale - startX;
+            const ny = (me.clientY - vRect.top - state.canvas.y) / state.canvas.scale - startY;
             pos.x = nx; pos.y = ny;
             card.style.left = `${nx}px`;
             card.style.top = `${ny}px`;
@@ -83,6 +84,13 @@ function createCard(id, title, x, y, content, typeClass = '') {
         window.addEventListener('mousemove', move);
         window.addEventListener('mouseup', up);
     };
+
+    // Hover Intelligence
+    card.onmouseover = () => {
+        const insight = explanations[Object.keys(explanations).find(k => id.startsWith(k))] || 'Click the help icon for details.';
+        card.setAttribute('title', insight);
+    };
+
 
 
 
