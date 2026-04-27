@@ -12,10 +12,14 @@ class AccuFlowApp {
     }
 
     init() {
+        if (state.years[2026].transactions.length === 0) {
+            loadScenario('ABC_TRADERS');
+        }
         this.setupInteractions();
         this.render();
         window.addEventListener('resize', () => drawConnections());
     }
+
 
     setupInteractions() {
         let isPanning = false;
