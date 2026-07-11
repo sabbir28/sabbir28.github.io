@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>M3U8 Control Center</title>
+
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+
+<style>
+
+body {
+
+    background:
+    radial-gradient(circle at top left,#1e40af,transparent 40%),
+    radial-gradient(circle at bottom right,#7c3aed,transparent 40%),
+    #020617;
+
+}
+
+
+.glass {
+
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body class="min-h-screen text-white p-6">
+
+
+<div class="max-w-7xl mx-auto">
+
+
+<div class="glass rounded-3xl p-8 shadow-2xl">
+
+
+<div class="flex justify-between mb-8">
+
+
+<div>
+
+<h1 class="text-4xl font-bold">
+M3U8 Control Center
+</h1>
+
+<p class="text-gray-300">
+Dynamic streaming task monitor
+</p>
+
+</div>
+
+
+<div class="flex items-center gap-2 bg-blue-500/20 px-5 py-3 rounded-xl">
+
+<i data-lucide="radio"></i>
+
+Online
+
+</div>
+
+
+</div>
+
+
+
+<div class="overflow-x-auto">
+
+
+<table class="w-full">
+
+
+<thead>
+
+<tr class="border-b border-white/20 text-gray-300">
+
+
+<th class="p-4">
+ID
+</th>
+
+
+<th class="p-4">
+Task
+</th>
+
+
+<th class="p-4">
+M3U8 URL
+</th>
+
+
+<th class="p-4">
+Status
+</th>
+
+
+<th class="p-4">
+Action
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="tableBody">
+
+<tr>
+
+<td colspan="5" class="text-center p-10">
+Loading...
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+lucide.createIcons();
+
+
+
+async function loadM3U8(){
+
+
+    try {
+
+
+        const response =
+        await fetch("m3u8.json");
+
+
+        const data =
+        await response.json();
+
+
+
+        const table =
+        document.getElementById("tableBody");
+
+
+        table.innerHTML="";
+
+
+
+        data.forEach(item=>{
+
+
+            let statusClass="";
+
+
+            if(item.status.toLowerCase()=="running")
+                statusClass="text-orange-400";
+
+            else if(item.status.toLowerCase()=="completed")
+                statusClass="text-green-400";
+
+            else
+                statusClass="text-gray-400";
+
+
+
+            table.innerHTML += `
+
+
+<tr class="hover:bg-white/10 transition">
+
+
+<td class="p-4">
+#${item.id}
+</td>
+
+
+<td class="p-4">
+
+<div class="flex gap-2 items-center">
+
+<i data-lucide="video"></i>
+
+${item.task}
+
+</div>
+
+</td>
+
+
+
+<td class="p-4">
+
+
+<div class="bg-black/30 rounded-xl p-3 max-w-xl truncate">
+
+${item.url}
+
+</div>
+
+
+</td>
+
+
+
+
+<td class="p-4 ${statusClass}">
+
+${item.status}
+
+</td>
+
+
+
+<td class="p-4">
+
+
+<button
+
+onclick="copyURL('${item.url}',this)"
+
+class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-xl flex gap-2 items-center">
+
+
+<i data-lucide="copy"></i>
+
+Copy
+
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+        });
+
+
+
+        lucide.createIcons();
+
+
+    }
+
+
+    catch(error){
+
+
+        document.getElementById("tableBody").innerHTML = `
+
+        <tr>
+
+        <td colspan="5" class="text-center text-red-400 p-10">
+
+        Failed to load m3u8.json
+
+        </td>
+
+        </tr>
+
+        `;
+
+
+        console.error(error);
+
+
+    }
+
+
+}
+
+
+
+
+
+function copyURL(url,button){
+
+
+    navigator.clipboard.writeText(url);
+
+
+
+    button.innerHTML =
+    `<i data-lucide="check"></i> Copied`;
+
+
+
+    lucide.createIcons();
+
+
+
+    setTimeout(()=>{
+
+
+        button.innerHTML =
+        `<i data-lucide="copy"></i> Copy`;
+
+
+        lucide.createIcons();
+
+
+    },1500);
+
+
+
+}
+
+
+
+
+
+loadM3U8();
+
+
+</script>
+
+
+</body>
+
+</html>

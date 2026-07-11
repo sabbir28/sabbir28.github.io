@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "task": "Video Download",
+        "url": "https://example.com/video/master.m3u8",
+        "status": "Running"
+    },
+    {
+        "id": 2,
+        "task": "Movie Stream",
+        "url": "https://cdn.example.com/movie/index.m3u8",
+        "status": "Completed"
+    },
+    {
+        "id": 3,
+        "task": "Live Channel",
+        "url": "https://server.com/live/channel.m3u8",
+        "status": "Pending"
+    }
+]
