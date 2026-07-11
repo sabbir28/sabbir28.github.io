@@ -8,7 +8,6 @@
 
 <title>M3U8 Control Center</title>
 
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -34,6 +33,58 @@ body {
 }
 
 
+/* Loading Animation */
+
+#loader {
+
+    transition:
+    opacity .6s ease,
+    visibility .6s ease;
+
+}
+
+
+#loader.hide {
+
+    opacity:0;
+    visibility:hidden;
+
+}
+
+
+.spinner {
+
+    width:80px;
+    height:80px;
+
+    border-radius:50%;
+
+    border:5px solid rgba(255,255,255,.2);
+
+    border-top-color:#3b82f6;
+
+    animation:spin 1s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    from {
+
+        transform:rotate(0deg);
+
+    }
+
+    to {
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+
 </style>
 
 
@@ -43,10 +94,47 @@ body {
 <body class="min-h-screen text-white p-6">
 
 
+
+<!-- Loading Screen -->
+
+<div id="loader"
+class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-xl">
+
+
+<div class="text-center">
+
+
+<div class="spinner mx-auto"></div>
+
+
+<h2 class="mt-6 text-2xl font-bold">
+
+Loading M3U8 Tasks
+
+</h2>
+
+
+<p class="text-gray-400 mt-2">
+
+Fetching streaming data...
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
 <div class="max-w-7xl mx-auto">
 
 
 <div class="glass rounded-3xl p-8 shadow-2xl">
+
 
 
 <div class="flex justify-between mb-8">
@@ -54,27 +142,40 @@ body {
 
 <div>
 
+
 <h1 class="text-4xl font-bold">
+
 M3U8 Control Center
+
 </h1>
 
+
 <p class="text-gray-300">
+
 Dynamic streaming task monitor
+
 </p>
 
+
 </div>
+
 
 
 <div class="flex items-center gap-2 bg-blue-500/20 px-5 py-3 rounded-xl">
 
+
 <i data-lucide="radio"></i>
+
 
 Online
 
+
 </div>
 
 
 </div>
+
+
 
 
 
@@ -85,6 +186,7 @@ Online
 
 
 <thead>
+
 
 <tr class="border-b border-white/20 text-gray-300">
 
@@ -121,17 +223,25 @@ Action
 
 
 
+
 <tbody id="tableBody">
+
 
 <tr>
 
+
 <td colspan="5" class="text-center p-10">
+
 Loading...
+
 </td>
+
 
 </tr>
 
+
 </tbody>
+
 
 
 </table>
@@ -140,10 +250,15 @@ Loading...
 </div>
 
 
+
 </div>
 
 
 </div>
+
+
+
+
 
 
 
@@ -154,68 +269,90 @@ lucide.createIcons();
 
 
 
+
+
 async function loadM3U8(){
 
 
     try {
 
 
-        const response =
-        await fetch("m3u8.json");
+        const response = await fetch("m3u8.json");
 
 
-        const data =
-        await response.json();
-
-
-
-        const table =
-        document.getElementById("tableBody");
-
-
-        table.innerHTML="";
+        const data = await response.json();
 
 
 
-        data.forEach(item=>{
+        const table = document.getElementById("tableBody");
 
 
-            let statusClass="";
+        table.innerHTML = "";
 
 
-            if(item.status.toLowerCase()=="running")
-                statusClass="text-orange-400";
 
-            else if(item.status.toLowerCase()=="completed")
-                statusClass="text-green-400";
+
+        data.forEach(item => {
+
+
+
+            let statusClass = "";
+
+
+
+            if(item.status.toLowerCase() === "running")
+
+                statusClass = "text-orange-400";
+
+
+            else if(item.status.toLowerCase() === "completed")
+
+                statusClass = "text-green-400";
+
 
             else
-                statusClass="text-gray-400";
+
+                statusClass = "text-gray-400";
+
+
 
 
 
             table.innerHTML += `
 
 
-<tr class="hover:bg-white/10 transition">
+
+<tr class="hover:bg-white/10 transition duration-300">
+
 
 
 <td class="p-4">
+
 #${item.id}
+
 </td>
 
 
+
+
 <td class="p-4">
+
 
 <div class="flex gap-2 items-center">
 
+
 <i data-lucide="video"></i>
+
 
 ${item.task}
 
+
 </div>
 
+
 </td>
+
+
 
 
 
@@ -224,7 +361,9 @@ ${item.task}
 
 <div class="bg-black/30 rounded-xl p-3 max-w-xl truncate">
 
+
 ${item.url}
+
 
 </div>
 
@@ -234,11 +373,16 @@ ${item.url}
 
 
 
+
 <td class="p-4 ${statusClass}">
+
 
 ${item.status}
 
+
 </td>
+
+
 
 
 
@@ -254,6 +398,7 @@ class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-xl flex gap-2 items-cente
 
 <i data-lucide="copy"></i>
 
+
 Copy
 
 
@@ -263,7 +408,10 @@ Copy
 </td>
 
 
+
+
 </tr>
+
 
 
 `;
@@ -274,28 +422,62 @@ Copy
 
 
 
+
         lucide.createIcons();
+
+
+
+
+        // Smooth loader hide
+
+        setTimeout(()=>{
+
+
+            document
+            .getElementById("loader")
+            .classList.add("hide");
+
+
+        },500);
+
 
 
     }
 
 
+
     catch(error){
+
 
 
         document.getElementById("tableBody").innerHTML = `
 
-        <tr>
 
-        <td colspan="5" class="text-center text-red-400 p-10">
 
-        Failed to load m3u8.json
+<tr>
 
-        </td>
 
-        </tr>
+<td colspan="5" class="text-center text-red-400 p-10">
 
-        `;
+
+Failed to load m3u8.json
+
+
+</td>
+
+
+</tr>
+
+
+
+`;
+
+
+
+        document
+        .getElementById("loader")
+        .classList.add("hide");
+
 
 
         console.error(error);
@@ -304,7 +486,11 @@ Copy
     }
 
 
+
 }
+
+
+
 
 
 
@@ -313,11 +499,13 @@ Copy
 function copyURL(url,button){
 
 
+
     navigator.clipboard.writeText(url);
 
 
 
     button.innerHTML =
+
     `<i data-lucide="check"></i> Copied`;
 
 
@@ -326,14 +514,18 @@ function copyURL(url,button){
 
 
 
+
     setTimeout(()=>{
 
 
         button.innerHTML =
+
         `<i data-lucide="copy"></i> Copy`;
 
 
+
         lucide.createIcons();
+
 
 
     },1500);
@@ -346,10 +538,13 @@ function copyURL(url,button){
 
 
 
+
 loadM3U8();
 
 
+
 </script>
+
 
 
 </body>
