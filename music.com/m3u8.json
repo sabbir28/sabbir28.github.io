@@ -2,14 +2,14 @@
     {
         "id": 1,
         "task": "Bangla Music",
-        "url": "https://sabbir28.github.io/music.com/ftp/music_radio.m3u8",
+        "url": "https://raw.githubusercontent.com/sabbir28/sabbir28.github.io/main/music.com/ftp/music_radio.m3u8",
         "status": "Running"
     },
     {
         "id": 2,
-        "task": "Movie Stream",
-        "url": "https://cdn.example.com/movie/index.m3u8",
-        "status": "Completed"
+        "task": "Lofi Song",
+        "url": "https://raw.githubusercontent.com/sabbir28/sabbir28.github.io/main/music.com/ftp/lofi.m3u8",
+        "status": "Running"
     },
     {
         "id": 3,
