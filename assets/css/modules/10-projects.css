@@ -481,4 +481,200 @@
     }
 }
 
+/* ==============================================================================
+   12D. DEVELOPER LAB — OPEN SOURCE & UTILITY CODING PROJECTS
+   ============================================================================== */
+.dev-lab-section {
+    background: #081a24;
+    border-top: 1px solid var(--border-dark);
+    border-bottom: 1px solid var(--border-dark);
+    padding: 100px 0;
+    color: var(--white);
+    position: relative;
+}
+
+.dev-lab-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 48px;
+}
+
+.dev-lab-card {
+    background: rgba(14, 39, 54, 0.7);
+    border: 1px solid rgba(200, 168, 91, 0.2);
+    border-radius: 4px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(8px);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dev-lab-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--green-accent);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 15px rgba(15, 168, 137, 0.15);
+}
+
+.dev-lab-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.dev-terminal-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dev-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.dev-dot.red { background: #ff5f56; }
+.dev-dot.yellow { background: #ffbd2e; }
+.dev-dot.green { background: #27c93f; }
+
+.dev-lang-badge {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.1);
+    border: 1px solid rgba(200, 168, 91, 0.3);
+    padding: 2px 8px;
+    border-radius: 2px;
+}
+
+.dev-lab-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.25;
+}
+
+.dev-lab-subtitle {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green-accent);
+    margin-bottom: 12px;
+}
+
+.dev-lab-desc {
+    font-size: 13.5px;
+    color: var(--text-light-muted);
+    line-height: 1.65;
+    margin-bottom: 18px;
+}
+
+.dev-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 22px;
+}
+
+.dev-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-light-muted);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2px 7px;
+    border-radius: 2px;
+}
+
+.dev-lab-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dev-inspect-btn {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-light-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0;
+    transition: color var(--transition-fast);
+}
+
+.dev-inspect-btn:hover {
+    color: var(--gold-champagne);
+}
+
+.dev-live-link {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--green-accent);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.dev-live-link:hover {
+    color: var(--white);
+    transform: translateX(3px);
+}
+
+.modal-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--navy-midnight);
+    color: var(--gold-champagne);
+    border: 1px solid var(--gold-champagne);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    margin-top: 8px;
+}
+
+.modal-action-btn:hover {
+    background: var(--gold-champagne);
+    color: var(--navy-midnight);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(200, 168, 91, 0.3);
+}
+
+@media (max-width: 992px) {
+    .dev-lab-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .dev-lab-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 

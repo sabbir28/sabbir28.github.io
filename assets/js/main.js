@@ -1791,6 +1791,90 @@
             location: "Govt. Brojomohun College, Barishal",
             image: "assets/MyPhato/465783742_1795988934544627_8139255824473982833_n.jpg",
             imageAlt: "Md. Sabbir Hoshen smiling outdoors on campus following an academic discussion"
+        },
+        omorekushe: {
+            category: "NATIVE SYSTEMS PROGRAMMING // WIN32",
+            title: "Omor Ekushe — Win32 Bengali Keyboard Engine",
+            status: "OPEN-SOURCE SOFTWARE UTILITY",
+            summary: "A modern, ultra-lightweight, 100% native Win32 Bengali keyboard engine featuring Avro phonetic typing algorithms, XML layout maps, and full options configuration. Built as an open-source linguistic tool for Windows.",
+            points: [
+                "<strong>Win32 Hook Architecture:</strong> Implements system-level keyboard hooks to capture and transform keystrokes in real-time.",
+                "<strong>Phonetic Mapping Algorithm:</strong> Powered by Avro phonetic parsing rules and XML-based custom layout mapping definitions.",
+                "<strong>Zero-Bloat Native Performance:</strong> Compiled for Windows with zero external runtime dependencies and minimal memory consumption."
+            ],
+            tools: "Win32 API &bull; C / C++ &bull; Avro Phonetic Algorithm &bull; XML Layouts",
+            link: "https://sabbir28.github.io/OmorEkushe/",
+            linkText: "Launch Omor Ekushe Web Portal &nearr;"
+        },
+        pylua: {
+            category: "COMPILER ARCHITECTURE &amp; RUNTIME",
+            title: "PyLua — Scripting Language &amp; Virtual Machine",
+            status: "LANGUAGE DESIGN EXPERIMENT",
+            summary: "A modern scripting language and bytecode virtual machine runtime experiment combining Python syntax elegance with Lua's embeddable execution efficiency. Features a complete language specification, opcode tables, and documentation portal.",
+            points: [
+                "<strong>Lexical &amp; Syntax Pipeline:</strong> Implements a custom tokenizer, abstract syntax tree (AST) generator, and semantic analyzer.",
+                "<strong>Bytecode Virtual Machine:</strong> Custom stack/register-based opcode set designed for fast instruction dispatch and lightweight memory footprint.",
+                "<strong>Comprehensive Documentation:</strong> Full documentation portal covering grammar specifications, standard libraries, and embed APIs."
+            ],
+            tools: "Python &bull; Lua Runtime &bull; Bytecode Compiler &bull; AST Parsing &bull; VM Architecture",
+            link: "https://sabbir28.github.io/PyLua/",
+            linkText: "Explore PyLua Documentation Portal &nearr;"
+        },
+        gftp: {
+            category: "DEV-OPS &amp; CLI AUTOMATION",
+            title: "gftp — Git-Aware Differential FTP Sync CLI",
+            status: "PRODUCTION CLI UTILITY",
+            summary: "A high-performance C++ command-line tool built for Windows that accelerates website and codebase deployments by performing Git commit differential FTP synchronization in a single command, avoiding redundant uploads.",
+            points: [
+                "<strong>Git Differential Parsing:</strong> Queries local Git commit trees to isolate only modified, added, or deleted files since the last deployment.",
+                "<strong>Automated FTP Upload Pipeline:</strong> Connects to remote FTP servers, mirrors directory structures, and transfers differential payloads with speed.",
+                "<strong>Windows CLI Ergonomics:</strong> Single-binary execution with command-line flags, color-coded terminal output, and credential security."
+            ],
+            tools: "C++17 &bull; Win32 Sockets &bull; Git Tree Parsing &bull; FTP Protocol Engine",
+            link: "https://sabbir28.github.io/gftp/",
+            linkText: "View gftp CLI Docs &amp; Installation &nearr;"
+        },
+        casabbir: {
+            category: "FULL-STACK WEB &amp; EDUCATION",
+            title: "CA Sabbir — Chartered Accountancy Prep Portal",
+            status: "WEB APPLICATION &amp; STUDY HUB",
+            summary: "A dedicated cloud-deployed web workspace and resource hub designed to streamline Chartered Accountancy (ICAB) curriculum preparation, syllabus tracking, revision notes, and study scheduling.",
+            points: [
+                "<strong>Curriculum Syllabus Tracker:</strong> Interactive progress checklists covering ICAB Certificate Level modules and statutory chapters.",
+                "<strong>Study Resource Library:</strong> Structured repository indexing accounting standards summaries, taxation notes, and past examination problems.",
+                "<strong>Cloud Deployment:</strong> Hosted on Vercel with responsive mobile-first interface and fast client-side rendering."
+            ],
+            tools: "Next.js / React &bull; Vercel Cloud Hosting &bull; ICAB Certificate Curriculum",
+            link: "https://casabbir.vercel.app/",
+            linkText: "Access CA Sabbir Web App &nearr;"
+        },
+        timer420: {
+            category: "DESKTOP UTILITY &amp; PRODUCTIVITY",
+            title: "Timer420 — Transparent Windows Work Timer Overlay",
+            status: "NATIVE DESKTOP UTILITY",
+            summary: "A high-performance, non-intrusive, transparent desktop work timer for Windows 10 &amp; 11 built in pure C11 with the native Win32 API. Designed for distraction-free deep work, Pomodoro sessions, and time logging.",
+            points: [
+                "<strong>Transparent DWM Overlay:</strong> Renders seamlessly above desktop windows without stealing focus or interrupting keyboard input.",
+                "<strong>Pure C11 Performance:</strong> Ultra-minimal CPU and RAM footprint utilizing direct GDI/DWM composition APIs.",
+                "<strong>Web Interactive Simulator:</strong> Companion web simulation portal showcasing live timer configurations and feature previews."
+            ],
+            tools: "Pure C11 &bull; Win32 Direct API &bull; DWM Desktop Composition &bull; Web Simulator",
+            link: "https://sabbir28.github.io/Timer/",
+            linkText: "Launch Timer420 Portal &amp; Simulator &nearr;"
+        },
+        notepadlite: {
+            category: "DESKTOP APPLICATION &amp; OPEN SOURCE",
+            title: "NotepadLite — Native Windows Text Editor (v26.02.62)",
+            status: "BINARY RELEASE &amp; REPOSITORY",
+            summary: "A lightweight, zero-bloat native Windows text editor release engineered for instant cold startup, distraction-free document drafting, and essential status bar metrics.",
+            points: [
+                "<strong>Instantaneous Startup:</strong> Direct Win32 GUI window creation bypassing heavy application frameworks for instant file opening.",
+                "<strong>Status Bar &amp; Metrics:</strong> Real-time line and column tracking, character counts, and encoding indicators.",
+                "<strong>Published GitHub Release:</strong> Packaged binary release (v26.02.62) with version tracking, bug fixes, and source distribution."
+            ],
+            tools: "C / C++ &bull; Win32 GUI &bull; GitHub Releases &bull; Windows Binary Packaging",
+            link: "https://github.com/sabbir28/Notepad/releases/tag/v26.02.62",
+            linkText: "Download NotepadLite Release (v26.02.62) &nearr;"
         }
     };
 
@@ -1812,6 +1896,14 @@
             </div>
         ` : '';
 
+        const actionBtnHtml = item.link ? `
+            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-light);">
+                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="modal-action-btn">
+                    ${item.linkText || 'Open External Resource &nearr;'}
+                </a>
+            </div>
+        ` : '';
+
         body.innerHTML = `
             ${imageHtml}
             <div class="modal-category">${item.category}</div>
@@ -1822,7 +1914,7 @@
             </p>
             <div class="modal-section">
                 <div class="modal-section-title">
-                    Key Highlights &amp; Field Observations
+                    Key Highlights &amp; Technical Architecture
                 </div>
                 <ul class="modal-list">
                     ${item.points.map((pt) => `<li>${pt}</li>`).join("")}
@@ -1840,6 +1932,7 @@
                     <strong>Location:</strong> ${item.location}
                 </p>` : ''}
             </div>
+            ${actionBtnHtml}
         `;
 
         modal.classList.add("active");
