@@ -1,311 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume | MD. Sabbir Hoshen Howlader</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --resume-bg: #ffffff;
-            --resume-text: #1f2937;
-            --resume-accent: #3b82f6;
-        }
+    <title>MD. Sabbir Hoshen Howlader | Executive Curriculum Vitae</title>
+    <meta name="description" content="Curriculum Vitae of MD. Sabbir Hoshen Howlader — Chartered Accountancy Student & Financial Data Strategist.">
+    
+    <!-- Google Fonts: Playfair Display + DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-        body.resume-page {
-            background: #f3f4f6;
-            margin: 0;
-            padding: 2rem 0;
-            font-family: 'Inter', sans-serif;
-        }
+    <!-- Brand Vector Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/icon/favicon.svg">
 
-        .resume-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--resume-bg);
-            padding: 3rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            color: var(--resume-text);
-            position: relative;
-        }
+    <!-- Executive CV Stylesheet -->
+    <link rel="stylesheet" href="assets/css/resume.css">
 
-        .print-btn {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: var(--resume-accent);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            z-index: 100;
-            transition: transform 0.2s ease;
-        }
-
-        .print-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .resume-header {
-            border-bottom: 2px solid #f3f4f6;
-            padding-bottom: 2rem;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .resume-header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .resume-header p {
-            color: var(--resume-accent);
-            font-weight: 600;
-            margin: 5px 0 0;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 3px solid #f3f4f6;
-            margin-right: 20px;
-        }
-
-        .header-main {
-            display: flex;
-            align-items: center;
-        }
-
-
-        .contact-info {
-            text-align: right;
-            font-size: 0.9rem;
-            color: #6b7280;
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--resume-accent);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .resume-section {
-            margin-bottom: 2.5rem;
-        }
-
-        .exp-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .exp-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-
-        .exp-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .exp-date {
-            color: #9ca3af;
-            font-size: 0.85rem;
-        }
-
-        .exp-desc {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #4b5563;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .skill-tag {
-            background: #f9fafb;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            border-left: 3px solid var(--resume-accent);
-        }
-
-        @media print {
-            body.resume-page {
-                background: white;
-                padding: 0;
-            }
-
-            .resume-container {
-                box-shadow: none;
-                max-width: 100%;
-                padding: 0;
-            }
-
-            .print-btn {
-                display: none;
-            }
-        }
-
-        .home-link {
-            position: fixed;
-            top: 2rem;
-            left: 2rem;
-            color: #6b7280;
-            text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-    </style>
+    <!-- Deferred CV Script -->
+    <script defer src="assets/js/resume.js"></script>
 </head>
+<body>
 
-<body class="resume-page">
-    <a href="index.html" class="home-link"><i class="bi bi-arrow-left"></i> Home</a>
+    <!-- Screen Navigation & Print Control -->
+    <div class="cv-top-bar">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <a href="index.html" class="back-link">&larr; Home</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="about.html" class="back-link">About</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="capabilities.html" class="back-link">Capabilities</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="timeline.html" class="back-link">Timeline</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="projects.html" class="back-link">Projects</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="research.html" class="back-link">Research</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="skills.html" class="back-link">Toolkit</a>
+            <span style="color: var(--text-muted); font-size: 11px;">&bull;</span>
+            <a href="contact.html" class="back-link">Contact</a>
+        </div>
+        <div class="action-buttons">
+            <button id="btnPrintCv" class="btn-cv" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Print / Save as PDF</span>
+            </button>
+            <a href="mailto:sabbirb228@gmail.com" class="btn-cv btn-cv-accent">
+                <span>Contact via Email</span>
+            </a>
+        </div>
+    </div>
 
-    <button onclick="window.print()" class="print-btn">
-        <i class="bi bi-printer"></i> Print Resume
-    </button>
-
-    <div class="resume-container">
-        <header class="resume-header">
-            <div class="header-main">
-                <img src="assets/MyPhato/548302483_2038758410267677_7757873842697085935_n.jpg"
-                    alt="MD. SABBIR HOSHEN HOWLADER" class="profile-img">
+    <!-- Printable Executive CV Paper -->
+    <main class="cv-paper">
+        <!-- Header -->
+        <header class="cv-header">
+            <div class="cv-header-intro">
+                <img src="assets/img/executive-headshot.jpg" alt="MD. Sabbir Hoshen" class="cv-avatar" onerror="this.onerror=null; this.src='assets/img/main_profile.jpg';">
                 <div>
-                    <h1>MD. SABBIR HOSHEN HOWLADER</h1>
-                    <p>Chartered Accountancy Student & Financial Data Strategist</p>
+                    <h1 class="cv-name">MD. SABBIR HOSHEN HOWLADER</h1>
+                    <div class="cv-tagline">Chartered Accountancy Student &bull; Accounting Undergraduate</div>
+                    <div class="cv-motto">&ldquo;Finance is my domain. Technology is my tool.&rdquo;</div>
                 </div>
-
             </div>
-            <div class="contact-info">
-                <div><i class="bi bi-geo-alt"></i> Bangladesh</div>
-                <div><i class="bi bi-telephone"></i> +880 1614-933357</div>
-                <div><i class="bi bi-envelope"></i> sabbir28.github.io</div>
-                <div><i class="bi bi-link-45deg"></i> github.com/sabbir28</div>
+
+            <div class="cv-contact">
+                <div><strong>Location:</strong> Barishal / Dhaka, Bangladesh</div>
+                <div><strong>Phone / WhatsApp:</strong> +880 1614-933357</div>
+                <div><strong>Email:</strong> <a href="mailto:sabbirb228@gmail.com">sabbirb228@gmail.com</a></div>
+                <div><strong>Website:</strong> <a href="https://sabbir28.github.io">sabbir28.github.io</a></div>
+                <div><strong>GitHub:</strong> <a href="https://github.com/sabbir28">github.com/sabbir28</a></div>
             </div>
         </header>
 
-
-
-        <section class="resume-section">
-            <h2 class="section-title"><i class="bi bi-person"></i> Executive Summary</h2>
-            <p class="exp-desc">
-                Analytical professional currently pursuing <strong>Chartered Accountancy (CA)</strong> and a BBA in
-                Accounting.
-                Applying high-level computational logic and Data Science principles to corporate fiscal strategy. Lead
-                Strategist of the AccuFlow financial visualization suite.
+        <!-- Executive Summary -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">01 / Executive Profile</h2>
+            <p class="cv-item-desc">
+                Analytical and detail-oriented Accounting professional pursuing <strong>Chartered Accountancy (CA Certificate Level)</strong> under the Institute of Chartered Accountants of Bangladesh (ICAB) alongside a <strong>BBA in Accounting</strong>. Equipped with practical mastery of double-entry bookkeeping, trial balance preparation, IFRS compliance, financial statement analysis, and internal controls. Distinguishes traditional accounting practices by integrating computational workflows &mdash; including advanced Excel financial modeling, relational SQL databases, and automated Python data cleaning &mdash; to deliver actionable fiscal strategy and audit-ready verification.
             </p>
         </section>
 
-
-
-        <section class="resume-section">
-            <h2 class="section-title"><i class="bi bi-mortarboard"></i> Academic & Professional Education</h2>
-            <div class="exp-item">
-                <div class="exp-header"><span class="exp-title">Chartered Accountancy (CA)</span><span
-                        class="exp-date">Currently Pursuing</span></div>
-                <div class="exp-desc">Advanced professional training in auditing, taxation, and financial management.
+        <!-- Academic & Professional Education -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">02 / Academic &amp; Professional Education</h2>
+            
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Chartered Accountancy (CA) &mdash; Certificate Level</span>
+                    <span class="cv-item-date">2026 &mdash; Present</span>
                 </div>
+                <div class="cv-item-sub">The Institute of Chartered Accountants of Bangladesh (ICAB)</div>
+                <p class="cv-item-desc">
+                    Comprehensive professional qualifications covering Financial Accounting, Principles of Taxation, Commercial &amp; Corporate Law, and Assurance &amp; Auditing Standards.
+                </p>
             </div>
-            <div class="exp-item">
-                <div class="exp-header"><span class="exp-title">BBA (Honours) in Accounting</span><span
-                        class="exp-date">Current</span></div>
-                <div class="exp-desc">Government B.M. College, Barishal. Focus on corporate governance and fiscal
-                    analysis.</div>
+
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Bachelor of Business Administration (BBA) in Accounting (Honours)</span>
+                    <span class="cv-item-date">2026 &mdash; Present</span>
+                </div>
+                <div class="cv-item-sub">National University &bull; Government Brojomohun (B.M.) College, Barishal</div>
+                <p class="cv-item-desc">
+                    Four-year undergraduate program focusing on corporate governance, managerial accounting, cost allocation, fiscal strategy, and quantitative business statistics.
+                </p>
             </div>
-            <div class="exp-item">
-                <div class="exp-header"><span class="exp-title">Higher Secondary Certificate (HSC) -
-                        Commerce</span><span class="exp-date">GPA: 4.17</span></div>
-                <div class="exp-desc">Subidkhali Government College. Major in Business Studies and Finance.</div>
+
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Higher Secondary Certificate (HSC) &mdash; Business Studies</span>
+                    <span class="cv-item-date">2024</span>
+                </div>
+                <div class="cv-item-sub">Subidkhali Government College &bull; GPA: 4.17 / 5.00</div>
+                <p class="cv-item-desc">
+                    Specialized commerce curriculum in Accounting, Principles of Finance, Banking &amp; Insurance, and Business Organization.
+                </p>
             </div>
-            <div class="exp-item">
-                <div class="exp-header"><span class="exp-title">Secondary School Certificate (SSC) -
-                        Commerce</span><span class="exp-date">GPA: 4.28</span></div>
-                <div class="exp-desc">Subidkhali R.E. Pilot Secondary School. Foundation in business principles.</div>
+
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Secondary School Certificate (SSC) &mdash; Business Studies</span>
+                    <span class="cv-item-date">2022</span>
+                </div>
+                <div class="cv-item-sub">Subidkhali Govt Rahman Ishaque Pilot High School &bull; Barishal Board &bull; GPA: 4.28 / 5.00</div>
+                <p class="cv-item-desc">
+                    Foundational coursework in commerce, double-entry bookkeeping fundamentals, and mathematics.
+                </p>
             </div>
         </section>
 
-        <section class="resume-section">
-            <h2 class="section-title"><i class="bi bi-stars"></i> Extracurricular & Leadership</h2>
-            <div class="exp-item">
-                <div class="exp-header"><span class="exp-title">Rover Scout</span><span class="exp-date">Active
-                        Member</span></div>
-                <div class="exp-desc">Disciplined leadership training and community service engagement through the Rover
-                    Scout Unit. Focused on teamwork and social responsibility.</div>
+        <!-- Core Competencies -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">03 / Analytical &amp; Technical Toolkit</h2>
+            <div class="cv-skill-grid">
+                <div class="cv-skill-box">
+                    <div class="cv-skill-cat">Financial &amp; Managerial Accounting</div>
+                    <div class="cv-skill-list">
+                        IFRS/IAS Standards &bull; Double-Entry General Ledger &bull; Trial Balance &bull; Financial Statement Preparation &bull; Cost-Volume-Profit (CVP) Analysis &bull; Bank Reconciliations
+                    </div>
+                </div>
+
+                <div class="cv-skill-box">
+                    <div class="cv-skill-cat">Financial Analysis &amp; Modeling</div>
+                    <div class="cv-skill-list">
+                        DuPont ROE Decomposition &bull; Ratio Analysis (Liquidity, Solvency, Turnover) &bull; Working Capital Optimization &bull; Cash Flow Forecasting &bull; Budget Variance Analysis
+                    </div>
+                </div>
+
+                <div class="cv-skill-box">
+                    <div class="cv-skill-cat">Microsoft Excel (Advanced)</div>
+                    <div class="cv-skill-list">
+                        Financial Modeling &bull; INDEX/MATCH &bull; XLOOKUP &bull; Nested Logic &bull; Dynamic PivotTables &bull; Power Query ETL &bull; Sensitivity Tables &bull; Executive Dashboards
+                    </div>
+                </div>
+
+                <div class="cv-skill-box">
+                    <div class="cv-skill-cat">Technology &amp; Automation</div>
+                    <div class="cv-skill-list">
+                        Python for Data Science (Pandas, Data Cleaning) &bull; MySQL Relational Queries &amp; Extraction &bull; QuickBooks Accounting Software &bull; Audit Anomaly Detection
+                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- Selected Projects & Case Studies -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">04 / Selected Projects &amp; Analytical Studies</h2>
+            
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Corporate Financial Statement &amp; Ratio Analysis</span>
+                    <span class="cv-item-date">Excel &bull; Financial Modeling</span>
+                </div>
+                <p class="cv-item-desc">
+                    Conducted multi-year comparative horizontal and vertical analysis of corporate filings. Implemented 3-stage DuPont decomposition to isolate profit margin, asset turnover, and equity multiplier effects on corporate return on equity.
+                </p>
+            </div>
 
-        <section class="resume-section">
-            <h2 class="section-title"><i class="bi bi-graph-up"></i> Analytical & Strategic Expertise</h2>
-            <div class="skills-grid">
-                <div class="skill-tag">
-                    <strong>Analytical Computing:</strong> Advanced Excel (VBA/Modeling), Python for Data Science,
-                    Algorithmic Financial Processing.
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">AccuFlow Computerized Accounting &amp; Ledger Suite</span>
+                    <span class="cv-item-date">Workflow Architecture &bull; QuickBooks</span>
                 </div>
-                <div class="skill-tag">
-                    <strong>Financial Strategy:</strong> Corporate Accounting Cycle, IFRS Compliance, Multi-Year
-                    Forecasting & Trend Analysis.
+                <p class="cv-item-desc">
+                    Engineered an end-to-end accounting simulation executing journal transactions, automated general ledger posting, and synchronized balance sheet compilation with strict internal control verifications.
+                </p>
+            </div>
+
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Automated Financial Data Ingestion &amp; Audit Tool</span>
+                    <span class="cv-item-date">Python &bull; MySQL &bull; Automation</span>
                 </div>
-                <div class="skill-tag">
-                    <strong>Systems Architecture:</strong> Designing complex financial simulators (AccuFlow), Digital
-                    Transformation Strategy.
-                </div>
-                <div class="skill-tag">
-                    <strong>Leadership:</strong> Rover Scout Leadership, Strategic Project Management,
-                    Technical-to-Business Translation.
-                </div>
+                <p class="cv-item-desc">
+                    Built a Python algorithmic verification script connecting to MySQL databases to parse transaction ledgers against external bank records, successfully identifying out-of-balance entries and duplicate postings.
+                </p>
             </div>
         </section>
 
-    </div>
+        <!-- Research & Sector Inquiries -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">05 / Research &amp; Sector Inquiries</h2>
+            
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Investment &amp; Output Analysis</span>
+                    <span class="cv-item-date">Capital Productivity</span>
+                </div>
+                <p class="cv-item-desc">
+                    Empirical study investigating capital expenditure efficiency, incremental capital-output ratios (ICOR), and sales growth velocity in developing manufacturing sectors.
+                </p>
+            </div>
 
-    <!-- Theme synchronization script -->
-    <script>
-        if (localStorage.getItem('theme') === 'light') {
-            document.documentElement.style.setProperty('--resume-bg', '#ffffff');
-            document.documentElement.style.setProperty('--resume-text', '#1f2937');
-        } else {
-            // Dark mode adjustment for screen viewing
-            if (window.matchMedia && !window.matchMedia('print').matches) {
-                document.body.style.background = '#111827';
-                document.querySelector('.resume-container').style.background = '#1f2937';
-                document.querySelector('.resume-container').style.color = '#f3f4f6';
-                document.querySelectorAll('.exp-desc').forEach(el => el.style.color = '#d1d5db');
-                document.querySelectorAll('.skill-tag').forEach(el => el.style.background = '#374151');
-            }
-        }
-    </script>
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Bangladesh Industrial Sector Comparative Analysis</span>
+                    <span class="cv-item-date">Sector Benchmarking</span>
+                </div>
+                <p class="cv-item-desc">
+                    Comparative financial analysis examining liquidity resilience, working capital buffers, and debt coverage across Bangladeshi RMG, Pharmaceuticals, and Commercial Banking sectors.
+                </p>
+            </div>
+        </section>
+
+        <!-- Leadership & Extracurricular Activities -->
+        <section class="cv-section">
+            <h2 class="cv-section-title">06 / Leadership &amp; Extracurricular Activities</h2>
+            
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title"><img src="assets/icon/scouts-logo.svg" alt="Scouts Logo" style="width: 15px; height: 15px; vertical-align: -2px; margin-right: 6px; display: inline-block;">Active Member &mdash; Rover Scout Unit</span>
+                    <span class="cv-item-date">B.M. College Unit</span>
+                </div>
+                <p class="cv-item-desc">
+                    Participated in structured leadership development, community service, crisis coordination, and teamwork exercises fostering discipline, social accountability, and ethical citizenship.
+                </p>
+            </div>
+
+            <div class="cv-item">
+                <div class="cv-item-header">
+                    <span class="cv-item-title">Debater &mdash; Accounting Department Debating Club</span>
+                    <span class="cv-item-date">B.M. College</span>
+                </div>
+                <p class="cv-item-desc">
+                    Engaged in parliamentary debates on macroeconomic policies, corporate tax reforms, and business ethics, strengthening oral presentation and rapid analytical synthesis.
+                </p>
+            </div>
+        </section>
+    </main>
+
 </body>
-
 </html>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <defs>
+        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0A202D" />
+            <stop offset="100%" stop-color="#102C3D" />
+        </linearGradient>
+        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#E5C77A" />
+            <stop offset="100%" stop-color="#C8A85B" />
+        </linearGradient>
+    </defs>
+    
+    <!-- Background Shield Polygon -->
+    <polygon points="32,3 61,18 61,46 32,61 3,46 3,18" fill="url(#shieldGrad)" stroke="url(#goldGrad)" stroke-width="2" />
+    
+    <!-- Inner Accent Border -->
+    <polygon points="32,7 57,20 57,44 32,57 7,44 7,20" fill="none" stroke="#0FA889" stroke-width="1" stroke-opacity="0.4" />
+    
+    <!-- Geometric 'S' monogram in Gold -->
+    <path d="M22 25 C22 20, 31 19, 33 24 C34 29, 22 31, 22 37 C22 43, 34 43, 34 38" fill="none" stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round" />
+    
+    <!-- Geometric 'H' monogram in Emerald -->
+    <line x1="39" y1="20" x2="39" y2="44" stroke="#0FA889" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="47" y1="20" x2="47" y2="44" stroke="#0FA889" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="39" y1="32" x2="47" y2="32" stroke="#0FA889" stroke-width="2.5" />
+</svg>

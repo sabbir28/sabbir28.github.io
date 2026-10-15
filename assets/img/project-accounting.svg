@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#075b4d" />
+      <stop offset="100%" stop-color="#0a202d" />
+    </linearGradient>
+    <linearGradient id="sheetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="380" fill="url(#bgGrad2)" />
+
+  <!-- Ledger Sheet Frame -->
+  <g transform="translate(45, 30)">
+    <!-- Header -->
+    <rect x="0" y="0" width="510" height="40" rx="4" fill="#0a202d" fill-opacity="0.6" stroke="#dfe4e2" stroke-opacity="0.2" />
+    <text x="20" y="25" fill="#c8a85b" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">GENERAL LEDGER &amp; TRIAL BALANCE</text>
+    
+    <rect x="380" y="8" width="115" height="24" rx="12" fill="#075b4d" stroke="#4ade80" stroke-width="1" />
+    <text x="395" y="24" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="600">BALANCED: $0.00</text>
+
+    <!-- Table Container -->
+    <rect x="0" y="50" width="510" height="260" rx="4" fill="url(#sheetGrad)" stroke="#dfe4e2" stroke-opacity="0.15" />
+
+    <!-- Table Column Headers -->
+    <rect x="0" y="50" width="510" height="34" fill="#0a202d" fill-opacity="0.8" />
+    <text x="20" y="72" fill="#aebdc5" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1">ACCOUNT CODE &amp; DESCRIPTION</text>
+    <text x="310" y="72" fill="#aebdc5" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1">DEBIT ($)</text>
+    <text x="420" y="72" fill="#aebdc5" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1">CREDIT ($)</text>
+
+    <!-- Row 1: Cash & Equivalents -->
+    <line x1="0" y1="84" x2="510" y2="84" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="20" y="112" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="12" font-weight="500">1010 - Cash &amp; Bank Balances</text>
+    <text x="310" y="112" fill="#4ade80" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="600">84,500.00</text>
+    <text x="420" y="112" fill="#718096" font-family="'DM Sans', Arial, sans-serif" font-size="12">-</text>
+
+    <!-- Row 2: Accounts Receivable -->
+    <line x1="0" y1="128" x2="510" y2="128" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="20" y="154" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="12" font-weight="500">1020 - Accounts Receivable</text>
+    <text x="310" y="154" fill="#4ade80" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="600">42,120.00</text>
+    <text x="420" y="154" fill="#718096" font-family="'DM Sans', Arial, sans-serif" font-size="12">-</text>
+
+    <!-- Row 3: Accounts Payable -->
+    <line x1="0" y1="170" x2="510" y2="170" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="20" y="196" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="12" font-weight="500">2010 - Accounts Payable (Current)</text>
+    <text x="310" y="196" fill="#718096" font-family="'DM Sans', Arial, sans-serif" font-size="12">-</text>
+    <text x="420" y="196" fill="#c8a85b" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="600">31,800.00</text>
+
+    <!-- Row 4: Retained Earnings -->
+    <line x1="0" y1="212" x2="510" y2="212" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="20" y="238" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="12" font-weight="500">3010 - Common Equity &amp; Retained</text>
+    <text x="310" y="238" fill="#718096" font-family="'DM Sans', Arial, sans-serif" font-size="12">-</text>
+    <text x="420" y="238" fill="#c8a85b" font-family="'Playfair Display', Georgia, serif" font-size="14" font-weight="600">94,820.00</text>
+
+    <!-- Total Footer Row -->
+    <rect x="0" y="260" width="510" height="50" rx="0" fill="#0a202d" />
+    <line x1="0" y1="260" x2="510" y2="260" stroke="#c8a85b" stroke-width="1.5" />
+    <text x="20" y="291" fill="#c8a85b" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">TRIAL BALANCE TOTALS</text>
+    <text x="310" y="291" fill="#ffffff" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="700">$126,620.00</text>
+    <text x="420" y="291" fill="#ffffff" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="700">$126,620.00</text>
+  </g>
+</svg>

@@ -1,0 +1,255 @@
+/* ==============================================================================
+   04. SCROLL PROGRESS BAR
+   ============================================================================== */
+.scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2.5px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green-accent), var(--gold-champagne));
+    z-index: 100001;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px rgba(200, 168, 91, 0.6);
+}
+
+
+/* ==============================================================================
+   06. LUXURY FIXED NAVIGATION (ALWAYS ATTACHED AT TOP)
+   ============================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 10000;
+    background: rgba(248, 248, 244, 0.92);
+    border-bottom: 1px solid var(--border-light);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.navbar.scrolled {
+    background: rgba(10, 32, 45, 0.94);
+    border-bottom: 1px solid rgba(200, 168, 91, 0.15);
+    box-shadow: 0 10px 30px rgba(5, 16, 23, 0.25);
+}
+
+.navbar.scrolled .brand-title {
+    color: var(--white);
+}
+
+.navbar.scrolled .brand-sub {
+    color: var(--gold-champagne);
+}
+
+.navbar.scrolled .nav-links a {
+    color: var(--text-light-muted);
+}
+
+.navbar.scrolled .nav-links a:hover,
+.navbar.scrolled .nav-links a.active {
+    color: var(--white);
+}
+
+.navbar.scrolled .nav-cta {
+    border-color: var(--gold-champagne);
+    color: var(--gold-champagne);
+}
+
+.navbar.scrolled .nav-cta:hover {
+    background: var(--gold-champagne);
+    color: var(--navy-midnight);
+}
+
+.nav-inner {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-monogram {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--gold-champagne);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.08);
+}
+
+.brand-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--navy-midnight);
+    white-space: nowrap;
+    line-height: 1.15;
+    transition: color var(--transition-fast);
+}
+
+.brand-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green-emerald);
+    transition: color var(--transition-fast);
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+}
+
+.nav-links a {
+    position: relative;
+    color: var(--text-primary);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 26px 0;
+    transition: color var(--transition-fast);
+    white-space: nowrap;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 20px;
+    width: 0;
+    height: 2px;
+    background: var(--green-emerald);
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.navbar.scrolled .nav-links a::after {
+    background: var(--gold-champagne);
+}
+
+.nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border: 1px solid var(--green-emerald);
+    color: var(--green-emerald);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+}
+
+.nav-cta:hover {
+    background: var(--green-emerald);
+    color: var(--white);
+    transform: translateY(-1px);
+}
+
+.mobile-nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--navy-midnight);
+    padding: 8px;
+    z-index: 1001;
+}
+
+.navbar.scrolled .mobile-nav-toggle {
+    color: var(--white);
+}
+
+/* Mobile Drawer */
+.mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 360px;
+    height: 100vh;
+    background: var(--navy-midnight);
+    border-left: 1px solid rgba(200, 168, 91, 0.2);
+    z-index: 999;
+    padding: 100px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-nav-drawer.active {
+    transform: translateX(0);
+}
+
+.mobile-drawer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mobile-drawer-links a {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--white);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.mobile-drawer-links a:hover,
+.mobile-drawer-links a.active {
+    color: var(--gold-champagne);
+    transform: translateX(6px);
+}
+
+.mobile-drawer-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 25px;
+}
+
+.mobile-drawer-contact {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-light-muted);
+    line-height: 1.8;
+}
+

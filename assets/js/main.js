@@ -1,0 +1,1786 @@
+/**
+ * ==============================================================================
+ * MD. SABBIR HOSHEN HOWLADER — $2M-CLASS CINEMATIC PORTFOLIO ENGINE
+ * ==============================================================================
+ * Creative Direction: Private Banking Meets Cinematic Technology
+ * Color System: Midnight Navy, Institutional Navy, Emerald Green, Champagne Gold
+ * Architecture: Self-Contained Resilient Modular Client Engine
+ * Individual source partials preserved in: /assets/js/modules/
+ * ==============================================================================
+ */
+
+"use strict";
+
+
+// >>> MODULE: config.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — CLIENT CONFIGURATION MODULE
+ * Central configuration, reduced-motion detection, and Portfolio namespace.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    root.Portfolio.config = {
+        prefersReducedMotion: prefersReducedMotion,
+        timezone: "Asia/Dhaka",
+        debug: false
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: smooth-scroll.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — LENIS SMOOTH MOMENTUM SCROLLING ENGINE
+ * Smooth momentum physics integrated with GSAP ScrollTrigger.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    let lenisInstance = null;
+
+    function init() {
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+        if (window.Lenis && !prefersReducedMotion) {
+            try {
+                lenisInstance = new Lenis({
+                    duration: 1.25,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    smoothWheel: true,
+                    smoothTouch: false,
+                    touchMultiplier: 1.5
+                });
+
+                // Prevent Lenis from intercepting the horizontal timeline
+                const timelineContainer = document.getElementById("timelineScrollContainer");
+                if (timelineContainer) {
+                    timelineContainer.setAttribute("data-lenis-prevent", "true");
+                }
+            } catch (e) {
+                console.warn("Lenis initialization notice:", e);
+            }
+        }
+        return lenisInstance;
+    }
+
+    root.Portfolio.scroll = {
+        init: init,
+        getInstance: () => lenisInstance
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: particles.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — ATMOSPHERIC CANVAS PARTICLES & CELESTIAL LIGHTING
+ * Interactive particle simulation on cinematic intro and hero canvas.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function initAtmosphericCanvas(canvasId, particleCount = 45, enableConnections = true) {
+        const canvas = document.getElementById(canvasId);
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+        if (!canvas || prefersReducedMotion) return;
+
+        const ctx = canvas.getContext("2d");
+        let width, height;
+        let particles = [];
+        let animFrameId = null;
+
+        function resize() {
+            width = canvas.width = canvas.offsetWidth;
+            height = canvas.height = canvas.offsetHeight;
+        }
+
+        window.addEventListener("resize", resize, { passive: true });
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 1.8 + 0.6;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 0.45;
+                this.vy = (Math.random() - 0.5) * 0.45;
+                this.alpha = Math.random() * 0.5 + 0.2;
+                this.pulseSpeed = Math.random() * 0.02 + 0.008;
+                // Palette: Gold, Emerald, Light Cream
+                const colors = [
+                    "rgba(200, 168, 91, ",  // Gold
+                    "rgba(15, 168, 137, ",  // Emerald
+                    "rgba(248, 248, 244, "  // Cream
+                ];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+
+                this.alpha += Math.sin(Date.now() * this.pulseSpeed) * 0.005;
+                this.alpha = Math.max(0.1, Math.min(0.7, this.alpha));
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.alpha + ")";
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                if (enableConnections) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 110) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            const connAlpha = (1 - dist / 110) * 0.12;
+                            ctx.strokeStyle = `rgba(200, 168, 91, ${connAlpha})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            animFrameId = requestAnimationFrame(render);
+        }
+
+        render();
+
+        return {
+            destroy: () => {
+                if (animFrameId) cancelAnimationFrame(animFrameId);
+                window.removeEventListener("resize", resize);
+            }
+        };
+    }
+
+    function init() {
+        initAtmosphericCanvas("introCanvas", 48, true);
+        initAtmosphericCanvas("heroCanvas", 35, true);
+    }
+
+    root.Portfolio.particles = {
+        init: init,
+        initAtmosphericCanvas: initAtmosphericCanvas
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: intro.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — CINEMATIC INTRO SEQUENCE MODULE
+ * Handles SVG monogram animation, mask reveals, percentage counter, and safe dismiss logic.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    let introDismissed = false;
+
+    function init() {
+        const introElem = document.getElementById("cinematicIntro");
+        const introSkipBtn = document.getElementById("introSkipBtn");
+        const introCounter = document.getElementById("introCounter");
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+
+        if (!introElem) return;
+
+        function dismissCinematicIntro() {
+            if (introDismissed || !introElem) return;
+            introDismissed = true;
+
+            introElem.classList.add("fade-out", "intro-dismissed");
+            introElem.style.pointerEvents = "none";
+            introElem.style.opacity = "0";
+            document.body.classList.remove("intro-active");
+
+            setTimeout(() => {
+                introElem.style.display = "none";
+                introElem.setAttribute("aria-hidden", "true");
+            }, 600);
+        }
+
+        if (prefersReducedMotion) {
+            dismissCinematicIntro();
+            return;
+        }
+
+        // Percentage Counter Animation (00% -> 100%)
+        let count = 0;
+        const countInterval = setInterval(() => {
+            count += Math.floor(Math.random() * 5) + 3;
+            if (count > 100) count = 100;
+            if (introCounter) {
+                introCounter.textContent = (count < 10 ? "0" : "") + count + "%";
+            }
+            if (count >= 100) {
+                clearInterval(countInterval);
+                setTimeout(dismissCinematicIntro, 250);
+            }
+        }, 32);
+
+        // Failsafe timer: Force dismiss after at most 2.4s under all circumstances
+        setTimeout(() => {
+            if (!introDismissed) {
+                clearInterval(countInterval);
+                dismissCinematicIntro();
+            }
+        }, 2400);
+
+        if (introSkipBtn) {
+            introSkipBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                clearInterval(countInterval);
+                dismissCinematicIntro();
+            });
+        }
+
+        // Clicking anywhere on intro backdrop dismisses it
+        introElem.addEventListener("click", () => {
+            clearInterval(countInterval);
+            dismissCinematicIntro();
+        });
+
+        // Global Esc key dismisses intro
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !introDismissed) {
+                clearInterval(countInterval);
+                dismissCinematicIntro();
+            }
+        });
+
+        // Expose replay function globally for footer action
+        window.replayCinematicIntro = function () {
+            if (!introElem) return;
+            introDismissed = false;
+            introElem.style.display = "flex";
+            introElem.style.pointerEvents = "auto";
+            introElem.style.opacity = "1";
+            introElem.removeAttribute("aria-hidden");
+            introElem.classList.remove("fade-out", "intro-dismissed");
+
+            if (introCounter) introCounter.textContent = "00%";
+
+            window.scrollTo({ top: 0, behavior: "instant" });
+
+            let replayCount = 0;
+            const replayInterval = setInterval(() => {
+                replayCount += 4;
+                if (replayCount > 100) replayCount = 100;
+                if (introCounter) {
+                    introCounter.textContent = (replayCount < 10 ? "0" : "") + replayCount + "%";
+                }
+                if (replayCount >= 100) {
+                    clearInterval(replayInterval);
+                    setTimeout(dismissCinematicIntro, 300);
+                }
+            }, 25);
+        };
+    }
+
+    root.Portfolio.intro = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: cursor.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — DESKTOP PRECISION CUSTOM CURSOR MODULE
+ * Custom trailing magnetic halo with fine-pointer physics and hover magnification.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+        const cursorRing = document.getElementById("cursorRing");
+        const cursorDot = document.getElementById("cursorDot");
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+
+        if (cursorRing && !prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
+            let mouseX = -100;
+            let mouseY = -100;
+            let ringX = -100;
+            let ringY = -100;
+            let isVisible = false;
+
+            window.addEventListener("mousemove", (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!isVisible) {
+                    isVisible = true;
+                    cursorRing.style.opacity = "1";
+                }
+            }, { passive: true });
+
+            function animateCursor() {
+                // Smooth trailing physics lerp
+                ringX += (mouseX - ringX) * 0.18;
+                ringY += (mouseY - ringY) * 0.18;
+                cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Click down/up active states
+            window.addEventListener("mousedown", () => {
+                cursorRing.classList.add("cursor-active");
+            });
+
+            window.addEventListener("mouseup", () => {
+                cursorRing.classList.remove("cursor-active");
+            });
+
+            // Interactive target hover detection via event delegation
+            const interactiveSelector = "a, button, [role='button'], input[type='submit'], input[type='button'], .button, .btn, .era-jump-btn, .timeline-btn, .copy-email-chip, .intro-skip-btn, .mobile-nav-toggle, .modal-close, .nav-cta, .interactive, .milestone-card, .project-card, .tool-card, .activity-card, .social-card";
+
+            document.addEventListener("mouseover", (e) => {
+                if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+                    cursorRing.classList.add("cursor-hover");
+                }
+            }, { passive: true });
+
+            document.addEventListener("mouseout", (e) => {
+                if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+                    cursorRing.classList.remove("cursor-hover");
+                }
+            }, { passive: true });
+
+            // Hide halo when mouse leaves viewport
+            document.addEventListener("mouseleave", () => {
+                cursorRing.style.opacity = "0";
+                isVisible = false;
+            });
+
+            document.addEventListener("mouseenter", () => {
+                cursorRing.style.opacity = "1";
+                isVisible = true;
+            });
+        }
+    }
+
+    root.Portfolio.cursor = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: navbar.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — LUXURY NAVBAR & SCROLL PROGRESS MODULE
+ * Sticky navbar glass styling, scroll progress bar, and mobile navigation drawer.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+        const scrollProgressBar = document.getElementById("scrollProgressBar");
+        const navbar = document.getElementById("navbar");
+        const mobileNavBtn = document.getElementById("mobileNavBtn");
+        const mobileDrawer = document.getElementById("mobileDrawer");
+
+        function handleScroll() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+
+            if (scrollProgressBar) {
+                scrollProgressBar.style.width = `${scrollPercent}%`;
+            }
+
+            if (navbar) {
+                if (scrollTop > 45) {
+                    navbar.classList.add("scrolled");
+                } else {
+                    navbar.classList.remove("scrolled");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll();
+
+        // Mobile Drawer Controller
+        if (mobileNavBtn && mobileDrawer) {
+            mobileNavBtn.addEventListener("click", () => {
+                const isActive = mobileDrawer.classList.toggle("active");
+                mobileNavBtn.classList.toggle("active");
+                mobileNavBtn.setAttribute("aria-expanded", String(isActive));
+                document.body.classList.toggle("drawer-open", isActive);
+            });
+
+            // Close on any link click
+            mobileDrawer.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    mobileDrawer.classList.remove("active");
+                    mobileNavBtn.classList.remove("active");
+                    mobileNavBtn.setAttribute("aria-expanded", "false");
+                    document.body.classList.remove("drawer-open");
+                });
+            });
+
+            // Close on escape key
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && mobileDrawer.classList.contains("active")) {
+                    mobileDrawer.classList.remove("active");
+                    mobileNavBtn.classList.remove("active");
+                    mobileNavBtn.setAttribute("aria-expanded", "false");
+                    document.body.classList.remove("drawer-open");
+                }
+            });
+        }
+    }
+
+    root.Portfolio.navbar = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: section-spy.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — ACTIVE SECTION SPY MODULE
+ * Automatically highlights the corresponding navbar navigation link based on scroll position.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+        const sections = document.querySelectorAll("section[id]");
+        const navLinks = document.querySelectorAll(".nav-links a");
+
+        if ("IntersectionObserver" in window && sections.length > 0) {
+            const spyObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const currentId = entry.target.getAttribute("id");
+                        navLinks.forEach((link) => {
+                            const href = link.getAttribute("href");
+                            if (href && href.startsWith("#")) {
+                                if (href === `#${currentId}`) {
+                                    link.classList.add("active");
+                                } else {
+                                    link.classList.remove("active");
+                                }
+                            }
+                        });
+                    }
+                });
+            }, {
+                rootMargin: "-25% 0px -65% 0px"
+            });
+
+            sections.forEach((sec) => spyObserver.observe(sec));
+        }
+    }
+
+    root.Portfolio.sectionSpy = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: tilt.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — 3D TILT & DYNAMIC SPOTLIGHT ENGINE
+ * Realistic 3D card tilt and cursor-following spotlight glow for capability cards.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+        const capabilityCards = document.querySelectorAll(".capability-card");
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+
+        if (!prefersReducedMotion && window.matchMedia("(hover: hover)").matches) {
+            capabilityCards.forEach((card) => {
+                card.addEventListener("mousemove", (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * -7;
+                    const rotateY = ((x - centerX) / centerX) * 7;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px)`;
+                    card.style.setProperty("--mouse-x", `${x}px`);
+                    card.style.setProperty("--mouse-y", `${y}px`);
+                });
+
+                card.addEventListener("mouseleave", () => {
+                    card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)";
+                });
+            });
+        }
+    }
+
+    root.Portfolio.tilt = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: timeline.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — SIGNATURE EDUCATION TIMELINE MODULE (2010 TO PRESENT)
+ * Interactive horizontal timeline, era jumping, scrubber tracking, and active card sync.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+        // 09. SIGNATURE EDUCATION TIMELINE (2010 TO PRESENT)
+        // ==========================================================================
+        const timelineContainer = document.getElementById("timelineScrollContainer");
+        const scrubberFill = document.getElementById("timelineScrubberFill");
+        const scrubberTrack = document.getElementById("timelineScrubber");
+        const scrollLeftBtn = document.getElementById("timelineScrollLeftBtn");
+        const scrollRightBtn = document.getElementById("timelineScrollRightBtn");
+        const replayJourneyBtn = document.getElementById("timelineReplayBtn");
+        const activeHudLabel = document.getElementById("timelineActiveHud");
+        const eraButtons = document.querySelectorAll(".era-jump-btn");
+        const milestoneItems = document.querySelectorAll(".timeline-milestone");
+
+        let glideId = null;
+        let isAutoGliding = false;
+        let hasAutoGlided = false;
+
+        function updateTimelineState() {
+            if (!timelineContainer) return;
+
+            const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+            if (maxScroll <= 0) {
+                if (scrubberFill) scrubberFill.style.width = "100%";
+                return;
+            }
+
+            const scrollRatio = timelineContainer.scrollLeft / maxScroll;
+            const pct = Math.min(Math.max(scrollRatio * 100, 0), 100);
+            if (scrubberFill) scrubberFill.style.width = `${pct}%`;
+
+            let closestMilestone = null;
+
+            // When scrolled near the end (within 140px or 90%+), snap active state to the current study status (Milestone 17)
+            if (scrollRatio >= 0.90 || (maxScroll - timelineContainer.scrollLeft) < 140) {
+                closestMilestone = {
+                    item: milestoneItems[milestoneItems.length - 1],
+                    index: milestoneItems.length - 1
+                };
+            } else if (scrollRatio <= 0.05 || timelineContainer.scrollLeft < 60) {
+                closestMilestone = {
+                    item: milestoneItems[0],
+                    index: 0
+                };
+            } else {
+                const containerCenter = timelineContainer.scrollLeft + (timelineContainer.clientWidth / 2);
+                let minDistance = Infinity;
+
+                milestoneItems.forEach((item, index) => {
+                    const itemCenter = item.offsetLeft + (item.offsetWidth / 2);
+                    const dist = Math.abs(containerCenter - itemCenter);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestMilestone = { item, index };
+                    }
+                });
+            }
+
+            if (closestMilestone) {
+                milestoneItems.forEach((m) => m.classList.remove("is-active-milestone"));
+                closestMilestone.item.classList.add("is-active-milestone");
+
+                const yearEl = closestMilestone.item.querySelector(".milestone-year");
+                const rawYear = yearEl ? (yearEl.childNodes[0]?.textContent || yearEl.textContent || "") : "";
+                const cleanYear = rawYear.replace(/\s+/g, " ").trim();
+                const titleText = closestMilestone.item.querySelector(".milestone-title")?.textContent || "";
+                if (activeHudLabel) {
+                    activeHudLabel.innerHTML = `<span class="hud-pulse"></span><span>[ MILESTONE ${closestMilestone.index + 1}/17 ] ${cleanYear} &mdash; ${titleText.trim()}</span>`;
+                }
+
+                // Sync active Era Jump button based on current index
+                const currentIdx = closestMilestone.index;
+                let activeEraIdx = 0;
+                const eraBreakpoints = [0, 5, 8, 11, 13, 16];
+                for (let i = eraBreakpoints.length - 1; i >= 0; i--) {
+                    if (currentIdx >= eraBreakpoints[i]) {
+                        activeEraIdx = eraBreakpoints[i];
+                        break;
+                    }
+                }
+                eraButtons.forEach((btn) => {
+                    const target = parseInt(btn.getAttribute("data-target-index") || "0", 10);
+                    btn.classList.toggle("active", target === activeEraIdx);
+                });
+            }
+        }
+
+        function cancelTimelineGlide() {
+            if (glideId) {
+                cancelAnimationFrame(glideId);
+                glideId = null;
+            }
+            if (timelineContainer) {
+                timelineContainer.classList.remove("is-gliding");
+            }
+            isAutoGliding = false;
+        }
+
+        // Snaps the container so cards are cleanly framed and never cut off
+        function snapToNearestMilestone() {
+            if (!timelineContainer) return;
+            const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+            if (maxScroll <= 0) return;
+
+            // If scrolled near the end, cleanly snap to the final current status cards
+            if (timelineContainer.scrollLeft > maxScroll - 160) {
+                timelineContainer.scrollTo({ left: maxScroll, behavior: "smooth" });
+                return;
+            }
+            // If near the start, snap to the first card
+            if (timelineContainer.scrollLeft < 80) {
+                timelineContainer.scrollTo({ left: 0, behavior: "smooth" });
+                return;
+            }
+
+            // Find the nearest milestone offset (aligned with 10px track padding)
+            let bestOffset = 0;
+            let minDiff = Infinity;
+            milestoneItems.forEach((item) => {
+                const offset = item.offsetLeft - 10;
+                const diff = Math.abs(timelineContainer.scrollLeft - offset);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    bestOffset = Math.min(Math.max(offset, 0), maxScroll);
+                }
+            });
+
+            timelineContainer.scrollTo({ left: bestOffset, behavior: "smooth" });
+        }
+
+        function glideTimelineToPresent(duration = 2200, delay = 200) {
+            if (!timelineContainer) return;
+            cancelTimelineGlide();
+
+            const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+            if (maxScroll <= 0) {
+                // If layout is still settling or fonts are loading, retry after 100ms
+                setTimeout(() => glideTimelineToPresent(duration, 0), 100);
+                return;
+            }
+
+            // If user prefers reduced motion, jump directly to current status without waiting
+            if (prefersReducedMotion) {
+                timelineContainer.style.scrollBehavior = "auto";
+                timelineContainer.scrollLeft = maxScroll;
+                updateTimelineState();
+                return;
+            }
+
+            // Temporarily set scrollBehavior to auto and disable snap during programmatic requestAnimationFrame
+            timelineContainer.style.scrollBehavior = "auto";
+            timelineContainer.classList.add("is-gliding");
+            timelineContainer.scrollLeft = 0;
+            updateTimelineState();
+            isAutoGliding = true;
+
+            setTimeout(() => {
+                const freshMaxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+                if (freshMaxScroll <= 0) {
+                    timelineContainer.classList.remove("is-gliding");
+                    isAutoGliding = false;
+                    return;
+                }
+
+                const start = timelineContainer.scrollLeft;
+                const target = freshMaxScroll;
+                const startTime = performance.now();
+
+                function step(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Brisk & dynamic quartic curve: swift acceleration across past eras with a crisp snap landing
+                    const ease = progress < 0.5
+                        ? 8 * progress * progress * progress * progress
+                        : 1 - Math.pow(-2 * progress + 2, 4) / 2;
+
+                    timelineContainer.scrollLeft = start + (target - start) * ease;
+                    updateTimelineState();
+
+                    if (progress < 1) {
+                        glideId = requestAnimationFrame(step);
+                    } else {
+                        timelineContainer.scrollLeft = target;
+                        updateTimelineState();
+
+                        // Lock highlight onto the final milestone (ICAB CA & BBA)
+                        const lastMilestone = milestoneItems[milestoneItems.length - 1];
+                        if (lastMilestone) {
+                            milestoneItems.forEach((m) => m.classList.remove("is-active-milestone"));
+                            lastMilestone.classList.add("is-active-milestone");
+                        }
+                        if (activeHudLabel) {
+                            activeHudLabel.innerHTML = '<span class="hud-pulse"></span><span>[ MILESTONE 17/17 ] 2026 &mdash; Present &mdash; Chartered Accountancy &mdash; Certificate Level</span>';
+                        }
+                        eraButtons.forEach((b) => b.classList.toggle("active", b.getAttribute("data-target-index") === "16"));
+
+                        timelineContainer.classList.remove("is-gliding");
+                        glideId = null;
+                        isAutoGliding = false;
+                    }
+                }
+
+                glideId = requestAnimationFrame(step);
+            }, delay);
+        }
+
+        if (timelineContainer) {
+            timelineContainer.addEventListener("scroll", updateTimelineState, { passive: true });
+
+            // Wheel behavior: Shift+Wheel or Trackpad Horizontal scrolls the timeline.
+            // Vertical wheel does NOT trap page scroll and does NOT cancel auto-glide.
+            timelineContainer.addEventListener("wheel", (e) => {
+                if (e.shiftKey) {
+                    e.preventDefault();
+                    cancelTimelineGlide();
+                    timelineContainer.scrollLeft += (e.deltaY || e.deltaX) * 1.2;
+                } else if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                    cancelTimelineGlide();
+                    timelineContainer.scrollLeft += e.deltaX;
+                }
+            }, { passive: false });
+
+            let isDown = false;
+            let startX = 0;
+            let startScroll = 0;
+
+            timelineContainer.addEventListener("mousedown", (e) => {
+                isDown = true;
+                cancelTimelineGlide();
+                timelineContainer.classList.add("is-dragging");
+                startX = e.pageX - timelineContainer.offsetLeft;
+                startScroll = timelineContainer.scrollLeft;
+            });
+
+            window.addEventListener("mouseup", () => {
+                if (isDown) {
+                    isDown = false;
+                    timelineContainer.classList.remove("is-dragging");
+                    // Snap cleanly to nearest card so no card is cut off
+                    snapToNearestMilestone();
+                }
+            });
+
+            timelineContainer.addEventListener("mousemove", (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - timelineContainer.offsetLeft;
+                const walk = (x - startX) * 1.6;
+                timelineContainer.scrollLeft = startScroll - walk;
+            });
+
+            timelineContainer.addEventListener("touchstart", () => {
+                cancelTimelineGlide();
+            }, { passive: true });
+
+            timelineContainer.addEventListener("touchend", () => {
+                setTimeout(snapToNearestMilestone, 150);
+            }, { passive: true });
+
+            if (scrubberTrack) {
+                scrubberTrack.addEventListener("click", (e) => {
+                    cancelTimelineGlide();
+                    const rect = scrubberTrack.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const ratio = Math.min(Math.max(clickX / rect.width, 0), 1);
+                    const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+                    timelineContainer.scrollTo({ left: maxScroll * ratio, behavior: "smooth" });
+                });
+            }
+
+            if (scrollLeftBtn) {
+                scrollLeftBtn.addEventListener("click", () => {
+                    cancelTimelineGlide();
+                    // Scroll by exactly 1 card + gap (330px card + 30px gap = 360px)
+                    timelineContainer.scrollBy({ left: -360, behavior: "smooth" });
+                });
+            }
+
+            if (scrollRightBtn) {
+                scrollRightBtn.addEventListener("click", () => {
+                    cancelTimelineGlide();
+                    const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+                    if (maxScroll - timelineContainer.scrollLeft <= 380) {
+                        timelineContainer.scrollTo({ left: maxScroll, behavior: "smooth" });
+                    } else {
+                        timelineContainer.scrollBy({ left: 360, behavior: "smooth" });
+                    }
+                });
+            }
+
+            if (replayJourneyBtn) {
+                replayJourneyBtn.addEventListener("click", () => {
+                    hasAutoGlided = true;
+                    glideTimelineToPresent(2200, 80);
+                });
+            }
+
+            eraButtons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    cancelTimelineGlide();
+                    const targetIndex = parseInt(btn.getAttribute("data-target-index") || "0", 10);
+                    const targetMilestone = milestoneItems[targetIndex];
+                    if (targetMilestone) {
+                        const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
+                        const targetOffset = targetIndex === 16
+                            ? maxScroll
+                            : Math.min(Math.max(targetMilestone.offsetLeft - 10, 0), maxScroll);
+                        timelineContainer.scrollTo({ left: targetOffset, behavior: "smooth" });
+                    }
+                    eraButtons.forEach((b) => b.classList.remove("active"));
+                    btn.classList.add("active");
+                });
+            });
+
+            window.addEventListener("keydown", (e) => {
+                if (document.activeElement === timelineContainer || timelineContainer.contains(document.activeElement)) {
+                    if (e.key === "ArrowLeft") {
+                        cancelTimelineGlide();
+                        timelineContainer.scrollBy({ left: -360, behavior: "smooth" });
+                    } else if (e.key === "ArrowRight") {
+                        cancelTimelineGlide();
+                        timelineContainer.scrollBy({ left: 360, behavior: "smooth" });
+                    }
+                }
+            });
+
+            // Resilient Triggering: Automatically glides to Present when #education enters view
+            function checkAndTriggerAutoGlide() {
+                if (hasAutoGlided) return;
+                const eduSection = document.getElementById("education");
+                if (!eduSection) return;
+
+                const rect = eduSection.getBoundingClientRect();
+                // Trigger when the top of the education section enters within the viewport
+                if (rect.top < window.innerHeight * 0.85 && rect.bottom > 100) {
+                    hasAutoGlided = true;
+                    glideTimelineToPresent(2200, 200);
+                }
+            }
+
+            // 1. IntersectionObserver trigger with wide threshold
+            if ("IntersectionObserver" in window) {
+                const eduObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting && !hasAutoGlided) {
+                            hasAutoGlided = true;
+                            glideTimelineToPresent(2200, 200);
+                            eduObserver.disconnect();
+                        }
+                    });
+                }, { threshold: [0, 0.05, 0.1], rootMargin: "60px 0px 60px 0px" });
+
+                const eduSection = document.getElementById("education");
+                if (eduSection) eduObserver.observe(eduSection);
+            }
+
+            // 2. Window scroll listener fallback (ensures Lenis or fast scrolls trigger it)
+            window.addEventListener("scroll", checkAndTriggerAutoGlide, { passive: true });
+
+            // 3. Delayed viewport checks in case page was loaded/refreshed near #education
+            setTimeout(checkAndTriggerAutoGlide, 400);
+            setTimeout(checkAndTriggerAutoGlide, 1000);
+
+            // 4. In-page nav links to #education
+            document.querySelectorAll('a[href="#education"]').forEach((link) => {
+                link.addEventListener("click", () => {
+                    hasAutoGlided = true;
+                    setTimeout(() => {
+                        glideTimelineToPresent(2200, 250);
+                    }, 200);
+                });
+            });
+
+            updateTimelineState();
+        }
+    }
+
+    root.Portfolio.timeline = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: benchmarks.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — INSTITUTIONAL RESEARCH BENCHMARK VISUALIZATION MODULE
+ * Interactive multi-sector comparative analysis with animated financial ratio charts.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+        // 10. INSTITUTIONAL RESEARCH BENCHMARK VISUALIZATION ENGINE
+        // ==========================================================================
+        const researchData = {
+        rmg: {
+            title: "Ready-Made Garments & Textiles (RMG)",
+            subtitle: "Export-Driven Capital Cycle & Working Capital Normalization",
+            dupont: {
+                roe: "22.4%",
+                netMargin: "6.8%",
+                assetTurnover: "1.92x",
+                equityMultiplier: "1.72x",
+                desc: "High volume, low-to-moderate net profit margin compensated by high asset turnover."
+            },
+            workingCapital: {
+                currentRatio: "1.42x",
+                cashConversionCycle: "82 Days",
+                inventoryDays: "58 Days",
+                receivableDays: "44 Days",
+                desc: "Back-to-back LC financing model; raw cotton & fabric lead times dictate liquidity buffers."
+            },
+            capitalEfficiency: {
+                icor: "3.6x",
+                operatingLeverage: "Moderate",
+                capexRoic: "14.8%",
+                desc: "Compliance & green factory certification (LEED) drive operational resilience."
+            }
+        },
+        pharma: {
+            title: "Pharmaceuticals & Healthcare",
+            subtitle: "High Value-Add Formulation & Domestic Market Dominance",
+            dupont: {
+                roe: "26.8%",
+                netMargin: "14.5%",
+                assetTurnover: "1.15x",
+                equityMultiplier: "1.61x",
+                desc: "Premium operating margins driven by branded formulations and local pricing power."
+            },
+            workingCapital: {
+                currentRatio: "1.85x",
+                cashConversionCycle: "115 Days",
+                inventoryDays: "88 Days",
+                receivableDays: "52 Days",
+                desc: "Substantial active pharmaceutical ingredient (API) buffers required to safeguard production."
+            },
+            capitalEfficiency: {
+                icor: "4.2x",
+                operatingLeverage: "High",
+                capexRoic: "18.2%",
+                desc: "Strong return on invested capital driven by automated packaging and global GMP facilities."
+            }
+        },
+        banking: {
+            title: "Commercial Banking & Financial Institutions",
+            subtitle: "Asset-Liability Management, Net Interest Margin (NIM) & NPL Coverage",
+            dupont: {
+                roe: "15.2%",
+                netMargin: "12.8%",
+                assetTurnover: "0.08x",
+                equityMultiplier: "14.8x",
+                desc: "Financial intermediary model; low asset turnover counterbalanced by leveraged balance sheet."
+            },
+            workingCapital: {
+                currentRatio: "1.12x (ADR 84.5%)",
+                cashConversionCycle: "N/A (Treasury)",
+                inventoryDays: "N/A",
+                receivableDays: "N/A",
+                desc: "Prudential liquidity maintained through CRR/SLR compliance and Treasury bond yields."
+            },
+            capitalEfficiency: {
+                icor: "N/A",
+                operatingLeverage: "Low",
+                capexRoic: "11.5% ROA 1.05%",
+                desc: "Core earnings anchored by fee-based corporate advisory, trade finance, and LC commissions."
+            }
+        }
+    };
+
+    let currentSector = "rmg";
+    let currentMetric = "dupont";
+
+    const sectorPills = document.querySelectorAll(".sector-pill-btn");
+    const metricTabs = document.querySelectorAll(".metric-tab-btn");
+    const chartTitleElem = document.getElementById("researchChartTitle");
+    const chartSvgElem = document.getElementById("researchChartSvg");
+
+    window.renderResearchChart = function (animate = false) {
+        const data = researchData[currentSector];
+        if (!data || !chartSvgElem) return;
+
+        if (chartTitleElem) {
+            chartTitleElem.textContent = `${data.title} — ${currentMetric.toUpperCase()} BENCHMARK`;
+        }
+
+        let svgContent = "";
+        const metricData = data[currentMetric];
+
+        if (currentMetric === "dupont") {
+            svgContent = `
+                <g transform="translate(40, 20)">
+                    <line x1="0" y1="160" x2="620" y2="160" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                    <line x1="0" y1="110" x2="620" y2="110" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4" />
+                    <line x1="0" y1="60" x2="620" y2="60" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4" />
+
+                    <!-- Bar 1: ROE -->
+                    <rect class="chart-animated-bar" x="50" y="40" width="70" height="120" rx="3" fill="url(#goldBarGrad)" />
+                    <text x="85" y="30" fill="#c8a85b" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="middle">${metricData.roe}</text>
+                    <text x="85" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Return on Equity</text>
+
+                    <!-- Multiply Sign -->
+                    <text x="160" y="105" fill="#c8a85b" font-family="'JetBrains Mono', monospace" font-size="18" text-anchor="middle">=</text>
+
+                    <!-- Bar 2: Net Margin -->
+                    <rect class="chart-animated-bar" x="200" y="70" width="70" height="90" rx="3" fill="#075b4d" />
+                    <text x="235" y="60" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="middle">${metricData.netMargin}</text>
+                    <text x="235" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Net Margin</text>
+
+                    <!-- Multiply Sign -->
+                    <text x="310" y="105" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="16" text-anchor="middle">&times;</text>
+
+                    <!-- Bar 3: Asset Turnover -->
+                    <rect class="chart-animated-bar" x="350" y="60" width="70" height="100" rx="3" fill="#0fa889" />
+                    <text x="385" y="50" fill="#0fa889" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="middle">${metricData.assetTurnover}</text>
+                    <text x="385" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Asset Turnover</text>
+
+                    <!-- Multiply Sign -->
+                    <text x="460" y="105" fill="#0fa889" font-family="'JetBrains Mono', monospace" font-size="16" text-anchor="middle">&times;</text>
+
+                    <!-- Bar 4: Financial Leverage -->
+                    <rect class="chart-animated-bar" x="500" y="50" width="70" height="110" rx="3" fill="#102c3d" stroke="#c8a85b" stroke-width="1.5" />
+                    <text x="535" y="40" fill="#c8a85b" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="middle">${metricData.equityMultiplier}</text>
+                    <text x="535" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Equity Multiplier</text>
+                </g>
+            `;
+        } else if (currentMetric === "workingCapital") {
+            svgContent = `
+                <g transform="translate(40, 20)">
+                    <line x1="0" y1="160" x2="620" y2="160" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                    
+                    <rect class="chart-animated-bar" x="60" y="50" width="90" height="110" rx="3" fill="#0fa889" />
+                    <text x="105" y="40" fill="#0fa889" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">${metricData.currentRatio}</text>
+                    <text x="105" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Current Ratio</text>
+
+                    <rect class="chart-animated-bar" x="230" y="30" width="90" height="130" rx="3" fill="url(#goldBarGrad)" />
+                    <text x="275" y="20" fill="#c8a85b" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">${metricData.cashConversionCycle}</text>
+                    <text x="275" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Cash Cycle (CCC)</text>
+
+                    <rect class="chart-animated-bar" x="400" y="70" width="90" height="90" rx="3" fill="#075b4d" />
+                    <text x="445" y="60" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">${metricData.inventoryDays}</text>
+                    <text x="445" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Inventory Days</text>
+                </g>
+            `;
+        } else {
+            svgContent = `
+                <g transform="translate(40, 20)">
+                    <line x1="0" y1="160" x2="620" y2="160" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                    
+                    <rect class="chart-animated-bar" x="100" y="50" width="120" height="110" rx="3" fill="url(#goldBarGrad)" />
+                    <text x="160" y="40" fill="#c8a85b" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">${metricData.capexRoic}</text>
+                    <text x="160" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Capex ROIC / Yield</text>
+
+                    <rect class="chart-animated-bar" x="360" y="70" width="120" height="90" rx="3" fill="#0fa889" />
+                    <text x="420" y="60" fill="#0fa889" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">${metricData.icor}</text>
+                    <text x="420" y="180" fill="#9bb0bd" font-family="'DM Sans', sans-serif" font-size="11" text-anchor="middle">Capital-Output (ICOR)</text>
+                </g>
+            `;
+        }
+
+        chartSvgElem.innerHTML = `
+            <defs>
+                <linearGradient id="goldBarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#c8a85b" />
+                    <stop offset="100%" stop-color="#8c6c24" />
+                </linearGradient>
+            </defs>
+            ${svgContent}
+        `;
+
+        const commentaryElem = document.getElementById("researchCommentary");
+        if (commentaryElem) {
+            commentaryElem.textContent = metricData.desc;
+        }
+
+        // Optional GSAP animation on bars
+        if (window.gsap && !prefersReducedMotion) {
+            gsap.fromTo(".chart-animated-bar", {
+                scaleY: 0,
+                transformOrigin: "bottom"
+            }, {
+                scaleY: 1,
+                duration: 0.7,
+                stagger: 0.08,
+                ease: "power3.out"
+            });
+        }
+    };
+
+    if (sectorPills.length > 0) {
+        sectorPills.forEach((pill) => {
+            pill.addEventListener("click", () => {
+                sectorPills.forEach((p) => p.classList.remove("active"));
+                pill.classList.add("active");
+                currentSector = pill.getAttribute("data-sector") || "rmg";
+                window.renderResearchChart();
+            });
+        });
+
+        metricTabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                metricTabs.forEach((t) => t.classList.remove("active"));
+                tab.classList.add("active");
+                currentMetric = tab.getAttribute("data-metric") || "dupont";
+                window.renderResearchChart();
+            });
+        });
+
+        window.renderResearchChart();
+    }
+
+    // ==========================================================================
+
+    }
+
+    root.Portfolio.benchmarks = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: modal.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — CASE STUDY MODAL SYSTEM MODULE
+ * Accessible case study drawer modal with dynamic study injection and keyboard control.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    const projectData = {
+        financial: {
+            category: "FINANCIAL ANALYSIS & VALUATION",
+            title: "Financial Statement & DuPont Ratio Modeling",
+            status: "COMPLETED ACADEMIC SIMULATION",
+            summary: "Comprehensive horizontal, vertical, and 3-stage DuPont decomposition of corporate financial statements to isolate operational drivers of equity profitability and working capital health.",
+            points: [
+                "<strong>DuPont 3-Stage Model:</strong> Decomposed Return on Equity (ROE) into Net Profit Margin × Total Asset Turnover × Equity Multiplier to identify key value levers.",
+                "<strong>Working Capital Ratios:</strong> Evaluated liquidity through Current Ratio, Quick Ratio, and Cash Conversion Cycle benchmarks.",
+                "<strong>Financial Normalization:</strong> Normalized multi-period financial statements across balance sheet and income statement line items."
+            ],
+            tools: "Microsoft Excel &bull; Financial Modeling Formulas &bull; DuPont Architecture"
+        },
+        accounting: {
+            category: "ACCOUNTING SYSTEMS & GOVERNANCE",
+            title: "Accounting Projects & Ledger Systems",
+            status: "PRACTICAL COURSEWORK & CASE STUDY",
+            summary: "Hands-on accounting system implementations covering double-entry ledger architecture, trial balance verification, and computerized ledger workflows.",
+            points: [
+                "<strong>General Ledger Architecture:</strong> Designed structured Chart of Accounts conforming to IFRS and IAS 1 financial reporting rules.",
+                "<strong>Trial Balance Equalization:</strong> Implemented strict verification mechanisms ensuring zero deviation between total debits and credits.",
+                "<strong>QuickBooks Workflow:</strong> Simulated journal adjustments, accounts payable/receivable batches, and monthly bank reconciliations."
+            ],
+            tools: "QuickBooks &bull; Microsoft Excel &bull; Double-Entry General Ledger"
+        },
+        data: {
+            category: "DATA ANALYTICS & BI DASHBOARDS",
+            title: "Data Analysis & Dynamic Modeling",
+            status: "ANALYTICAL PORTFOLIO ARTIFACT",
+            summary: "Leveraging Microsoft Excel and automated Python scripts to clean, transform, and visualize transactional corporate datasets into executive KPI dashboards.",
+            points: [
+                "<strong>Dynamic Excel Modeling:</strong> Built executive dashboards utilizing XLOOKUP, INDEX/MATCH, and automated PivotTables.",
+                "<strong>Variance Monitoring:</strong> Modeled monthly budget vs. actual discrepancies with conditional risk indicators.",
+                "<strong>Python ETL Scripts:</strong> Processed raw transaction feeds using Pandas to eliminate anomalies and generate summarized tables."
+            ],
+            tools: "Python (Pandas) &bull; Microsoft Excel &bull; MySQL Queries"
+        },
+        research: {
+            category: "MACROECONOMIC & INDUSTRIAL RESEARCH",
+            title: "Bangladesh Industrial Sector Benchmarking",
+            status: "INDEPENDENT ANALYTICAL STUDY",
+            summary: "A rigorous comparative cross-sectional study evaluating liquidity buffers, debt leverage, and capital output across Ready-Made Garments (RMG), Pharmaceuticals, and Commercial Banking.",
+            points: [
+                "<strong>Cross-Sector Ratio Matrix:</strong> Benchmarked working capital cycles (CCC), interest coverage, and net margins across three critical economic engines.",
+                "<strong>Liquidity Stress Testing:</strong> Examined working capital stress and trade credit dependencies under foreign exchange volatility.",
+                "<strong>Actionable Strategic Findings:</strong> Formulated insights on supply chain financing and working capital rationalization for Bangladeshi exporters."
+            ],
+            tools: "Financial Statement Synthesis &bull; Ratio Analysis &bull; Empirical Economics"
+        }
+    };
+
+    window.openProjectModal = function (projectId) {
+        const item = projectData[projectId];
+        if (!item) return;
+
+        const modal = document.getElementById("projectModal");
+        const body = document.getElementById("modalBody");
+        if (!modal || !body) return;
+
+        body.innerHTML = `
+            <div class="modal-category">${item.category}</div>
+            <h3 class="modal-title">${item.title}</h3>
+            <span class="modal-tag">${item.status}</span>
+            <p class="modal-summary">
+                ${item.summary}
+            </p>
+            <div class="modal-section">
+                <div class="modal-section-title">
+                    Key Highlights &amp; Analytical Framework
+                </div>
+                <ul class="modal-list">
+                    ${item.points.map((pt) => `<li>${pt}</li>`).join("")}
+                </ul>
+            </div>
+            <div class="modal-section" style="padding-bottom: 0;">
+                <div class="modal-section-title">
+                    Technical Toolkit &amp; Methodology
+                </div>
+                <p style="font-family: var(--mono); font-size: 13px; color: var(--navy-midnight);">
+                    ${item.tools}
+                </p>
+            </div>
+        `;
+
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+    };
+
+    window.closeProjectModal = function () {
+        const modal = document.getElementById("projectModal");
+        if (modal) {
+            modal.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+    };
+
+    window.closeModalOnBackdrop = function (e) {
+        if (e.target === document.getElementById("projectModal")) {
+            window.closeProjectModal();
+        }
+    };
+
+    function init() {
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                window.closeProjectModal();
+            }
+        });
+    }
+
+    root.Portfolio.modal = {
+        init: init,
+        projectData: projectData
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: toast.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — CLIPBOARD UTILITIES & TOAST NOTIFICATION MODULE
+ * Unobtrusive toast feedback and resilient cross-browser clipboard copy actions.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+    // 12. CLIPBOARD UTILITIES & TOAST NOTIFICATIONS
+    // ==========================================================================
+    const toast = document.getElementById("toastNotification");
+    let toastTimeout = null;
+
+    window.copyToClipboard = function (text, message = "Copied to clipboard") {
+        if (!navigator.clipboard) {
+            const input = document.createElement("input");
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+            showToast(message);
+            return;
+        }
+
+        navigator.clipboard.writeText(text).then(() => {
+            showToast(message);
+        }).catch(() => {
+            showToast("Failed to copy");
+        });
+    };
+
+    function showToast(msg) {
+        if (!toast) return;
+        toast.innerHTML = `<span>✓</span> <span>${msg}</span>`;
+        toast.classList.add("active");
+
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 2800);
+    }
+
+    // ==========================================================================
+
+    }
+
+    root.Portfolio.toast = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: clock.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — LIVE LOCAL TIME ENGINE MODULE
+ * Real-time Barishal / Dhaka (UTC+6) live clock in the luxury footer.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init() {
+    // 13. LIVE LOCAL TIME ENGINE (BARISHAL / DHAKA UTC+6)
+    // ==========================================================================
+    const clockElem = document.getElementById("liveLocalTime");
+    function updateClock() {
+        if (!clockElem) return;
+        try {
+            const now = new Date();
+            const timeStr = new Intl.DateTimeFormat("en-GB", {
+                timeZone: "Asia/Dhaka",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
+            }).format(now);
+            clockElem.textContent = `BARISHAL / DHAKA: ${timeStr} (UTC+6)`;
+        } catch (e) {
+            clockElem.textContent = "BARISHAL / DHAKA (UTC+6)";
+        }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+
+    }
+
+    root.Portfolio.clock = {
+        init: init
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// >>> MODULE: scroll-animations.js <<<
+/**
+ * MD. SABBIR HOSHEN HOWLADER — SCROLL CHOREOGRAPHY & ANIMATIONS MODULE
+ * GSAP ScrollTrigger Master Choreography Suite with Resilient Observer Fallback.
+ */
+(function (root) {
+    "use strict";
+
+    root.Portfolio = root.Portfolio || {};
+
+    function init(lenis) {
+        const prefersReducedMotion = root.Portfolio.config && root.Portfolio.config.prefersReducedMotion;
+        const hasGSAP = Boolean(window.gsap && window.ScrollTrigger);
+
+        // Flag HTML as having active motion capabilities
+        if (!prefersReducedMotion) {
+            document.documentElement.classList.add("has-motion");
+        }
+
+        // 1. Resilient Native Observer for all Reveal Elements
+        // Guarantees all sections, headers, and media become visible immediately upon scroll
+        if ("IntersectionObserver" in window) {
+            const revealObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-revealed", "visible");
+
+                        // If it's the metrics strip, trigger number counters
+                        if (entry.target.classList.contains("metrics-strip") || entry.target.id === "aboutMetricsStrip") {
+                            entry.target.querySelectorAll(".metric-item-num").forEach((numEl) => {
+                                const target = parseFloat(numEl.getAttribute("data-target") || numEl.textContent || "0");
+                                const suffix = numEl.textContent.replace(/[0-9.]/g, "");
+                                animateNumberCounter(numEl, target, 1600, suffix);
+                            });
+                        }
+
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: "0px 0px -40px 0px"
+            });
+
+            const revealSelectors = [
+                ".reveal-on-scroll",
+                ".reveal-scale",
+                ".curtain-clip-reveal",
+                ".track-expand-reveal",
+                ".metrics-strip",
+                ".capability-card",
+                ".timeline-milestone",
+                ".milestone-card",
+                ".project-card",
+                ".tool-card",
+                ".activity-card",
+                ".social-card"
+            ];
+
+            document.querySelectorAll(revealSelectors.join(", ")).forEach((el) => {
+                revealObserver.observe(el);
+            });
+        } else {
+            // Fallback: Reveal everything immediately
+            document.querySelectorAll(".reveal-on-scroll, .reveal-scale, .curtain-clip-reveal, .track-expand-reveal").forEach((el) => {
+                el.classList.add("is-revealed", "visible");
+            });
+        }
+
+        // 2. GSAP Enhanced Choreography (if loaded & motion allowed)
+        if (hasGSAP && !prefersReducedMotion) {
+            try {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Connect Lenis with ScrollTrigger if active
+                if (lenis && typeof lenis.on === "function") {
+                    lenis.on("scroll", ScrollTrigger.update);
+                    gsap.ticker.add((time) => {
+                        lenis.raf(time * 1000);
+                    });
+                    gsap.ticker.lagSmoothing(0);
+                }
+
+                // Hero Parallax on Scroll
+                gsap.to(".hero-content", {
+                    yPercent: -12,
+                    opacity: 0.45,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".hero",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+
+                gsap.to(".hero-portrait-img", {
+                    yPercent: -8,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".hero",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+
+                gsap.to(".hero-floating-card", {
+                    yPercent: -30,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".hero",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 1.5
+                    }
+                });
+
+                // Capability Cards Staggered Reveal
+                gsap.from(".capability-card", {
+                    y: 40,
+                    opacity: 0,
+                    stagger: 0.12,
+                    duration: 0.85,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".capability-grid",
+                        start: "top 85%"
+                    }
+                });
+
+                // Featured Project Cards Reveal
+                gsap.from(".project-card", {
+                    y: 45,
+                    opacity: 0,
+                    stagger: 0.14,
+                    duration: 0.9,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".projects-grid",
+                        start: "top 85%"
+                    }
+                });
+
+                // Tool Cards Reveal
+                gsap.from(".tool-card", {
+                    y: 35,
+                    opacity: 0,
+                    stagger: 0.1,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".toolkit-grid",
+                        start: "top 85%"
+                    }
+                });
+
+                // Activity Cards Reveal
+                gsap.from(".activity-card", {
+                    y: 35,
+                    opacity: 0,
+                    stagger: 0.12,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: "#activities",
+                        start: "top 85%"
+                    }
+                });
+
+                // Quote Pillars Stagger
+                gsap.from(".quote-pillar-item, .quote-tenet", {
+                    y: 25,
+                    opacity: 0,
+                    stagger: 0.12,
+                    duration: 0.75,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: ".quote-pillars",
+                        start: "top 85%"
+                    }
+                });
+
+            } catch (err) {
+                console.warn("[Portfolio.animations] GSAP choreography notice:", err);
+            }
+        }
+    }
+
+    // Number Counter Animation Helper
+    function animateNumberCounter(elem, target, duration = 1500, suffix = "") {
+        if (!elem) return;
+        const startTime = performance.now();
+        const startVal = 0;
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out exponential
+            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+            const currentVal = startVal + (target - startVal) * easeProgress;
+
+            if (Number.isInteger(target)) {
+                elem.textContent = Math.round(currentVal) + suffix;
+            } else {
+                elem.textContent = currentVal.toFixed(2) + suffix;
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                elem.textContent = (Number.isInteger(target) ? target : target.toFixed(2)) + suffix;
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    root.Portfolio.animations = {
+        init: init,
+        animateNumberCounter: animateNumberCounter
+    };
+})(typeof window !== "undefined" ? window : this);
+
+
+// ==============================================================================
+// MASTER PRODUCTION SUBSYSTEM ORCHESTRATOR
+// ==============================================================================
+(function (root) {
+    function bootstrapSubsystems() {
+        const P = root.Portfolio;
+        if (!P) return;
+
+        // 1. Lenis Smooth Momentum Scrolling
+        let lenis = null;
+        if (P.scroll && typeof P.scroll.init === "function") {
+            try {
+                lenis = P.scroll.init();
+            } catch (err) {
+                console.warn("[Portfolio.scroll] Init notice:", err);
+            }
+        }
+
+        // 2. Atmospheric Canvas Particles (Intro & Hero)
+        if (P.particles && typeof P.particles.init === "function") {
+            try {
+                P.particles.init();
+            } catch (err) {
+                console.warn("[Portfolio.particles] Init notice:", err);
+            }
+        }
+
+        // 3. Cinematic Intro Sequence
+        if (P.intro && typeof P.intro.init === "function") {
+            try {
+                P.intro.init();
+            } catch (err) {
+                console.warn("[Portfolio.intro] Init notice:", err);
+            }
+        }
+
+        // 4. Desktop Precision Custom Cursor
+        if (P.cursor && typeof P.cursor.init === "function") {
+            try {
+                P.cursor.init();
+            } catch (err) {
+                console.warn("[Portfolio.cursor] Init notice:", err);
+            }
+        }
+
+        // 5. Luxury Navbar & Scroll Progress Bar
+        if (P.navbar && typeof P.navbar.init === "function") {
+            try {
+                P.navbar.init();
+            } catch (err) {
+                console.warn("[Portfolio.navbar] Init notice:", err);
+            }
+        }
+
+        // 6. Active Navigation Section Spy
+        if (P.sectionSpy && typeof P.sectionSpy.init === "function") {
+            try {
+                P.sectionSpy.init();
+            } catch (err) {
+                console.warn("[Portfolio.sectionSpy] Init notice:", err);
+            }
+        }
+
+        // 7. 3D Tilt & Dynamic Spotlight Engine
+        if (P.tilt && typeof P.tilt.init === "function") {
+            try {
+                P.tilt.init();
+            } catch (err) {
+                console.warn("[Portfolio.tilt] Init notice:", err);
+            }
+        }
+
+        // 8. Signature Education Timeline (2010 to Present)
+        if (P.timeline && typeof P.timeline.init === "function") {
+            try {
+                P.timeline.init();
+            } catch (err) {
+                console.warn("[Portfolio.timeline] Init notice:", err);
+            }
+        }
+
+        // 9. Institutional Research Benchmark Visualization
+        if (P.benchmarks && typeof P.benchmarks.init === "function") {
+            try {
+                P.benchmarks.init();
+            } catch (err) {
+                console.warn("[Portfolio.benchmarks] Init notice:", err);
+            }
+        }
+
+        // 10. Case Study Modal System
+        if (P.modal && typeof P.modal.init === "function") {
+            try {
+                P.modal.init();
+            } catch (err) {
+                console.warn("[Portfolio.modal] Init notice:", err);
+            }
+        }
+
+        // 11. Toast Feedback & Clipboard Utilities
+        if (P.toast && typeof P.toast.init === "function") {
+            try {
+                P.toast.init();
+            } catch (err) {
+                console.warn("[Portfolio.toast] Init notice:", err);
+            }
+        }
+
+        // 12. Live Local Time Engine (Barishal / Dhaka UTC+6)
+        if (P.clock && typeof P.clock.init === "function") {
+            try {
+                P.clock.init();
+            } catch (err) {
+                console.warn("[Portfolio.clock] Init notice:", err);
+            }
+        }
+
+        // 13. GSAP ScrollTrigger & Resilient Observer Animations
+        if (P.animations && typeof P.animations.init === "function") {
+            try {
+                P.animations.init(lenis);
+            } catch (err) {
+                console.warn("[Portfolio.animations] Init notice:", err);
+            }
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", bootstrapSubsystems);
+    } else {
+        bootstrapSubsystems();
+    }
+
+    root.Portfolio.init = bootstrapSubsystems;
+})(typeof window !== "undefined" ? window : this);

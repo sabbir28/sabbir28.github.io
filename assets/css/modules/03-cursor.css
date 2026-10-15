@@ -1,0 +1,99 @@
+/* ==============================================================================
+   03. BESPOKE EXECUTIVE CURSOR SYSTEM (ASSETS/FONT SUITE)
+   ============================================================================== */
+html, body {
+    cursor: url("../font/cursor.svg") 5 3, url("../font/cursor.png") 5 3, auto;
+}
+
+/* Interactive Pointer Cursor across all links, buttons, and actionable items */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+.button,
+.btn,
+.era-jump-btn,
+.timeline-btn,
+.copy-email-chip,
+.intro-skip-btn,
+.mobile-nav-toggle,
+.modal-close,
+.nav-cta,
+.interactive,
+.milestone-card,
+.project-card,
+.tool-card,
+.activity-card,
+.social-card {
+    cursor: url("../font/cursor-pointer.svg") 5 3, url("../font/cursor-pointer.png") 5 3, pointer;
+}
+
+/* Text Input Cursors */
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+    cursor: text;
+}
+
+/* Horizontal Timeline & Scrubber Grabbable States */
+.timeline-scroll-container,
+.timeline-scrubber {
+    cursor: grab;
+}
+
+.timeline-scroll-container.is-dragging {
+    cursor: grabbing !important;
+}
+
+/* Luxury Trailing Magnetic Ring */
+.custom-cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 100000;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid rgba(200, 168, 91, 0.45);
+    background: rgba(200, 168, 91, 0.04);
+    box-shadow: 0 0 10px rgba(200, 168, 91, 0.15);
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                height 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.3s ease,
+                background 0.3s ease,
+                opacity 0.25s ease;
+    opacity: 0;
+}
+
+.custom-cursor-ring.cursor-hover {
+    width: 52px;
+    height: 52px;
+    border-color: var(--green-accent);
+    background: rgba(15, 168, 137, 0.12);
+    box-shadow: 0 0 18px rgba(15, 168, 137, 0.35);
+}
+
+.custom-cursor-ring.cursor-active {
+    transform: translate(-50%, -50%) scale(0.85);
+    border-color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.2);
+}
+
+/* Hide artificial dot to let the custom arrow cursor shine */
+.custom-cursor-dot {
+    display: none !important;
+}
+
+/* Touch & Mobile Fallback: Revert to standard system pointer */
+@media (pointer: coarse), (hover: none) {
+    html, body, a, button, [role="button"], input {
+        cursor: auto !important;
+    }
+    .custom-cursor-ring {
+        display: none !important;
+    }
+}

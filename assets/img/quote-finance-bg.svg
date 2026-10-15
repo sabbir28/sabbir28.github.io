@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 650" width="100%" height="100%">
+  <defs>
+    <linearGradient id="qBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a202d" />
+      <stop offset="50%" stop-color="#075b4d" />
+      <stop offset="100%" stop-color="#053e34" />
+    </linearGradient>
+  </defs>
+
+  <rect width="500" height="650" fill="url(#qBg)" />
+
+  <!-- Data overlay streams -->
+  <g opacity="0.12" fill="#ffffff" font-family="'DM Sans', monospace" font-size="12">
+    <text x="30" y="50">IFRS COMPLIANCE // IAS 1 PRESENTATION</text>
+    <text x="30" y="80">EBITDA MARGIN +22.4% | ROE 31.5%</text>
+    <text x="30" y="110">DUPONT DECOMPOSITION: 3-STAGE YIELD</text>
+    <text x="30" y="140">WORKING CAPITAL CYCLE // CASH RATIO 1.84</text>
+    <text x="30" y="170">SELECT * FROM FISCAL_LEDGER WHERE BAL != 0</text>
+    <text x="30" y="200">AUTOMATED AUDIT EXCEPTION REPORT // ZERO DEFECT</text>
+    <text x="30" y="230">ICAB CERTIFICATE LEVEL // ADVANCED ASSURANCE</text>
+    <text x="30" y="260">PORTFOLIO OPTIMIZATION | CAPEX ROIC</text>
+    <text x="30" y="290">FINANCIAL INTEGRITY x COMPUTATIONAL ADVANTAGE</text>
+    <text x="30" y="320">TRIAL BALANCE 100% RECONCILED</text>
+  </g>
+
+  <!-- Glowing subtle chart lines -->
+  <path d="M 0 450 Q 150 400 250 480 T 500 360" fill="none" stroke="#4ade80" stroke-opacity="0.25" stroke-width="2" />
+  <path d="M 0 520 Q 120 490 280 540 T 500 420" fill="none" stroke="#c8a85b" stroke-opacity="0.2" stroke-width="2" />
+</svg>

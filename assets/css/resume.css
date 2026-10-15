@@ -1,0 +1,365 @@
+/**
+ * ==============================================================================
+ * MD. SABBIR HOSHEN HOWLADER — EXECUTIVE CURRICULUM VITAE STYLESHEET
+ * ==============================================================================
+ * Architecture & Separation:
+ *  01. Design Tokens & CSS Variables
+ *  02. Modern Reset & Base Rules
+ *  03. Top Action Bar (Screen Only)
+ *  04. Printable Executive CV Paper Layout
+ *  05. Executive Header & Profile Group
+ *  06. Structured Sections & Timeline Entries
+ *  07. Core Competency & Skills Matrix
+ *  08. Print Media Optimizations (Paper Margins & Page-break Guards)
+ *  09. Mobile & Responsive Layout
+ * ==============================================================================
+ */
+
+/* ==============================================================================
+   01. DESIGN TOKENS & CSS VARIABLES
+   ============================================================================== */
+:root {
+    --bg-page: #f8f8f4;
+    --bg-paper: #ffffff;
+    --text-primary: #172b38;
+    --text-secondary: #61717b;
+    --text-muted: #889da8;
+    --border-line: #dfe4e2;
+    --navy-primary: #102c3d;
+    --accent-forest: #075b4d;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'DM Sans', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ==============================================================================
+   02. MODERN RESET & BASE RULES
+   ============================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    padding: 2.5rem 1rem;
+    -webkit-font-smoothing: antialiased;
+    cursor: url("../font/cursor.svg") 5 3, url("../font/cursor.png") 5 3, auto;
+}
+
+a, button, .btn-cv, .back-link {
+    cursor: url("../font/cursor-pointer.svg") 5 3, url("../font/cursor-pointer.png") 5 3, pointer;
+}
+
+/* ==============================================================================
+   03. TOP ACTION BAR (SCREEN ONLY)
+   ============================================================================== */
+.cv-top-bar {
+    max-width: 860px;
+    margin: 0 auto 1.5rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--navy-primary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--accent-forest);
+    text-decoration: underline;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-cv {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--navy-primary);
+    color: #ffffff;
+    padding: 0.55rem 1.1rem;
+    border-radius: 2px;
+    border: 1px solid var(--navy-primary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-cv:hover {
+    background-color: #1a384f;
+    border-color: #1a384f;
+}
+
+.btn-cv-accent {
+    background-color: var(--accent-forest);
+    border-color: var(--accent-forest);
+}
+
+.btn-cv-accent:hover {
+    background-color: #05463b;
+    border-color: #05463b;
+}
+
+/* ==============================================================================
+   04. PRINTABLE EXECUTIVE CV PAPER LAYOUT
+   ============================================================================== */
+.cv-paper {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--bg-paper);
+    padding: 3.5rem 3.5rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+}
+
+/* ==============================================================================
+   05. EXECUTIVE HEADER & PROFILE GROUP
+   ============================================================================== */
+.cv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--navy-primary);
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+}
+
+.cv-header-intro {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.cv-avatar {
+    width: 85px;
+    height: 85px;
+    border-radius: 3px;
+    object-fit: cover;
+    border: 1px solid var(--border-line);
+    flex-shrink: 0;
+}
+
+.cv-name {
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--navy-primary);
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+}
+
+.cv-tagline {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-forest);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.35rem;
+}
+
+.cv-motto {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.cv-contact {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cv-contact a {
+    color: var(--navy-primary);
+    text-decoration: none;
+}
+
+.cv-contact a:hover {
+    text-decoration: underline;
+    color: var(--accent-forest);
+}
+
+/* ==============================================================================
+   06. STRUCTURED SECTIONS & TIMELINE ENTRIES
+   ============================================================================== */
+.cv-section {
+    margin-bottom: 2rem;
+}
+
+.cv-section-title {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--navy-primary);
+    border-bottom: 1px solid var(--border-line);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cv-item {
+    margin-bottom: 1.25rem;
+}
+
+.cv-item:last-child {
+    margin-bottom: 0;
+}
+
+.cv-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.2rem;
+}
+
+.cv-item-title {
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--text-primary);
+}
+
+.cv-item-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.cv-item-sub {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--navy-primary);
+    margin-bottom: 0.4rem;
+}
+
+.cv-item-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* ==============================================================================
+   07. CORE COMPETENCY & SKILLS MATRIX
+   ============================================================================== */
+.cv-skill-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.cv-skill-box {
+    background-color: #fafafa;
+    border: 1px solid var(--border-line);
+    border-left: 3px solid var(--navy-primary);
+    padding: 0.85rem 1rem;
+}
+
+.cv-skill-cat {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--navy-primary);
+    margin-bottom: 0.25rem;
+}
+
+.cv-skill-list {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ==============================================================================
+   08. PRINT MEDIA OPTIMIZATIONS
+   ============================================================================== */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .cv-top-bar {
+        display: none !important;
+    }
+
+    .cv-paper {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+        padding: 1.5cm 1.5cm !important;
+    }
+
+    a {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
+
+    .cv-item {
+        page-break-inside: avoid;
+    }
+
+    .cv-section {
+        page-break-inside: auto;
+    }
+}
+
+/* ==============================================================================
+   09. MOBILE & RESPONSIVE LAYOUT
+   ============================================================================== */
+@media (max-width: 768px) {
+    .cv-paper {
+        padding: 2rem 1.5rem;
+    }
+
+    .cv-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cv-header-intro {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cv-contact {
+        text-align: left;
+    }
+
+    .cv-skill-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,2 +1,4 @@
 User-agent: *
+Allow: /
+
 Sitemap: https://sabbir28.github.io/sitemap.xml

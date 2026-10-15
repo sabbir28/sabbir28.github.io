@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a202d" />
+      <stop offset="60%" stop-color="#102c3d" />
+      <stop offset="100%" stop-color="#075b4d" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="380" fill="url(#bgGrad4)" />
+
+  <!-- Macro Research Cover / Report Visual -->
+  <g transform="translate(45, 30)">
+    <!-- Report Header Frame -->
+    <rect x="0" y="0" width="510" height="42" rx="3" fill="#075b4d" fill-opacity="0.35" stroke="#dfe4e2" stroke-opacity="0.15" />
+    <text x="20" y="26" fill="#c8a85b" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">BANGLADESH INDUSTRIAL &amp; SECTOR RESEARCH</text>
+    <rect x="420" y="9" width="75" height="24" rx="2" fill="#075b4d" />
+    <text x="432" y="25" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="700">Q4 - 2026</text>
+
+    <!-- Main Comparison Grid -->
+    <g transform="translate(0, 56)">
+      <!-- Sector 1: RMG & Textiles -->
+      <rect x="0" y="0" width="160" height="235" rx="4" fill="#0a202d" fill-opacity="0.8" stroke="#dfe4e2" stroke-opacity="0.12" />
+      <rect x="0" y="0" width="160" height="32" rx="4" fill="#075b4d" fill-opacity="0.6" />
+      <text x="14" y="21" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700">RMG &amp; APPAREL</text>
+      
+      <text x="14" y="55" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">AVG. ROE</text>
+      <text x="14" y="78" fill="#ffffff" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">18.4%</text>
+
+      <text x="14" y="110" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">WORKING CAPITAL</text>
+      <text x="14" y="133" fill="#4ade80" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">68 Days</text>
+
+      <text x="14" y="165" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">DEBT / EQUITY</text>
+      <text x="14" y="188" fill="#c8a85b" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">1.45x</text>
+
+      <rect x="14" y="202" width="132" height="20" rx="2" fill="#ffffff" fill-opacity="0.06" />
+      <text x="24" y="216" fill="#aebdc5" font-family="'DM Sans', Arial, sans-serif" font-size="9">Export Resilient</text>
+
+      <!-- Sector 2: Pharmaceuticals -->
+      <rect x="175" y="0" width="160" height="235" rx="4" fill="#0a202d" fill-opacity="0.8" stroke="#4ade80" stroke-width="1.2" />
+      <rect x="175" y="0" width="160" height="32" rx="4" fill="#075b4d" />
+      <text x="189" y="21" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700">PHARMA &amp; HEALTH</text>
+      
+      <text x="189" y="55" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">AVG. ROE</text>
+      <text x="189" y="78" fill="#4ade80" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">22.6%</text>
+
+      <text x="189" y="110" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">OPERATING MARGIN</text>
+      <text x="189" y="133" fill="#4ade80" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">24.2%</text>
+
+      <text x="189" y="165" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">DEBT / EQUITY</text>
+      <text x="189" y="188" fill="#ffffff" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">0.82x</text>
+
+      <rect x="189" y="202" width="132" height="20" rx="2" fill="#075b4d" fill-opacity="0.8" />
+      <text x="199" y="216" fill="#4ade80" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600">Leading Margin</text>
+
+      <!-- Sector 3: Commercial Banking -->
+      <rect x="350" y="0" width="160" height="235" rx="4" fill="#0a202d" fill-opacity="0.8" stroke="#dfe4e2" stroke-opacity="0.12" />
+      <rect x="350" y="0" width="160" height="32" rx="4" fill="#075b4d" fill-opacity="0.6" />
+      <text x="364" y="21" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700">COMMERCIAL BANKS</text>
+      
+      <text x="364" y="55" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">AVG. ROE</text>
+      <text x="364" y="78" fill="#ffffff" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">12.1%</text>
+
+      <text x="364" y="110" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">CAPITAL ADEQUACY</text>
+      <text x="364" y="133" fill="#ffffff" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">11.8%</text>
+
+      <text x="364" y="165" fill="#889da8" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1">COST / INCOME</text>
+      <text x="364" y="188" fill="#c8a85b" font-family="'Playfair Display', Georgia, serif" font-size="18" font-weight="700">54.2%</text>
+
+      <rect x="364" y="202" width="132" height="20" rx="2" fill="#ffffff" fill-opacity="0.06" />
+      <text x="374" y="216" fill="#aebdc5" font-family="'DM Sans', Arial, sans-serif" font-size="9">Basel III Standard</text>
+    </g>
+  </g>
+</svg>

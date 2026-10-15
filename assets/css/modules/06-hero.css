@@ -1,0 +1,290 @@
+/* ==============================================================================
+   07. HERO SECTION — EXECUTIVE IMPACT
+   ============================================================================== */
+.hero {
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100vh - 78px);
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #F8F8F4 0%, #EFF2EE 100%);
+}
+
+.hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.7;
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    align-items: center;
+    padding: 60px 0;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.status-beacon {
+    width: 8px;
+    height: 8px;
+    background: var(--green-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 var(--green-glow);
+    animation: beaconPulse 2s infinite;
+}
+
+@keyframes beaconPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(15, 168, 137, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 9px rgba(15, 168, 137, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(15, 168, 137, 0);
+    }
+}
+
+.hero-eyebrow-text {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green-emerald);
+}
+
+.hero-title {
+    color: var(--navy-midnight);
+    font-family: var(--serif);
+    font-size: clamp(44px, 5.2vw, 76px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 22px;
+    letter-spacing: -0.5px;
+}
+
+.hero-line-reveal {
+    display: block;
+    overflow: hidden;
+}
+
+.hero-serif-italic {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--green-emerald);
+}
+
+.hero-badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.hero-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--navy-inst);
+    background: rgba(16, 44, 61, 0.05);
+    border: 1px solid var(--border-light);
+    padding: 4px 12px;
+    border-radius: 2px;
+}
+
+.hero-description {
+    max-width: 620px;
+    margin-bottom: 34px;
+    color: var(--text-muted);
+    font-size: 16.5px;
+    line-height: 1.75;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 28px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.button-primary {
+    background: var(--green-emerald);
+    color: var(--white);
+    border: 1px solid var(--green-emerald);
+    box-shadow: 0 8px 24px rgba(7, 91, 77, 0.25);
+}
+
+.button-primary:hover {
+    background: var(--navy-midnight);
+    border-color: var(--navy-midnight);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(10, 32, 45, 0.3);
+}
+
+.button-secondary {
+    background: transparent;
+    color: var(--navy-midnight);
+    border: 1px solid var(--border-light);
+}
+
+.button-secondary:hover {
+    border-color: var(--gold-champagne);
+    color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.06);
+    transform: translateY(-2px);
+}
+
+.hero-quick-connect {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.copy-email-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    padding: 4px 10px;
+    border-radius: 2px;
+    color: var(--navy-inst);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.copy-email-chip:hover {
+    border-color: var(--green-emerald);
+    color: var(--green-emerald);
+}
+
+/* Portrait Visual Spread */
+.hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portrait-halo-wrap {
+    position: relative;
+    width: min(440px, 90vw);
+    aspect-ratio: 4 / 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.portrait-halo-bg {
+    position: absolute;
+    inset: 5% 5% 0% 5%;
+    background: radial-gradient(circle at 50% 35%, rgba(15, 168, 137, 0.35) 0%, rgba(10, 32, 45, 0.95) 75%);
+    border-radius: 220px 220px 8px 8px;
+    border: 1px solid rgba(200, 168, 91, 0.3);
+    box-shadow: 0 25px 60px rgba(10, 32, 45, 0.25), inset 0 0 35px rgba(200, 168, 91, 0.15);
+    z-index: 1;
+    overflow: hidden;
+}
+
+.portrait-halo-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 20%, rgba(200, 168, 91, 0.2) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.hero-portrait-img {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    height: 98%;
+    object-fit: cover;
+    object-position: center top;
+    filter: contrast(1.03) saturate(1.02);
+    transition: transform 0.4s ease-out;
+}
+
+.hero-floating-card {
+    position: absolute;
+    bottom: -15px;
+    right: -20px;
+    z-index: 3;
+    background: rgba(10, 32, 45, 0.92);
+    border: 1px solid var(--gold-champagne);
+    color: var(--white);
+    padding: 18px 22px;
+    border-radius: 2px;
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-dark);
+    max-width: 220px;
+}
+
+.floating-card-quote {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.35;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.floating-card-line {
+    width: 32px;
+    height: 1px;
+    background: var(--gold-champagne);
+    margin-bottom: 8px;
+}
+
+.floating-card-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold-champagne);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+

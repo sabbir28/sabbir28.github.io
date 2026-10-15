@@ -1,0 +1,122 @@
+/* ==============================================================================
+   10. FINANCE x TECHNOLOGY CAPABILITY GRID
+   ============================================================================== */
+.capabilities {
+    background-color: var(--cream-soft);
+}
+
+.capabilities-header {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 60px auto;
+}
+
+.capabilities-header .section-description {
+    margin: 15px auto 0 auto;
+}
+
+.capability-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.capability-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    padding: 38px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 380px;
+    cursor: default;
+}
+
+.capability-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-elevated);
+    border-color: var(--green-emerald);
+}
+
+.card-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(15, 168, 137, 0.12) 0%, transparent 70%);
+}
+
+.capability-card:hover .card-spotlight {
+    opacity: 1;
+}
+
+.capability-icon-wrap {
+    width: 58px;
+    height: 58px;
+    border: 1px solid rgba(7, 91, 77, 0.2);
+    border-radius: 2px;
+    background: var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-emerald);
+    margin-bottom: 24px;
+    transition: all var(--transition-fast);
+}
+
+.capability-card:hover .capability-icon-wrap {
+    background: var(--green-emerald);
+    color: var(--white);
+    border-color: var(--green-emerald);
+    transform: scale(1.05);
+}
+
+.capability-card-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy-midnight);
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.capability-sub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-grow: 1;
+}
+
+.capability-sub-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+}
+
+.capability-sub-list li::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: var(--green-emerald);
+    border-radius: 50%;
+}
+
+.capability-card-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green-emerald);
+    border-top: 1px solid var(--border-light);
+    padding-top: 16px;
+}
+

@@ -1,0 +1,177 @@
+/* ==============================================================================
+   05. THE CINEMATIC INTRO EXPERIENCE (SCENES A, B, C)
+   ============================================================================== */
+.cinematic-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--navy-midnight);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform var(--transition-cinematic), opacity var(--transition-cinematic);
+}
+
+.cinematic-intro.intro-dismissed,
+.cinematic-intro.fade-out {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+.intro-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.intro-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 30px;
+}
+
+/* Monogram */
+.intro-monogram-wrap {
+    margin-bottom: 25px;
+    display: inline-block;
+    position: relative;
+}
+
+.intro-monogram-svg {
+    width: 90px;
+    height: 90px;
+    filter: drop-shadow(0 0 16px rgba(200, 168, 91, 0.4));
+}
+
+.monogram-path {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: drawPath 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes drawPath {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Identity Typography Reveal */
+.intro-name-box {
+    margin-bottom: 20px;
+}
+
+.intro-line-mask {
+    overflow: hidden;
+    display: block;
+    line-height: 1.1;
+}
+
+.intro-line {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(38px, 6.5vw, 76px);
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--white);
+    transform: translateY(110%);
+    opacity: 0;
+    animation: revealLine 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.intro-line-1 { animation-delay: 0.4s; }
+.intro-line-2 { animation-delay: 0.7s; }
+.intro-line-3 {
+    animation-delay: 1.0s;
+    font-style: italic;
+    color: var(--gold-champagne);
+    text-shadow: 0 0 25px rgba(200, 168, 91, 0.4);
+}
+
+@keyframes revealLine {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.intro-divider {
+    width: 0%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-champagne), transparent);
+    margin: 20px auto;
+    animation: expandLine 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+}
+
+@keyframes expandLine {
+    to {
+        width: 280px;
+    }
+}
+
+.intro-tagline {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.8vw, 15px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-light-muted);
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInTagline 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards;
+}
+
+@keyframes fadeInTagline {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading HUD & Skip Control */
+.intro-hud {
+    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.intro-counter {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--gold-champagne);
+}
+
+.intro-skip-btn {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    z-index: 10;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light-muted);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    transition: all var(--transition-fast);
+}
+
+.intro-skip-btn:hover {
+    color: var(--gold-champagne);
+    border-color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.1);
+}
+

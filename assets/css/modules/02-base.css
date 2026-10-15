@@ -1,0 +1,158 @@
+/* ==============================================================================
+   02. RESET & BASE FOUNDATIONS
+   ============================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: var(--cream-soft);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    position: relative;
+    padding-top: var(--navbar-height, 78px);
+}
+
+section[id] {
+    scroll-margin-top: calc(var(--navbar-height, 78px) + 16px);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+button {
+    font: inherit;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+.container {
+    width: min(var(--container), calc(100% - 64px));
+    margin: 0 auto;
+}
+
+/* ==============================================================================
+   LENIS SMOOTH SCROLL INTEGRATION
+   ============================================================================== */
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+    pointer-events: none;
+}
+
+/* ==============================================================================
+   SCROLL REVEAL & CHOREOGRAPHY UTILITIES (ROBUST & RESILIENT)
+   ============================================================================== */
+.reveal-on-scroll {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+html.has-motion .reveal-on-scroll:not(.is-revealed) {
+    opacity: 0;
+    transform: translateY(35px);
+}
+
+.reveal-on-scroll.is-revealed {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.reveal-scale {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+html.has-motion .reveal-scale:not(.is-revealed) {
+    opacity: 0;
+    transform: scale(0.95) translateY(25px);
+}
+
+.reveal-scale.is-revealed {
+    opacity: 1 !important;
+    transform: scale(1) translateY(0) !important;
+}
+
+.curtain-clip-reveal {
+    clip-path: inset(0% 0 0 0);
+    transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: clip-path;
+}
+
+html.has-motion .curtain-clip-reveal:not(.is-revealed) {
+    clip-path: inset(100% 0 0 0);
+}
+
+.curtain-clip-reveal.is-revealed {
+    clip-path: inset(0% 0 0 0) !important;
+}
+
+.track-expand-reveal {
+    opacity: 1;
+    letter-spacing: 2px;
+    transition: opacity 0.7s ease, letter-spacing 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, letter-spacing;
+}
+
+html.has-motion .track-expand-reveal:not(.is-revealed) {
+    opacity: 0;
+    letter-spacing: 0.5px;
+}
+
+.track-expand-reveal.is-revealed {
+    opacity: 1 !important;
+    letter-spacing: 2px !important;
+}
+
+[data-scroll-parallax] {
+    will-change: transform;
+    transition: transform 0.1s linear;
+}
+
+

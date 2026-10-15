@@ -1,0 +1,75 @@
+/* ==============================================================================
+   15. LEADERSHIP & EXTRACURRICULAR ACTIVITIES
+   ============================================================================== */
+.activities {
+    background: var(--white);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+    margin-top: 50px;
+}
+
+.activity-card {
+    background: var(--cream-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    padding: 38px 32px;
+    display: flex;
+    gap: 24px;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.activity-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--green-emerald);
+    box-shadow: var(--shadow-subtle);
+}
+
+.activity-icon-seal {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border: 1px solid var(--border-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    color: var(--green-emerald);
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(10, 32, 45, 0.04);
+}
+
+.activity-icon-seal img,
+.activity-seal-img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+.activity-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy-midnight);
+    margin-bottom: 6px;
+}
+
+.activity-inst {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green-emerald);
+    margin-bottom: 12px;
+}
+
+.activity-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+

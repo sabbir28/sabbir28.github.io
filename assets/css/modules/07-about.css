@@ -1,0 +1,203 @@
+/* ==============================================================================
+   08. SHARED EDITORIAL SECTION HEADERS
+   ============================================================================== */
+section {
+    padding: 110px 0;
+    position: relative;
+}
+
+.section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--green-emerald);
+    margin-bottom: 14px;
+}
+
+.section-label-dark {
+    color: var(--gold-champagne);
+}
+
+.section-title {
+    color: var(--navy-midnight);
+    font-family: var(--serif);
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+.section-title-dark {
+    color: var(--white);
+}
+
+.section-description {
+    max-width: 680px;
+    margin-top: 18px;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.section-description-dark {
+    color: var(--text-light-muted);
+}
+
+/* ==============================================================================
+   09. ABOUT SECTION — EDITORIAL STORYTELLING
+   ============================================================================== */
+.about {
+    background-color: var(--white);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+.about-editorial-text p {
+    color: var(--text-primary);
+    font-size: 16.5px;
+    line-height: 1.85;
+    margin-bottom: 22px;
+}
+
+.about-editorial-text p.lead {
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--navy-inst);
+    line-height: 1.7;
+}
+
+.metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    padding: 24px 0;
+    margin: 32px 0;
+}
+
+.metric-item-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green-emerald);
+    line-height: 1.1;
+    margin-bottom: 5px;
+}
+
+.metric-item-label {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.signature-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.executive-signature {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-style: italic;
+    color: var(--navy-midnight);
+    letter-spacing: 1px;
+}
+
+.signature-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green-emerald);
+}
+
+/* Quote Card Spread */
+.quote-spread-card {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--navy-midnight);
+    box-shadow: var(--shadow-dark);
+    border: 1px solid var(--border-dark);
+    padding: 45px 35px;
+    color: var(--white);
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.quote-svg-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.18;
+    pointer-events: none;
+}
+
+.quote-tenet-tag {
+    position: relative;
+    z-index: 2;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold-champagne);
+    text-transform: uppercase;
+}
+
+.quote-main-statement {
+    position: relative;
+    z-index: 2;
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.5vw, 36px);
+    line-height: 1.35;
+    font-style: italic;
+    color: var(--white);
+    margin: 30px 0;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.quote-pillars {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 25px;
+}
+
+.pillar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-light-muted);
+}
+
+.pillar-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold-champagne);
+    border-radius: 50%;
+}
+

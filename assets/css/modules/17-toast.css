@@ -1,0 +1,31 @@
+/* ==============================================================================
+   19. TOAST NOTIFICATION POPUP
+   ============================================================================== */
+.toast-notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--navy-midnight);
+    border: 1px solid var(--gold-champagne);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    z-index: 1000000;
+    box-shadow: var(--shadow-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.toast-notification.active {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
