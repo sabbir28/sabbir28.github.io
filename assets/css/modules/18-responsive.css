@@ -11,22 +11,45 @@
 }
 
 @media (max-width: 992px) {
+    .hero {
+        height: auto;
+        max-height: none;
+        min-height: calc(100vh - 72px);
+        padding: 0 !important;
+    }
+    .hero-wrapper {
+        min-height: auto;
+        height: auto;
+        padding: 24px 0 20px;
+        max-width: 100%;
+    }
     .hero-inner {
         grid-template-columns: 1fr;
-        gap: 50px;
+        gap: 28px;
         text-align: center;
+        padding: 8px 0 16px;
+        align-items: center;
     }
-    .hero-eyebrow {
+    .hero-content {
+        align-items: center;
+    }
+    .hero-intro-label {
         justify-content: center;
     }
-    .hero-badges-row {
+    .hero-eyebrow,
+    .eyebrow {
+        justify-content: center;
+    }
+    .hero-badges-row,
+    .hero-subtitle {
         justify-content: center;
     }
     .hero-description {
         margin-left: auto;
         margin-right: auto;
     }
-    .hero-actions {
+    .hero-actions,
+    .hero-buttons {
         justify-content: center;
     }
     .hero-quick-connect {
@@ -34,13 +57,36 @@
     }
     .hero-visual {
         order: -1;
+        justify-content: center;
     }
+    .portrait-arch-frame,
     .portrait-halo-wrap {
-        width: 320px;
+        width: min(290px, 75vw);
+        height: clamp(350px, 46vh, 410px);
+        margin: 0 auto;
     }
-    .hero-floating-card {
+    .geo-circle-gold {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .geo-circle-teal {
+        left: 50%;
+        top: 35%;
+        transform: translate(-50%, -50%);
+    }
+    .geo-lines-group {
+        display: none;
+    }
+    .hero-quote-card,
+    .hero-floating-card,
+    .hero-overlay {
         right: 0;
-        bottom: -10px;
+        bottom: -8px;
+        max-width: 195px;
+    }
+    .hero-credentials-strip {
+        gap: 16px;
     }
     .about-grid {
         grid-template-columns: 1fr;
@@ -84,6 +130,21 @@
     .metrics-strip {
         grid-template-columns: 1fr;
         gap: 16px;
+    }
+    .hero-credentials-strip {
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+        text-align: center;
+    }
+    .cred-item:first-child,
+    .cred-item:last-child {
+        text-align: center;
+    }
+    .cred-divider {
+        width: 44px;
+        height: 1px;
+        margin: 0;
     }
     .footer-top {
         flex-direction: column;

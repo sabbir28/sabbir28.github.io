@@ -80,14 +80,14 @@
                     gsap.ticker.lagSmoothing(0);
                 }
 
-                // Hero Parallax on Scroll
+                // Hero Parallax on Scroll (calibrated to fixed 72px navbar)
                 gsap.to(".hero-content", {
                     yPercent: -12,
                     opacity: 0.45,
                     ease: "none",
                     scrollTrigger: {
                         trigger: ".hero",
-                        start: "top top",
+                        start: "top 72px",
                         end: "bottom top",
                         scrub: true
                     }
@@ -98,18 +98,18 @@
                     ease: "none",
                     scrollTrigger: {
                         trigger: ".hero",
-                        start: "top top",
+                        start: "top 72px",
                         end: "bottom top",
                         scrub: true
                     }
                 });
 
                 gsap.to(".hero-floating-card", {
-                    yPercent: -30,
+                    yPercent: -20,
                     ease: "none",
                     scrollTrigger: {
                         trigger: ".hero",
-                        start: "top top",
+                        start: "top 72px",
                         end: "bottom top",
                         scrub: 1.5
                     }

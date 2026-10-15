@@ -38,8 +38,8 @@
     --serif: "Playfair Display", Georgia, serif;
     --sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --mono: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --container: 1260px;
-    --navbar-height: 78px;
+    --container: 1240px;
+    --navbar-height: 72px;
     --transition-fast: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     --transition-smooth: 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     --transition-cinematic: 0.8s cubic-bezier(0.16, 1, 0.3, 1);

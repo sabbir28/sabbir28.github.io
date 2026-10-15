@@ -17,9 +17,27 @@
 
         if (!introElem) return;
 
+        // Ensure page is locked at top during loading intro
+        document.body.classList.add("intro-active");
+        if (typeof history !== "undefined" && "scrollRestoration" in history) {
+            history.scrollRestoration = "manual";
+        }
+        window.scrollTo(0, 0);
+
         function dismissCinematicIntro() {
             if (introDismissed || !introElem) return;
             introDismissed = true;
+
+            // Instantly ensure Hero section is at the exact top
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            if (root.Portfolio && root.Portfolio.scroll && typeof root.Portfolio.scroll.getInstance === "function") {
+                const lenis = root.Portfolio.scroll.getInstance();
+                if (lenis && typeof lenis.scrollTo === "function") {
+                    try {
+                        lenis.scrollTo(0, { immediate: true });
+                    } catch (err) {}
+                }
+            }
 
             introElem.classList.add("fade-out", "intro-dismissed");
             introElem.style.pointerEvents = "none";
@@ -29,6 +47,10 @@
             setTimeout(() => {
                 introElem.style.display = "none";
                 introElem.setAttribute("aria-hidden", "true");
+                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                if (window.ScrollTrigger) {
+                    window.ScrollTrigger.refresh();
+                }
             }, 600);
         }
 

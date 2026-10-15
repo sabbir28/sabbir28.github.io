@@ -38,9 +38,15 @@
 
     <!-- Main Production Motion & Interactive Engine -->
     <script src="assets/js/main.js" defer></script>
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
 </head>
 
-<body>
+<body class="intro-active">
 
     <!-- CUSTOM DESKTOP CURSOR -->
     <div class="custom-cursor-dot" id="cursorDot" aria-hidden="true"></div>
@@ -156,101 +162,123 @@
     <main>
 
         <!-- ==========================================================================
-             HERO SECTION — EXECUTIVE IMPACT
+             HERO SECTION — EXECUTIVE EDITORIAL FINANCE
              ========================================================================== -->
         <section class="hero" id="home">
             <canvas class="hero-canvas" id="heroCanvas"></canvas>
 
-            <div class="container hero-inner">
+            <div class="container hero-wrapper">
 
-                <div class="hero-content" data-scroll-parallax="0.2">
+                <div class="hero-inner">
 
-                    <h1 class="hero-title">
-                        <span class="hero-line-reveal">MD. SABBIR</span>
-                        <span class="hero-line-reveal">HOSHEN</span>
-                        <span class="hero-line-reveal hero-serif-italic">HOWLADER</span>
-                    </h1>
+                    <!-- Left Column: Editorial Information Architecture (52-55%) -->
+                    <div class="hero-content" data-scroll-parallax="0.2">
 
-                    <div class="hero-badges-row">
-                        <span class="hero-badge-pill">Accounting Undergraduate</span>
-                        <span class="hero-badge-pill">CA Certificate Level</span>
-                        <span class="hero-badge-pill">Financial Modeling</span>
+                        <!-- Introductory Label with Subtle Gold Line -->
+                        <div class="hero-intro-label">
+                            <span class="hero-label-line" aria-hidden="true"></span>
+                            <span class="hero-label-text">HELLO, I'M</span>
+                        </div>
+
+                        <!-- Dominant High-Contrast Dramatic Serif Heading -->
+                        <h1 class="hero-title">
+                            <span class="hero-line-navy">MD. SABBIR</span>
+                            <span class="hero-line-navy">HOSHEN</span>
+                            <span class="hero-line-accent">HOWLADER</span>
+                        </h1>
+
+                        <!-- Uppercase Subheading with Generous Letter Spacing -->
+                        <div class="hero-subhead">
+                            BBA // CA CANDIDATE
+                        </div>
+
+                        <!-- Constrained Professional Description -->
+                        <p class="hero-description">
+                            I am an Accounting undergraduate developing high-conviction financial analysis, statutory audit readiness, and computerized ledger workflows. Blending traditional accounting discipline with computational data technology.
+                        </p>
+
+                        <!-- Corporate & Investment-Grade Editorial Buttons -->
+                        <div class="hero-actions">
+                            <a href="#portalDirectory" class="button button-editorial-primary">
+                                Explore My Work &rarr;
+                            </a>
+                            <a href="resume.html" class="button button-editorial-secondary">
+                                View Curriculum Vitae
+                            </a>
+                        </div>
+
+                        <!-- Direct Channel Contact Chip -->
+                        <div class="hero-quick-connect">
+                            <span class="quick-connect-label">Direct Channel:</span>
+                            <button type="button" class="copy-email-chip" onclick="copyToClipboard('sabbirb228@gmail.com', 'Copied sabbirb228@gmail.com to clipboard')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                sabbirb228@gmail.com
+                            </button>
+                        </div>
+
                     </div>
 
-                    <p class="hero-description">
-                        I am an Accounting undergraduate developing high-conviction financial analysis, statutory audit readiness, and computerized ledger workflows. Blending traditional accounting discipline with computational data technology.
-                    </p>
+                    <!-- Right Column: Editorial Portrait Arch & Subtle Geometry (45-48%) -->
+                    <div class="hero-visual" data-scroll-parallax="0.12">
 
-                    <div class="hero-actions">
-                        <a href="#portalDirectory" class="button button-primary">
-                            Explore Portfolios &darr;
-                        </a>
-                        <a href="resume.html" class="button button-secondary">
-                            Curriculum Vitae
-                        </a>
-                    </div>
-
-                    <div class="hero-quick-connect">
-                        <span>Direct Channel:</span>
-                        <button type="button" class="copy-email-chip" onclick="copyToClipboard('sabbirb228@gmail.com', 'Copied sabbirb228@gmail.com to clipboard')">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            sabbirb228@gmail.com
-                        </button>
-                    </div>
-
-                </div>
-
-                <div class="hero-visual" data-scroll-parallax="0.12">
-                    <div class="portrait-halo-wrap">
-                        <div class="portrait-halo-bg"></div>
-
-                        <img
-                            src="assets/img/executive-headshot-removebg-preview.png"
-                            alt="Md. Sabbir Hoshen Howlader"
-                            class="hero-portrait-img"
-                            onerror="this.onerror=null; this.src='assets/img/main_profile.jpg';"
-                        >
-
-                        <div class="hero-floating-card" data-scroll-parallax="0.3">
-                            <p class="floating-card-quote">
-                                &ldquo;Better Decisions.<br>
-                                Build Stronger<br>
-                                Futures.&rdquo;
-                            </p>
-                            <div class="floating-card-line"></div>
-                            <div class="floating-card-meta">
-                                Barishal / Dhaka, BD
+                        <!-- Subtle Editorial Geometric Elements -->
+                        <div class="hero-geo-decoration" aria-hidden="true">
+                            <div class="geo-circle-gold"></div>
+                            <div class="geo-circle-teal"></div>
+                            <div class="geo-lines-group">
+                                <span class="geo-v-line"></span>
+                                <span class="geo-v-line"></span>
+                                <span class="geo-v-line"></span>
                             </div>
                         </div>
+
+                        <!-- Editorial Portrait Arch Frame -->
+                        <div class="portrait-arch-frame portrait-halo-wrap">
+                            <div class="portrait-arch-bg"></div>
+
+                            <img
+                                src="assets/img/executive-headshot-removebg-preview.png"
+                                alt="Md. Sabbir Hoshen Howlader"
+                                class="hero-portrait-img"
+                                onerror="this.onerror=null; this.src='assets/img/main_profile.jpg';"
+                            >
+
+                            <!-- Dark Navy Quote Card Overlapping Lower-Right of Portrait -->
+                            <div class="hero-quote-card hero-floating-card" data-scroll-parallax="0.3">
+                                <p class="quote-card-text">
+                                    &ldquo;Better Decisions.<br>
+                                    Build Stronger<br>
+                                    Futures.&rdquo;
+                                </p>
+                                <div class="quote-card-divider" aria-hidden="true"></div>
+                                <div class="quote-card-meta">
+                                    BARISHAL / DHAKA, BD
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Horizontal Editorial Credentials Strip -->
+                <div class="hero-credentials-strip">
+                    <div class="cred-item">
+                        <span class="cred-title">ACCOUNTING</span>
+                        <span class="cred-sub">Undergraduate</span>
+                    </div>
+                    <div class="cred-divider" aria-hidden="true"></div>
+                    <div class="cred-item">
+                        <span class="cred-title">CA CERTIFICATE</span>
+                        <span class="cred-sub">Level</span>
+                    </div>
+                    <div class="cred-divider" aria-hidden="true"></div>
+                    <div class="cred-item">
+                        <span class="cred-title">FINANCIAL</span>
+                        <span class="cred-sub">Modeling</span>
                     </div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- ==========================================================================
-             EXECUTIVE AT-A-GLANCE METRICS STRIP
-             ========================================================================== -->
-        <section style="background: var(--white); padding: 50px 0; border-bottom: 1px solid var(--border-light);">
-            <div class="container">
-                <div class="metrics-strip reveal-on-scroll" id="homeMetricsStrip">
-                    <div>
-                        <div class="metric-item-num" data-target="16" data-suffix="+">16+</div>
-                        <div class="metric-item-label">Years Continuous Academic Odyssey</div>
-                    </div>
-                    <div>
-                        <div class="metric-item-num" data-target="100" data-suffix="%">100%</div>
-                        <div class="metric-item-label">Trial Balance &amp; Ledger Reconciliation</div>
-                    </div>
-                    <div>
-                        <div class="metric-item-num">ICAB</div>
-                        <div class="metric-item-label">Certificate Level Professional Candidate</div>
-                    </div>
-                    <div>
-                        <div class="metric-item-num">3-Stage</div>
-                        <div class="metric-item-label">DuPont Return on Equity Modeling</div>
-                    </div>
-                </div>
             </div>
         </section>
 

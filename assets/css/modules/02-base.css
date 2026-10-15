@@ -23,11 +23,11 @@ body {
     line-height: 1.7;
     overflow-x: hidden;
     position: relative;
-    padding-top: var(--navbar-height, 78px);
+    padding-top: var(--navbar-height, 72px);
 }
 
 section[id] {
-    scroll-margin-top: calc(var(--navbar-height, 78px) + 16px);
+    scroll-margin-top: calc(var(--navbar-height, 72px) + 16px);
 }
 
 img {
@@ -55,7 +55,7 @@ ul, ol {
 }
 
 .container {
-    width: min(var(--container), calc(100% - 64px));
+    width: min(var(--container), calc(100% - 80px));
     margin: 0 auto;
 }
 

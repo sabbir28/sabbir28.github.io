@@ -24,58 +24,64 @@
     right: 0;
     width: 100%;
     z-index: 10000;
-    background: rgba(248, 248, 244, 0.92);
-    border-bottom: 1px solid var(--border-light);
+    background: rgba(10, 32, 45, 0.96);
+    border-bottom: 1px solid rgba(200, 168, 91, 0.2);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .navbar.scrolled {
-    background: rgba(10, 32, 45, 0.94);
-    border-bottom: 1px solid rgba(200, 168, 91, 0.15);
-    box-shadow: 0 10px 30px rgba(5, 16, 23, 0.25);
+    background: rgba(8, 26, 37, 0.98);
+    border-bottom: 1px solid rgba(200, 168, 91, 0.28);
+    box-shadow: 0 10px 30px rgba(5, 16, 23, 0.45);
 }
 
-.navbar.scrolled .brand-title {
+.navbar .brand-title {
     color: var(--white);
 }
 
-.navbar.scrolled .brand-sub {
+.navbar .brand-sub {
     color: var(--gold-champagne);
 }
 
-.navbar.scrolled .nav-links a {
-    color: var(--text-light-muted);
+.navbar .nav-links a {
+    color: rgba(248, 248, 244, 0.8);
 }
 
-.navbar.scrolled .nav-links a:hover,
-.navbar.scrolled .nav-links a.active {
+.navbar .nav-links a:hover {
     color: var(--white);
 }
 
-.navbar.scrolled .nav-cta {
+.navbar .nav-links a.active {
+    color: var(--gold-champagne);
+}
+
+.navbar .nav-cta {
     border-color: var(--gold-champagne);
     color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.08);
 }
 
-.navbar.scrolled .nav-cta:hover {
+.navbar .nav-cta:hover {
     background: var(--gold-champagne);
     color: var(--navy-midnight);
+    box-shadow: 0 4px 14px rgba(200, 168, 91, 0.3);
 }
 
 .nav-inner {
-    min-height: 78px;
+    min-height: 72px;
+    height: 72px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 30px;
+    gap: 28px;
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
 .brand-monogram {
@@ -90,7 +96,7 @@
     font-size: 15px;
     font-weight: 700;
     color: var(--gold-champagne);
-    background: rgba(200, 168, 91, 0.08);
+    background: rgba(200, 168, 91, 0.12);
 }
 
 .brand-info {
@@ -100,9 +106,9 @@
 
 .brand-title {
     font-family: var(--serif);
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 700;
-    color: var(--navy-midnight);
+    color: var(--white);
     white-space: nowrap;
     line-height: 1.15;
     transition: color var(--transition-fast);
@@ -114,30 +120,30 @@
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--green-emerald);
+    color: var(--gold-champagne);
     transition: color var(--transition-fast);
 }
 
 .nav-container {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 28px;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 24px;
     position: relative;
 }
 
 .nav-links a {
     position: relative;
-    color: var(--text-primary);
-    font-size: 13.5px;
+    color: rgba(248, 248, 244, 0.8);
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.3px;
-    padding: 26px 0;
+    letter-spacing: 0.4px;
+    padding: 22px 0;
     transition: color var(--transition-fast);
     white-space: nowrap;
 }
@@ -146,10 +152,10 @@
     content: "";
     position: absolute;
     left: 0;
-    bottom: 20px;
+    bottom: 16px;
     width: 0;
     height: 2px;
-    background: var(--green-emerald);
+    background: var(--gold-champagne);
     transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -158,19 +164,16 @@
     width: 100%;
 }
 
-.navbar.scrolled .nav-links a::after {
-    background: var(--gold-champagne);
-}
-
 .nav-cta {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 18px;
-    border: 1px solid var(--green-emerald);
-    color: var(--green-emerald);
+    padding: 7px 16px;
+    border: 1px solid var(--gold-champagne);
+    color: var(--gold-champagne);
+    background: rgba(200, 168, 91, 0.08);
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -179,9 +182,10 @@
 }
 
 .nav-cta:hover {
-    background: var(--green-emerald);
-    color: var(--white);
+    background: var(--gold-champagne);
+    color: var(--navy-midnight);
     transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(200, 168, 91, 0.3);
 }
 
 .mobile-nav-toggle {
@@ -189,13 +193,9 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--navy-midnight);
+    color: var(--white);
     padding: 8px;
     z-index: 1001;
-}
-
-.navbar.scrolled .mobile-nav-toggle {
-    color: var(--white);
 }
 
 /* Mobile Drawer */

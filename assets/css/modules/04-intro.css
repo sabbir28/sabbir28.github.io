@@ -1,6 +1,12 @@
 /* ==============================================================================
    05. THE CINEMATIC INTRO EXPERIENCE (SCENES A, B, C)
    ============================================================================== */
+body.intro-active {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none !important;
+}
+
 .cinematic-intro {
     position: fixed;
     inset: 0;

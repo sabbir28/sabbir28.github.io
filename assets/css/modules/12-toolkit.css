@@ -31,24 +31,25 @@
 }
 
 .tool-monogram-wrap {
-    width: 52px;
-    height: 52px;
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
+    width: 56px;
+    height: 56px;
+    border: 1px solid rgba(10, 32, 45, 0.1);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #FFFFFF;
     margin-bottom: 20px;
-    padding: 9px;
+    padding: 10px;
     box-shadow: 0 4px 14px rgba(10, 32, 45, 0.05);
     transition: all var(--transition-fast);
 }
 
 .tool-card:hover .tool-monogram-wrap {
+    background: #FFFFFF !important;
     border-color: var(--gold-champagne);
-    box-shadow: 0 6px 18px rgba(200, 168, 91, 0.22);
-    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(200, 168, 91, 0.28);
+    transform: scale(1.08) translateY(-2px);
 }
 
 .tool-icon-img {
