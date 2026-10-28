@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradEdu" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a202d" />
+      <stop offset="50%" stop-color="#0e2736" />
+      <stop offset="100%" stop-color="#102c3d" />
+    </linearGradient>
+    <linearGradient id="glowGradEdu" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0fa889" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#c8a85b" stop-opacity="0.05" />
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0fa889" />
+      <stop offset="70%" stop-color="#4ade80" />
+      <stop offset="100%" stop-color="#c8a85b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="380" fill="url(#bgGradEdu)" />
+
+  <!-- Subtle Focus Grid Lines -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="30" y1="60" x2="570" y2="60" />
+    <line x1="30" y1="120" x2="570" y2="120" />
+    <line x1="30" y1="180" x2="570" y2="180" />
+    <line x1="30" y1="240" x2="570" y2="240" />
+    <line x1="30" y1="300" x2="570" y2="300" />
+    <line x1="100" y1="30" x2="100" y2="350" />
+    <line x1="200" y1="30" x2="200" y2="350" />
+    <line x1="300" y1="30" x2="300" y2="350" />
+    <line x1="400" y1="30" x2="400" y2="350" />
+    <line x1="500" y1="30" x2="500" y2="350" />
+  </g>
+
+  <!-- App Header Bar -->
+  <g transform="translate(40, 28)">
+    <rect width="180" height="26" rx="4" fill="#075b4d" fill-opacity="0.5" stroke="#0fa889" stroke-width="1" />
+    <text x="14" y="17" fill="#e9f1ed" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.2">EDUTRACE &#8226; ANDROID APP</text>
+  </g>
+
+  <g transform="translate(430, 28)">
+    <rect width="130" height="26" rx="4" fill="#ffffff" fill-opacity="0.06" stroke="#c8a85b" stroke-width="0.8" />
+    <circle cx="16" cy="13" r="4" fill="#0fa889" />
+    <text x="28" y="17" fill="#c8a85b" font-family="'DM Sans', Arial, sans-serif" font-size="10.5" font-weight="600">OFFLINE-FIRST</text>
+  </g>
+
+  <!-- Left: Study Pulse Circular Meter -->
+  <g transform="translate(140, 195)">
+    <!-- Glow circle -->
+    <circle cx="0" cy="0" r="82" fill="url(#glowGradEdu)" />
+    <!-- Background track -->
+    <circle cx="0" cy="0" r="72" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="10" />
+    <!-- Progress Ring (~78% filled) -->
+    <circle cx="0" cy="0" r="72" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="452.4" stroke-dashoffset="100" transform="rotate(-90)" />
+    <!-- Timer Display -->
+    <text x="0" y="-8" text-anchor="middle" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="28" font-weight="700" letter-spacing="1">04:32:18</text>
+    <text x="0" y="14" text-anchor="middle" fill="#0fa889" font-family="'DM Sans', Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="1">DEEP FOCUS ACTIVE</text>
+    <text x="0" y="32" text-anchor="middle" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="9.5">Target: 06:00:00 &#8226; Efficiency 94%</text>
+  </g>
+
+  <!-- Right: Academic Hierarchy & Analytics Cards -->
+  <g transform="translate(300, 75)">
+    <!-- Card 1: Subject Focus -->
+    <rect width="260" height="74" rx="8" fill="#0e2736" stroke="#0fa889" stroke-opacity="0.4" stroke-width="1.2" />
+    <circle cx="24" cy="24" r="8" fill="#075b4d" />
+    <path d="M 21 24 L 23 26 L 27 22" stroke="#4ade80" stroke-width="1.8" fill="none" stroke-linecap="round" />
+    <text x="42" y="22" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="13" font-weight="700">Advanced Financial Accounting</text>
+    <text x="42" y="37" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="10.5">BSc / BBA Curriculum &#8226; Subject Goal 80h</text>
+    
+    <!-- Mini Progress Bar -->
+    <rect x="42" y="49" width="160" height="6" rx="3" fill="#ffffff" fill-opacity="0.1" />
+    <rect x="42" y="49" width="134" height="6" rx="3" fill="url(#ringGrad)" />
+    <text x="210" y="55" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">84%</text>
+  </g>
+
+  <g transform="translate(300, 162)">
+    <!-- Card 2: Digital Wellbeing & Distraction Shield -->
+    <rect width="260" height="74" rx="8" fill="#0e2736" stroke="#c8a85b" stroke-opacity="0.3" stroke-width="1" />
+    <circle cx="24" cy="24" r="8" fill="#c8a85b" fill-opacity="0.2" />
+    <path d="M 24 18 L 24 24 L 28 26" stroke="#c8a85b" stroke-width="1.8" fill="none" stroke-linecap="round" />
+    <text x="42" y="22" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="13" font-weight="700">Digital Wellbeing &amp; Library Mode</text>
+    <text x="42" y="37" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="10.5">App Block Nudge &#8226; Silence Ringer &#8226; 0 Logs Leak</text>
+    <text x="42" y="55" fill="#c8a85b" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">&#8226; 4 Distractions Intercepted Today</text>
+  </g>
+
+  <g transform="translate(300, 249)">
+    <!-- Card 3: Cloud Sync & In-App OTA -->
+    <rect width="260" height="74" rx="8" fill="#0e2736" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1" />
+    <circle cx="24" cy="24" r="8" fill="#ffffff" fill-opacity="0.1" />
+    <path d="M 20 25 C 20 22, 22 20, 24 20 C 26 20, 27 21, 28 23 C 29 23, 30 24, 30 25" stroke="#ffffff" stroke-width="1.6" fill="none" />
+    <text x="42" y="22" fill="#ffffff" font-family="'DM Sans', Arial, sans-serif" font-size="13" font-weight="700">Cloud Sync &amp; OTA OBB Engine</text>
+    <text x="42" y="37" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="10.5">REST API Sync &#8226; GitHub Releases In-App Update</text>
+    <text x="42" y="55" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">&#8226; Version 1.0 &#8226; Jetpack Room Database</text>
+  </g>
+
+  <!-- Bottom Badges -->
+  <g transform="translate(40, 335)">
+    <rect width="105" height="22" rx="3" fill="#ffffff" fill-opacity="0.05" />
+    <text x="10" y="15" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="500">API 21 - 33</text>
+
+    <rect x="115" width="115" height="22" rx="3" fill="#ffffff" fill-opacity="0.05" />
+    <text x="125" y="15" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="500">Bilingual EN / BN</text>
+
+    <rect x="240" width="110" height="22" rx="3" fill="#ffffff" fill-opacity="0.05" />
+    <text x="250" y="15" fill="#9bb0bd" font-family="'DM Sans', Arial, sans-serif" font-size="10" font-weight="500">MIT Open Source</text>
+  </g>
+</svg>

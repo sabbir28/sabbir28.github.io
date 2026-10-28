@@ -56,6 +56,21 @@
             ],
             tools: "Financial Statement Synthesis &bull; Ratio Analysis &bull; Empirical Economics"
         },
+        edutrace: {
+            category: "MOBILE ENGINEERING &bull; ANDROID PLATFORM",
+            title: "EduTrace — Modern Study Tracker & Focus Assistant",
+            status: "FLAGSHIP SOFTWARE APPLICATION (V1.0)",
+            summary: "A native offline-first Android application designed to help students, candidates, and scholars eliminate digital distractions, log academic milestones, and reach deep focus states.",
+            points: [
+                "<strong>Zero-Leak Session Stopwatch:</strong> Engineered with Android Foreground Service and persistence managers ensuring continuous timekeeping during screen sleep and system restarts.",
+                "<strong>Academic Program Architecture:</strong> Models hierarchical degree and subject structures with custom milestone targets, color tokens, and Jetpack Room SQLite storage.",
+                "<strong>Digital Wellbeing & Distraction Shield:</strong> Integrates Android Library Mode to silence ringer disturbances and an on-device App Usage Warden that delivers overlay nudges against social media doom-scrolling.",
+                "<strong>OTA OBB Content Packs & In-App Updates:</strong> Delivers dynamic hot-updates for bilingual quotes and focus soundscapes without requiring full application reinstalls."
+            ],
+            tools: "Java &bull; Android SDK (API 21-33) &bull; Room SQLite &bull; REST API &bull; Foreground Services",
+            link: "edutrace.html",
+            privacyLink: "edutrace-privacy.html"
+        },
         ecotrail: {
             category: "ENVIRONMENTAL FIELDWORK // ROVER SCOUTING",
             title: "Eco-Trail & Mangrove Habitat Reconnaissance",

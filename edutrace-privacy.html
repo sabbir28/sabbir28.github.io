@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Privacy Policy | EduTrace Android Application — Md. Sabbir Hoshen Howlader</title>
+
+    <meta name="description" content="Official Privacy Policy for EduTrace — Modern Study Tracker & Focus Assistant for Android developed by Md. Sabbir Hoshen Howlader. Complete transparency regarding data storage, device permissions, and security.">
+    <meta name="keywords" content="EduTrace Privacy Policy, Android Permissions, Digital Wellbeing, Room Database, Cloud Sync, Md. Sabbir Hoshen Howlader">
+    <meta name="author" content="Md. Sabbir Hoshen Howlader">
+    <meta name="theme-color" content="#0A202D">
+
+    <!-- Open Graph / Meta -->
+    <meta property="og:title" content="Privacy Policy | EduTrace Android Application">
+    <meta property="og:description" content="EduTrace operates on privacy-first, offline-first principles. Learn how your study data and Android permissions are safeguarded.">
+    <meta property="og:image" content="assets/img/project-edutrace.svg">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts: Playfair Display + DM Sans + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Brand Vector Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/icon/favicon.svg">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Lenis Smooth Momentum Scrolling Engine -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
+
+    <!-- GSAP & ScrollTrigger with Automatic Fallback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+    <!-- Main Production Motion & Interactive Engine -->
+    <script src="assets/js/main.js" defer></script>
+
+    <style>
+        .policy-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 50px 24px 90px 24px;
+        }
+
+        .policy-card {
+            background: var(--cream-card);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 44px;
+            box-shadow: var(--shadow-subtle);
+            margin-bottom: 32px;
+        }
+
+        .policy-card-dark {
+            background: rgba(14, 39, 54, 0.95);
+            border: 1px solid var(--border-dark);
+            color: var(--white);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .policy-meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .policy-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            background: var(--green-light);
+            color: var(--green-emerald);
+            font-weight: 600;
+        }
+
+        .policy-pill-gold {
+            background: rgba(200, 168, 91, 0.12);
+            color: var(--gold-champagne);
+            border: 1px solid rgba(200, 168, 91, 0.3);
+        }
+
+        .policy-section {
+            margin-bottom: 36px;
+        }
+
+        .policy-heading {
+            font-family: var(--serif);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy-midnight);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .policy-card-dark .policy-heading {
+            color: var(--white);
+        }
+
+        .policy-subheading {
+            font-family: var(--sans);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--navy-inst);
+            margin: 20px 0 8px 0;
+        }
+
+        .policy-card-dark .policy-subheading {
+            color: var(--gold-champagne);
+        }
+
+        .policy-text {
+            font-size: 15.5px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .policy-card-dark .policy-text {
+            color: var(--text-light-muted);
+        }
+
+        .policy-list {
+            padding-left: 22px;
+            margin-bottom: 18px;
+        }
+
+        .policy-list li {
+            font-size: 15px;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .policy-card-dark .policy-list li {
+            color: var(--text-light-muted);
+        }
+
+        .policy-table-wrapper {
+            overflow-x: auto;
+            margin: 24px 0;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+        }
+
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14.5px;
+            text-align: left;
+        }
+
+        .policy-table th {
+            background: var(--navy-midnight);
+            color: var(--white);
+            font-family: var(--mono);
+            font-size: 12.5px;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            text-transform: uppercase;
+        }
+
+        .policy-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-primary);
+            vertical-align: top;
+        }
+
+        .policy-table tr:nth-child(even) {
+            background: var(--green-light);
+        }
+
+        .perm-badge {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green-emerald);
+            background: rgba(7, 91, 77, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .callout-box {
+            background: rgba(15, 168, 137, 0.08);
+            border-left: 4px solid var(--green-accent);
+            padding: 20px 24px;
+            border-radius: 0 6px 6px 0;
+            margin: 22px 0;
+        }
+
+        .callout-title {
+            font-weight: 700;
+            color: var(--navy-midnight);
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .callout-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .quick-nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .quick-nav-btn {
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 7px 14px;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            background: var(--white);
+            color: var(--navy-inst);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .quick-nav-btn:hover {
+            border-color: var(--green-accent);
+            color: var(--green-emerald);
+            background: var(--green-light);
+        }
+
+        @media (max-width: 768px) {
+            .policy-card {
+                padding: 26px 20px;
+            }
+            .policy-table th, .policy-table td {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- CUSTOM DESKTOP CURSOR -->
+    <div class="custom-cursor-dot" id="cursorDot" aria-hidden="true"></div>
+    <div class="custom-cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+    <!-- TOP SCROLL PROGRESS BAR -->
+    <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+
+    <!-- STICKY NAVIGATION BAR -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-inner">
+
+            <a href="index.html" class="brand" aria-label="Md. Sabbir Hoshen Howlader Homepage">
+                <div class="brand-monogram">S</div>
+                <div class="brand-info">
+                    <span class="brand-title">Sabbir Hoshen</span>
+                    <span class="brand-sub">BBA &bull; CA Candidate</span>
+                </div>
+            </a>
+
+            <div class="nav-container">
+                <nav aria-label="Main Navigation">
+                    <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="capabilities.html">Capabilities</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="edutrace.html">EduTrace App</a></li>
+                        <li><a href="edutrace-privacy.html" class="active">Privacy Policy</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <a href="edutrace.html" class="nav-cta" aria-label="Download EduTrace Android APK">
+                    Download APK &rarr;
+                </a>
+            </div>
+
+            <button type="button" class="mobile-nav-toggle" id="mobileNavBtn" aria-label="Toggle navigation drawer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileDrawer">
+        <div class="mobile-drawer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Profile</a>
+            <a href="capabilities.html">Capabilities</a>
+            <a href="projects.html">Projects &amp; Case Studies</a>
+            <a href="edutrace.html">EduTrace Android App</a>
+            <a href="edutrace-privacy.html" class="active">EduTrace Privacy Policy</a>
+            <a href="contact.html">Contact</a>
+            <a href="resume.html" style="color: var(--gold-champagne);">Curriculum Vitae &rarr;</a>
+        </div>
+        <div class="mobile-drawer-footer">
+            <div class="mobile-drawer-contact">
+                <div>Barishal / Dhaka, Bangladesh</div>
+                <div>sabbirb228@gmail.com</div>
+                <div>+880 1614 933357</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUBPAGE EDITORIAL HEADER -->
+    <header class="subpage-header">
+        <div class="container">
+            <div class="subpage-breadcrumb">
+                <a href="index.html">Home</a>
+                <span>&bull;</span>
+                <a href="edutrace.html">EduTrace</a>
+                <span>&bull;</span>
+                <span>Privacy Policy</span>
+            </div>
+            <div class="subpage-eyebrow">Privacy-by-Design &bull; Strict Local Persistence &bull; Zero Monetization of Data</div>
+            <h1 class="subpage-title">EduTrace Application Privacy Policy</h1>
+            <p class="subpage-subtitle">
+                Official privacy and data governance declaration for the EduTrace Android productivity platform, developed by Md. Sabbir Hoshen Howlader.
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <div class="policy-container">
+
+            <!-- Meta Information Bar Card -->
+            <div class="policy-card">
+                <div class="policy-meta-bar">
+                    <div>
+                        <span class="policy-pill">Official Legal Document</span>
+                        <span class="policy-pill policy-pill-gold" style="margin-left: 8px;">Version 1.0 (Stable)</span>
+                    </div>
+                    <div style="font-family: var(--mono); font-size: 13px; color: var(--text-muted);">
+                        Effective Date: October 2026
+                    </div>
+                </div>
+
+                <div class="quick-nav-pills">
+                    <a href="#summary" class="quick-nav-btn">1. Core Philosophy</a>
+                    <a href="#permissions" class="quick-nav-btn">2. Android Permissions</a>
+                    <a href="#storage" class="quick-nav-btn">3. Local &amp; Cloud Data</a>
+                    <a href="#distraction" class="quick-nav-btn">4. Digital Wellbeing</a>
+                    <a href="#thirdparty" class="quick-nav-btn">5. Third-Party Services</a>
+                    <a href="#rights" class="quick-nav-btn">6. Deletion Rights</a>
+                    <a href="#contact" class="quick-nav-btn">7. Developer Contact</a>
+                </div>
+
+                <div class="callout-box">
+                    <div class="callout-title">The Privacy Promise in One Sentence</div>
+                    <p class="callout-desc">
+                        EduTrace does not sell, lease, or monetize your personal information or study metrics. By default, 100% of your academic records, timers, and subject logs remain strictly isolated within your device's local database.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 1: Overview -->
+            <section class="policy-card" id="summary">
+                <h2 class="policy-heading">
+                    <span>01</span> Core Philosophy &amp; Application Identity
+                </h2>
+                <p class="policy-text">
+                    This Privacy Policy governs the <strong>EduTrace</strong> mobile software application (Package ID: <code>org.sabbir.edutrace</code>), engineered by <strong>Md. Sabbir Hoshen Howlader</strong> ("Developer", "we", "us", or "our"). EduTrace was built as an offline-first study companion designed to empower students, researchers, and professionals to master their learning schedules without surrendering digital autonomy.
+                </p>
+                <p class="policy-text">
+                    We believe your focus and learning habits are deeply personal. Unlike conventional habit apps that inject ad trackers and sell behavioural metrics to data brokers, EduTrace enforces an architectural separation between your study data and the outside internet.
+                </p>
+            </section>
+
+            <!-- Section 2: Permissions -->
+            <section class="policy-card" id="permissions">
+                <h2 class="policy-heading">
+                    <span>02</span> Android Device Permissions &amp; Explicit Justifications
+                </h2>
+                <p class="policy-text">
+                    In compliance with Google Play Store Developer Guidelines and standard OS privacy paradigms, every permission requested by EduTrace is tied directly to a visible user-facing function:
+                </p>
+
+                <div class="policy-table-wrapper">
+                    <table class="policy-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 28%;">Permission</th>
+                                <th style="width: 22%;">System Scope</th>
+                                <th>Functional Necessity &amp; Data Safeguard</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="perm-badge">PACKAGE_USAGE_STATS</span></td>
+                                <td>Special Access / Digital Wellbeing</td>
+                                <td>
+                                    <strong>App Usage Warden (Distraction Blocker):</strong> Allows the user to detect when distracting non-study apps are active during a focus interval.
+                                    <br><em>Privacy Guarantee:</em> Usage statistics are evaluated entirely in real-time in volatile device RAM; application histories are <strong>never</strong> recorded to disk, uploaded to servers, or shared with third parties.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="perm-badge">SYSTEM_ALERT_WINDOW</span></td>
+                                <td>Display Over Other Apps</td>
+                                <td>
+                                    <strong>Overlay Distraction Nudge:</strong> Displays a non-intrusive focus reminder overlay if the learner opens a blocked social application during an ongoing study timer.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="perm-badge">FOREGROUND_SERVICE</span></td>
+                                <td>System Service Priority</td>
+                                <td>
+                                    <strong>Persistent Focus Stopwatch:</strong> Keeps the active study session timer executing reliably even when your phone screen turns off, preventing Android battery optimizers from killing active intervals.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="perm-badge">POST_NOTIFICATIONS</span></td>
+                                <td>Android 13+ (API 33)</td>
+                                <td>
+                                    <strong>Timer Controls &amp; Reminders:</strong> Displays ongoing timer durations with Play/Pause actions in your notification tray, and delivers user-configured study alarms.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="perm-badge">READ_PHONE_STATE</span><br><span class="perm-badge">ACCESS_NOTIFICATION_POLICY</span></td>
+                                <td>Telephony &amp; Do Not Disturb</td>
+                                <td>
+                                    <strong>Automatic Library Mode:</strong> Detects incoming calls while an active study session is engaged to automatically mute ringers and silence interruptions.
+                                    <br><em>Privacy Guarantee:</em> EduTrace <strong>never</strong> listens to, accesses, reads, logs, or transmits phone numbers, contacts, or call recordings.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="perm-badge">RECEIVE_BOOT_COMPLETED</span></td>
+                                <td>Boot Startup Receiver</td>
+                                <td>
+                                    <strong>Study Reminder Restoration:</strong> Restores user-scheduled study alarms via Android <code>WorkManager</code> after the phone is powered back on.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="perm-badge">INTERNET</span><br><span class="perm-badge">ACCESS_NETWORK_STATE</span></td>
+                                <td>Network Connectivity</td>
+                                <td>
+                                    <strong>Updates &amp; Optional Cloud Sync:</strong> Used to check GitHub Releases API for app update packages, download dynamic OBB asset packs, and synchronize study records if the user explicitly registers an EduTrace Cloud account.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 3: Data Storage -->
+            <section class="policy-card" id="storage">
+                <h2 class="policy-heading">
+                    <span>03</span> Data Storage: 100% Offline by Default
+                </h2>
+
+                <h3 class="policy-subheading">A. Local SQLite Room Database</h3>
+                <p class="policy-text">
+                    By default, EduTrace stores all degrees, subjects, study sessions, milestone dates, notes, and focus durations inside an internal SQLite database managed via Android Jetpack Room (<code>StudyDatabase.java</code>). This database resides strictly within the sandboxed storage sandbox allotted to EduTrace on your device. Other applications installed on your phone cannot access this data.
+                </p>
+
+                <h3 class="policy-subheading">B. Optional EduTrace Cloud Sync</h3>
+                <p class="policy-text">
+                    Users who desire cross-device synchronization and global leaderboard rankings may optionally register an EduTrace Cloud account.
+                </p>
+                <ul class="policy-list">
+                    <li><strong>Account Credentials:</strong> If you register, we store your username, email address, and a cryptographically salted password hash. We never store plain-text passwords.</li>
+                    <li><strong>Transport Security:</strong> All API requests to the EduTrace Cloud sync infrastructure are encrypted using Transport Layer Security (TLS 1.3 / HTTPS) with JSON Web Token (JWT) bearer authentication.</li>
+                    <li><strong>Leaderboard Visibility:</strong> If enabled, only your chosen public display name and net study minutes are computed for leaderboard standings. Private study notes or subject names remain confidential.</li>
+                </ul>
+            </section>
+
+            <!-- Section 4: Wellbeing & Distraction -->
+            <section class="policy-card" id="distraction">
+                <h2 class="policy-heading">
+                    <span>04</span> Digital Wellbeing &amp; Distraction Warden Privacy
+                </h2>
+                <p class="policy-text">
+                    Our "App Usage Warden" feature is engineered strictly for self-discipline:
+                </p>
+                <ul class="policy-list">
+                    <li>We do <strong>not</strong> track your keystrokes or text input.</li>
+                    <li>We do <strong>not</strong> monitor the internal contents of third-party apps (e.g. messages, feeds, accounts).</li>
+                    <li>We do <strong>not</strong> transmit lists of installed applications to any external server.</li>
+                    <li>All heuristic checks occur locally inside <code>AppBlockService.java</code> in volatile device memory and expire immediately upon completing your study session.</li>
+                </ul>
+            </section>
+
+            <!-- Section 5: Third-Party & Analytics -->
+            <section class="policy-card" id="thirdparty">
+                <h2 class="policy-heading">
+                    <span>05</span> Zero Ads &amp; Third-Party SDK Disclosure
+                </h2>
+                <p class="policy-text">
+                    EduTrace maintains a strict zero-telemetry policy:
+                </p>
+                <ul class="policy-list">
+                    <li><strong>Zero Ad Networks:</strong> No Google AdMob, Unity Ads, AppLovin, ironSource, or similar commercial SDKs.</li>
+                    <li><strong>Zero Behavioral Tracking:</strong> No Facebook SDK, Firebase Analytics, Adjust, or AppsFlyer trackers.</li>
+                    <li><strong>GitHub Releases:</strong> The built-in in-app update checker queries public endpoints of the GitHub API (<code>https://api.github.com/repos/sabbir28/EduTrace/releases/latest</code>) to compare semantic version tags. This connection is subject to GitHub's standard public API privacy policy.</li>
+                </ul>
+            </section>
+
+            <!-- Section 6: User Rights & Deletion -->
+            <section class="policy-card" id="rights">
+                <h2 class="policy-heading">
+                    <span>06</span> User Rights, Data Portability &amp; Account Deletion
+                </h2>
+                <p class="policy-text">
+                    Whether subject to GDPR (EU), CCPA (California), or applicable regional privacy legislation, you retain full sovereignty over your data:
+                </p>
+                <ul class="policy-list">
+                    <li><strong>Local Data Deletion:</strong> You can purge all local databases immediately by navigating to Android <em>Settings &rarr; Apps &rarr; EduTrace &rarr; Clear Storage / Clear Data</em>, or by simply uninstalling the application.</li>
+                    <li><strong>Cloud Account Deletion:</strong> If you created an EduTrace Cloud account, you may request permanent deletion of your profile, email, authentication tokens, and backup archives at any time. Simply send an email to <a href="mailto:sabbirb228@gmail.com" style="color: var(--green-emerald); font-weight: 600;">sabbirb228@gmail.com</a> with the subject <em>"EduTrace Account Deletion Request"</em>. All associated database records are irreversibly purged within 48 hours.</li>
+                </ul>
+            </section>
+
+            <!-- Section 7: Developer Contact -->
+            <section class="policy-card policy-card-dark" id="contact">
+                <h2 class="policy-heading">
+                    <span>07</span> Contact Information &amp; Legal Governance
+                </h2>
+                <p class="policy-text">
+                    For inquiries, privacy assessments, audit verification, or rights enforcement regarding this policy or the EduTrace application, contact the developer directly:
+                </p>
+
+                <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+                    <div>
+                        <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--gold-champagne); margin-bottom: 6px;">INDIVIDUAL PROPRIETOR / DEVELOPER</div>
+                        <div style="font-size: 17px; font-weight: 700; color: var(--white);">Md. Sabbir Hoshen Howlader</div>
+                        <div style="font-size: 13.5px; color: var(--text-light-muted); margin-top: 4px;">Independent Software Engineer &amp; CA Candidate</div>
+                        <div style="font-size: 13.5px; color: var(--text-light-muted);">Barishal / Dhaka, Bangladesh</div>
+                    </div>
+
+                    <div>
+                        <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--gold-champagne); margin-bottom: 6px;">DIRECT SUPPORT EMAIL</div>
+                        <div><a href="mailto:sabbirb228@gmail.com" style="color: var(--white); font-weight: 600; text-decoration: underline;">sabbirb228@gmail.com</a></div>
+                        <div style="font-size: 13.5px; color: var(--text-light-muted); margin-top: 4px;">Official Contact: <a href="mailto:ca@casabbir.pro.bd" style="color: var(--gold-champagne);">ca@casabbir.pro.bd</a></div>
+                    </div>
+
+                    <div>
+                        <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--gold-champagne); margin-bottom: 6px;">VERIFIABLE WEBSITES &amp; SOURCE</div>
+                        <div><a href="https://sabbir28.github.io" target="_blank" rel="noopener noreferrer" style="color: var(--white); font-size: 14px;">sabbir28.github.io</a></div>
+                        <div style="margin-top: 4px;"><a href="https://github.com/sabbir28/EduTrace" target="_blank" rel="noopener noreferrer" style="color: var(--white); font-size: 14px;">github.com/sabbir28/EduTrace</a></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- CINEMATIC GRAND FINALE FOOTER -->
+    <footer class="footer">
+        <div class="container">
+
+            <div class="footer-top reveal-on-scroll">
+                <div class="footer-brand-wrap">
+                    <div class="footer-seal" id="footerSeal">S</div>
+                    <div>
+                        <div class="footer-name">Md. Sabbir Hoshen Howlader</div>
+                        <div class="footer-title">Finance &bull; Accounting &bull; Technology</div>
+                    </div>
+                </div>
+
+                <div class="footer-quote">
+                    &ldquo;Privacy is not an added feature; it is an architectural foundation.&rdquo;
+                </div>
+            </div>
+
+            <div class="footer-bottom reveal-on-scroll">
+                <div class="footer-clock">
+                    <span class="clock-live-indicator"></span>
+                    <span id="liveLocalTime">BARISHAL / DHAKA (UTC+6)</span>
+                </div>
+
+                <div class="footer-copy">
+                    &copy; 2026 Md. Sabbir Hoshen Howlader. All rights reserved. &bull; EduTrace (Package: org.sabbir.edutrace)
+                </div>
+
+                <div class="footer-actions">
+                    <a href="edutrace.html" class="footer-btn-link">
+                        [ EduTrace Product Page ]
+                    </a>
+                    <a href="#navbar" class="footer-btn-link">
+                        [ Back to Top &uarr; ]
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+</body>
+</html>
